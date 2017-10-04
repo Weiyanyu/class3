@@ -195,6 +195,16 @@ public class UserService implements IUserService {
     }
 
 
+    //后台管理员登录
+    @Override
+    public ServerResponse checkRole(User user) {
+        if (user != null && user.getRole().equals(Const.Role.ROLE_ADMIN)) {
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
+    }
+
+
 
 
 }

@@ -114,4 +114,11 @@ public class UserController {
         }
         return userService.forceGetInfo(user.getUserId());
     }
+
+    @RequestMapping(value = "logout.do" , method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> logout(HttpSession session) {
+        session.removeAttribute(Const.CURRENT_USER);
+        return ServerResponse.createBySuccessMessage("退出登录成功");
+    }
 }
