@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
+import top.yeonon.service.IUserService;
 import top.yeonon.service.Impl.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpSession;
 public class UserManageController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @RequestMapping(value = "login.do" , method = RequestMethod.POST)
     @ResponseBody

@@ -143,7 +143,7 @@ public class UserService implements IUserService {
     public ServerResponse<User> updateInfo(User user) {
         ServerResponse<String> validResponse = this.checkValid(user.getEmail(), Const.EMAIL);
         if (!validResponse.isSuccess()) {
-            return ServerResponse.createBySuccessMessage("邮箱已存在");
+            return ServerResponse.createByErrorMessage("邮箱已存在");
         }
         User updateUser = new User();
         updateUser.setUserId(user.getUserId());

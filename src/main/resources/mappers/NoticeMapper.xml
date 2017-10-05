@@ -6,38 +6,21 @@
       <idArg column="notice_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="topic_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="notice_title" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="notice_desc" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="sub_image" jdbcType="VARCHAR" javaType="java.lang.String" />
-    </constructor>
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="top.yeonon.pojo.Notice" >
-    <constructor >
-      <idArg column="notice_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="topic_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="notice_desc" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="sub_image" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="notice_title" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    notice_id, user_id, topic_id, notice_desc, create_time, update_time, main_image, 
-    sub_image
+    notice_id, user_id, topic_id, notice_title, notice_desc, create_time, update_time, 
+    main_image, sub_image
   </sql>
-  <sql id="Blob_Column_List" >
-    notice_title
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from notice
     where notice_id = #{noticeId,jdbcType=INTEGER}
   </select>
@@ -47,12 +30,12 @@
   </delete>
   <insert id="insert" parameterType="top.yeonon.pojo.Notice" >
     insert into notice (notice_id, user_id, topic_id, 
-      notice_desc, create_time, update_time, 
-      main_image, sub_image, notice_title
+      notice_title, notice_desc, create_time, 
+      update_time, main_image, sub_image
       )
     values (#{noticeId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{topicId,jdbcType=INTEGER}, 
-      #{noticeDesc,jdbcType=VARCHAR}, now(), now(),
-      #{mainImage,jdbcType=VARCHAR}, #{subImage,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=LONGVARCHAR}
+      #{noticeTitle,jdbcType=VARCHAR}, #{noticeDesc,jdbcType=VARCHAR}, now(),
+      now(), #{mainImage,jdbcType=VARCHAR}, #{subImage,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="top.yeonon.pojo.Notice" >
@@ -66,6 +49,9 @@
       </if>
       <if test="topicId != null" >
         topic_id,
+      </if>
+      <if test="noticeTitle != null" >
+        notice_title,
       </if>
       <if test="noticeDesc != null" >
         notice_desc,
@@ -82,9 +68,6 @@
       <if test="subImage != null" >
         sub_image,
       </if>
-      <if test="noticeTitle != null" >
-        notice_title,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="noticeId != null" >
@@ -95,6 +78,9 @@
       </if>
       <if test="topicId != null" >
         #{topicId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeTitle != null" >
+        #{noticeTitle,jdbcType=VARCHAR},
       </if>
       <if test="noticeDesc != null" >
         #{noticeDesc,jdbcType=VARCHAR},
@@ -111,9 +97,6 @@
       <if test="subImage != null" >
         #{subImage,jdbcType=VARCHAR},
       </if>
-      <if test="noticeTitle != null" >
-        #{noticeTitle,jdbcType=LONGVARCHAR},
-      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="top.yeonon.pojo.Notice" >
@@ -125,6 +108,9 @@
       <if test="topicId != null" >
         topic_id = #{topicId,jdbcType=INTEGER},
       </if>
+      <if test="noticeTitle != null" >
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      </if>
       <if test="noticeDesc != null" >
         notice_desc = #{noticeDesc,jdbcType=VARCHAR},
       </if>
@@ -132,7 +118,7 @@
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        update_time = now(),
+        now(),
       </if>
       <if test="mainImage != null" >
         main_image = #{mainImage,jdbcType=VARCHAR},
@@ -140,33 +126,27 @@
       <if test="subImage != null" >
         sub_image = #{subImage,jdbcType=VARCHAR},
       </if>
-      <if test="noticeTitle != null" >
-        notice_title = #{noticeTitle,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where notice_id = #{noticeId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="top.yeonon.pojo.Notice" >
-    update notice
-    set user_id = #{userId,jdbcType=INTEGER},
-      topic_id = #{topicId,jdbcType=INTEGER},
-      notice_desc = #{noticeDesc,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = now(),
-      main_image = #{mainImage,jdbcType=VARCHAR},
-      sub_image = #{subImage,jdbcType=VARCHAR},
-      notice_title = #{noticeTitle,jdbcType=LONGVARCHAR}
     where notice_id = #{noticeId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="top.yeonon.pojo.Notice" >
     update notice
     set user_id = #{userId,jdbcType=INTEGER},
       topic_id = #{topicId,jdbcType=INTEGER},
+      notice_title = #{noticeTitle,jdbcType=VARCHAR},
       notice_desc = #{noticeDesc,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       main_image = #{mainImage,jdbcType=VARCHAR},
       sub_image = #{subImage,jdbcType=VARCHAR}
     where notice_id = #{noticeId,jdbcType=INTEGER}
   </update>
+
+  <select id="selectNoticesByTopicId" parameterType="int" resultType="int">
+    SELECT
+    notice_id
+    FROM notice
+    WHERE topic_id = #{topicId}
+  </select>
+
 </mapper>

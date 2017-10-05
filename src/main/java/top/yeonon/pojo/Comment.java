@@ -9,22 +9,22 @@ public class Comment {
 
     private Integer noticeId;
 
+    private String commentDesc;
+
     private Date createTime;
 
     private Date updateTime;
 
     private String insertImage;
 
-    private String commentDesc;
-
-    public Comment(Integer commentId, Integer userId, Integer noticeId, Date createTime, Date updateTime, String insertImage, String commentDesc) {
+    public Comment(Integer commentId, Integer userId, Integer noticeId, String commentDesc, Date createTime, Date updateTime, String insertImage) {
         this.commentId = commentId;
         this.userId = userId;
         this.noticeId = noticeId;
+        this.commentDesc = commentDesc;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.insertImage = insertImage;
-        this.commentDesc = commentDesc;
     }
 
     public Comment() {
@@ -55,6 +55,14 @@ public class Comment {
         this.noticeId = noticeId;
     }
 
+    public String getCommentDesc() {
+        return commentDesc;
+    }
+
+    public void setCommentDesc(String commentDesc) {
+        this.commentDesc = commentDesc == null ? null : commentDesc.trim();
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -77,13 +85,5 @@ public class Comment {
 
     public void setInsertImage(String insertImage) {
         this.insertImage = insertImage == null ? null : insertImage.trim();
-    }
-
-    public String getCommentDesc() {
-        return commentDesc;
-    }
-
-    public void setCommentDesc(String commentDesc) {
-        this.commentDesc = commentDesc == null ? null : commentDesc.trim();
     }
 }

@@ -11,11 +11,14 @@ public class Topic {
 
     private Date updateTime;
 
-    public Topic(Integer topicId, String topicName, Date createTime, Date updateTime) {
+    private Integer topicStatus;
+
+    public Topic(Integer topicId, String topicName, Date createTime, Date updateTime, Integer topicStatus) {
         this.topicId = topicId;
         this.topicName = topicName;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.topicStatus = topicStatus;
     }
 
     public Topic() {
@@ -52,5 +55,13 @@ public class Topic {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getTopicStatus() {
+        return topicStatus;
+    }
+
+    public void setTopicStatus(Integer topicStatus) {
+        this.topicStatus = topicStatus;
     }
 }

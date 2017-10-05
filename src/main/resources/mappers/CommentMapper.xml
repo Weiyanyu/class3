@@ -6,33 +6,18 @@
       <idArg column="comment_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="notice_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="comment_desc" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="insert_image" jdbcType="VARCHAR" javaType="java.lang.String" />
-    </constructor>
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="top.yeonon.pojo.Comment" >
-    <constructor >
-      <idArg column="comment_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="notice_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="insert_image" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="comment_desc" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    comment_id, user_id, notice_id, create_time, update_time, insert_image
+    comment_id, user_id, notice_id, comment_desc, create_time, update_time, insert_image
   </sql>
-  <sql id="Blob_Column_List" >
-    comment_desc
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from comment
     where comment_id = #{commentId,jdbcType=INTEGER}
   </select>
@@ -42,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="top.yeonon.pojo.Comment" >
     insert into comment (comment_id, user_id, notice_id, 
-      create_time, update_time, insert_image, 
-      comment_desc)
+      comment_desc, create_time, update_time, 
+      insert_image)
     values (#{commentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{noticeId,jdbcType=INTEGER}, 
-     now(),now(), #{insertImage,jdbcType=VARCHAR},
-      #{commentDesc,jdbcType=LONGVARCHAR})
+      #{commentDesc,jdbcType=VARCHAR}, now(), now(),
+      #{insertImage,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="top.yeonon.pojo.Comment" >
     insert into comment
@@ -60,6 +45,9 @@
       <if test="noticeId != null" >
         notice_id,
       </if>
+      <if test="commentDesc != null" >
+        comment_desc,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
@@ -68,9 +56,6 @@
       </if>
       <if test="insertImage != null" >
         insert_image,
-      </if>
-      <if test="commentDesc != null" >
-        comment_desc,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -83,6 +68,9 @@
       <if test="noticeId != null" >
         #{noticeId,jdbcType=INTEGER},
       </if>
+      <if test="commentDesc != null" >
+        #{commentDesc,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         now(),
       </if>
@@ -91,9 +79,6 @@
       </if>
       <if test="insertImage != null" >
         #{insertImage,jdbcType=VARCHAR},
-      </if>
-      <if test="commentDesc != null" >
-        #{commentDesc,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -106,6 +91,9 @@
       <if test="noticeId != null" >
         notice_id = #{noticeId,jdbcType=INTEGER},
       </if>
+      <if test="commentDesc != null" >
+        comment_desc = #{commentDesc,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -115,29 +103,29 @@
       <if test="insertImage != null" >
         insert_image = #{insertImage,jdbcType=VARCHAR},
       </if>
-      <if test="commentDesc != null" >
-        comment_desc = #{commentDesc,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where comment_id = #{commentId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="top.yeonon.pojo.Comment" >
-    update comment
-    set user_id = #{userId,jdbcType=INTEGER},
-      notice_id = #{noticeId,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = now(),
-      insert_image = #{insertImage,jdbcType=VARCHAR},
-      comment_desc = #{commentDesc,jdbcType=LONGVARCHAR}
     where comment_id = #{commentId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="top.yeonon.pojo.Comment" >
     update comment
     set user_id = #{userId,jdbcType=INTEGER},
       notice_id = #{noticeId,jdbcType=INTEGER},
+      comment_desc = #{commentDesc,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = now(),
       insert_image = #{insertImage,jdbcType=VARCHAR}
     where comment_id = #{commentId,jdbcType=INTEGER}
   </update>
+
+
+
+  <select id="selectCommentsByNoticeId" resultType="int" parameterType="int">
+    SELECT
+    comment_id
+    FROM comment
+    WHERE notice_id = #{noticeId}
+  </select>
+
+
+
 </mapper>

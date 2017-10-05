@@ -87,7 +87,7 @@ public class UserController {
         return response;
     }
 
-    @RequestMapping(value = "update_info", method = RequestMethod.POST)
+    @RequestMapping(value = "update_info.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> updateInfo(User user, HttpSession session) {
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);

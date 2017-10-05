@@ -14,4 +14,6 @@ public interface TopicMapper {
     int updateByPrimaryKeySelective(Topic record);
 
     int updateByPrimaryKey(Topic record);
+
+    int selectTopicByName(String topicName);
 }

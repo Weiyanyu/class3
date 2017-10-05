@@ -9,6 +9,8 @@ public class Notice {
 
     private Integer topicId;
 
+    private String noticeTitle;
+
     private String noticeDesc;
 
     private Date createTime;
@@ -19,18 +21,16 @@ public class Notice {
 
     private String subImage;
 
-    private String noticeTitle;
-
-    public Notice(Integer noticeId, Integer userId, Integer topicId, String noticeDesc, Date createTime, Date updateTime, String mainImage, String subImage, String noticeTitle) {
+    public Notice(Integer noticeId, Integer userId, Integer topicId, String noticeTitle, String noticeDesc, Date createTime, Date updateTime, String mainImage, String subImage) {
         this.noticeId = noticeId;
         this.userId = userId;
         this.topicId = topicId;
+        this.noticeTitle = noticeTitle;
         this.noticeDesc = noticeDesc;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.mainImage = mainImage;
         this.subImage = subImage;
-        this.noticeTitle = noticeTitle;
     }
 
     public Notice() {
@@ -59,6 +59,14 @@ public class Notice {
 
     public void setTopicId(Integer topicId) {
         this.topicId = topicId;
+    }
+
+    public String getNoticeTitle() {
+        return noticeTitle;
+    }
+
+    public void setNoticeTitle(String noticeTitle) {
+        this.noticeTitle = noticeTitle == null ? null : noticeTitle.trim();
     }
 
     public String getNoticeDesc() {
@@ -99,13 +107,5 @@ public class Notice {
 
     public void setSubImage(String subImage) {
         this.subImage = subImage == null ? null : subImage.trim();
-    }
-
-    public String getNoticeTitle() {
-        return noticeTitle;
-    }
-
-    public void setNoticeTitle(String noticeTitle) {
-        this.noticeTitle = noticeTitle == null ? null : noticeTitle.trim();
     }
 }

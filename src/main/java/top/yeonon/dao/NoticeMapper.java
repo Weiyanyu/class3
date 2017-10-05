@@ -2,6 +2,8 @@ package top.yeonon.dao;
 
 import top.yeonon.pojo.Notice;
 
+import java.util.List;
+
 public interface NoticeMapper {
     int deleteByPrimaryKey(Integer noticeId);
 
@@ -13,7 +15,7 @@ public interface NoticeMapper {
 
     int updateByPrimaryKeySelective(Notice record);
 
-    int updateByPrimaryKeyWithBLOBs(Notice record);
-
     int updateByPrimaryKey(Notice record);
+
+    List<Integer> selectNoticesByTopicId(Integer topicId);
 }

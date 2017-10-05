@@ -1,6 +1,9 @@
 package top.yeonon.dao;
 
+import org.apache.ibatis.annotations.Param;
 import top.yeonon.pojo.Comment;
+
+import java.util.List;
 
 public interface CommentMapper {
     int deleteByPrimaryKey(Integer commentId);
@@ -13,7 +16,10 @@ public interface CommentMapper {
 
     int updateByPrimaryKeySelective(Comment record);
 
-    int updateByPrimaryKeyWithBLOBs(Comment record);
-
     int updateByPrimaryKey(Comment record);
+
+
+    List<Integer> selectCommentsByNoticeId(Integer noticeId);
+
+
 }
