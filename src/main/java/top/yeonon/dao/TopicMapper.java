@@ -2,6 +2,8 @@ package top.yeonon.dao;
 
 import top.yeonon.pojo.Topic;
 
+import java.util.List;
+
 public interface TopicMapper {
     int deleteByPrimaryKey(Integer topicId);
 
@@ -16,4 +18,8 @@ public interface TopicMapper {
     int updateByPrimaryKey(Topic record);
 
     int selectTopicByName(String topicName);
+
+    List<Topic> selectAll();
+
+    List<Topic> selectTopicsByLikeName(String topicName);
 }

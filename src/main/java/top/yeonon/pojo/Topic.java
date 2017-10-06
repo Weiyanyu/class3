@@ -13,12 +13,15 @@ public class Topic {
 
     private Integer topicStatus;
 
-    public Topic(Integer topicId, String topicName, Date createTime, Date updateTime, Integer topicStatus) {
+    private String topicDesc;
+
+    public Topic(Integer topicId, String topicName, Date createTime, Date updateTime, Integer topicStatus, String topicDesc) {
         this.topicId = topicId;
         this.topicName = topicName;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.topicStatus = topicStatus;
+        this.topicDesc = topicDesc;
     }
 
     public Topic() {
@@ -63,5 +66,13 @@ public class Topic {
 
     public void setTopicStatus(Integer topicStatus) {
         this.topicStatus = topicStatus;
+    }
+
+    public String getTopicDesc() {
+        return topicDesc;
+    }
+
+    public void setTopicDesc(String topicDesc) {
+        this.topicDesc = topicDesc == null ? null : topicDesc.trim();
     }
 }

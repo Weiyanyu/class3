@@ -8,10 +8,11 @@
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="topic_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="topic_desc" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    topic_id, topic_name, create_time, update_time, topic_status
+    topic_id, topic_name, create_time, update_time, topic_status, topic_desc
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -25,9 +26,11 @@
   </delete>
   <insert id="insert" parameterType="top.yeonon.pojo.Topic" >
     insert into topic (topic_id, topic_name, create_time, 
-      update_time, topic_status)
-    values (#{topicId,jdbcType=INTEGER}, #{topicName,jdbcType=VARCHAR}, now(),
-      now(), #{topicStatus,jdbcType=INTEGER})
+      update_time, topic_status, topic_desc
+      )
+    values (#{topicId,jdbcType=INTEGER}, #{topicName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{topicStatus,jdbcType=INTEGER}, #{topicDesc,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="top.yeonon.pojo.Topic" >
     insert into topic
@@ -47,6 +50,9 @@
       <if test="topicStatus != null" >
         topic_status,
       </if>
+      <if test="topicDesc != null" >
+        topic_desc,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="topicId != null" >
@@ -56,13 +62,16 @@
         #{topicName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        now(),
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        now(),
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="topicStatus != null" >
         #{topicStatus,jdbcType=INTEGER},
+      </if>
+      <if test="topicDesc != null" >
+        #{topicDesc,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -76,10 +85,13 @@
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        update_time = now(),
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="topicStatus != null" >
         topic_status = #{topicStatus,jdbcType=INTEGER},
+      </if>
+      <if test="topicDesc != null" >
+        topic_desc = #{topicDesc,jdbcType=VARCHAR},
       </if>
     </set>
     where topic_id = #{topicId,jdbcType=INTEGER}
@@ -88,8 +100,9 @@
     update topic
     set topic_name = #{topicName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = now(),
-      topic_status = #{topicStatus,jdbcType=INTEGER}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      topic_status = #{topicStatus,jdbcType=INTEGER},
+      topic_desc = #{topicDesc,jdbcType=VARCHAR}
     where topic_id = #{topicId,jdbcType=INTEGER}
   </update>
 
@@ -97,5 +110,18 @@
     SELECT count(1)
     FROM topic
     WHERE topic_name=#{topicName}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM topic
+  </select>
+
+  <select id="selectTopicsByLikeName" resultMap="BaseResultMap" parameterType="string" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM topic
+    WHERE topic_name LIKE CONCAT("%",#{topicName},"%")
   </select>
 </mapper>

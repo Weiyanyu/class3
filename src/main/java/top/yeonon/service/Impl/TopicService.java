@@ -1,6 +1,9 @@
 package top.yeonon.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,6 +17,8 @@ import top.yeonon.dao.NoticeMapper;
 import top.yeonon.dao.TopicMapper;
 import top.yeonon.pojo.Topic;
 import top.yeonon.service.ITopicService;
+import top.yeonon.vo.TopicListVo;
+
 import java.util.List;
 
 
@@ -90,4 +95,70 @@ public class TopicService implements ITopicService {
         }
         topicMapper.deleteByPrimaryKey(topicId);
     }
+
+
+    //TODO 未来可能需要排序功能
+    @Override
+    public ServerResponse<PageInfo> getTopicList(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Topic> topicList = topicMapper.selectAll();
+        List<TopicListVo> topicListVoList = Lists.newArrayList();
+        for (Topic topic : topicList) {
+            topicListVoList.add(assembleTopicListVo(topic));
+        }
+        PageInfo result = new PageInfo(topicList);
+        result.setList(topicListVoList);
+        return ServerResponse.createBySuccess(result);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> searchTopic(String topicName, int pageNum, int pageSize) {
+        if (StringUtils.isBlank(topicName)) {
+            return ServerResponse.createByErrorMessage("参数错误");
+        }
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<Topic> topicList = topicMapper.selectTopicsByLikeName(topicName);
+        List<TopicListVo> topicListVoList = Lists.newArrayList();
+        for (Topic topic : topicList) {
+            topicListVoList.add(assembleTopicListVo(topic));
+        }
+        PageInfo result = new PageInfo(topicList);
+        result.setList(topicListVoList);
+        return ServerResponse.createBySuccess(result);
+    }
+
+
+    @Override
+    public ServerResponse updateTopic(Topic topic) {
+        if (topic == null) {
+            return ServerResponse.createByErrorMessage("参数错误");
+        }
+        Topic updateTopic = topicMapper.selectByPrimaryKey(topic.getTopicId());
+        if (updateTopic == null) {
+            return ServerResponse.createBySuccessMessage("找不到该主题，更新失败");
+        }
+
+        updateTopic.setTopicStatus(topic.getTopicStatus());
+        updateTopic.setTopicName(topic.getTopicName());
+
+        int rowCount = topicMapper.updateByPrimaryKey(updateTopic);
+        if (rowCount <= 0) {
+            return ServerResponse.createByErrorMessage("更新失败");
+        }
+        return ServerResponse.createBySuccessMessage("更新成功");
+    }
+
+
+    private TopicListVo assembleTopicListVo(Topic topic) {
+        TopicListVo topicListVo = new TopicListVo();
+        topicListVo.setId(topic.getTopicId());
+        topicListVo.setStatus(topic.getTopicStatus());
+        topicListVo.setTopicName(topic.getTopicName());
+        topicListVo.setDesc(topic.getTopicDesc());
+        return topicListVo;
+    }
+
+
+
 }
