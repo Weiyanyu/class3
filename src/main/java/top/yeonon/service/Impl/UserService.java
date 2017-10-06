@@ -30,7 +30,7 @@ public class UserService implements IUserService {
             return ServerResponse.createByErrorMessage("登录失败，不存在该学号");
         }
 
-        //TODO 这里密码应该要使用MD5加密
+
         String MD5Password = MD5Util.MD5EncodeUtf8(password);
 
         User user = userMapper.login(studentId, MD5Password);
