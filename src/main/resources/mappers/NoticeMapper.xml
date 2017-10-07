@@ -142,11 +142,33 @@
     where notice_id = #{noticeId,jdbcType=INTEGER}
   </update>
 
-  <select id="selectNoticesByTopicId" parameterType="int" resultType="int">
+  <select id="selectNoticesIdsByTopicId" parameterType="int" resultType="int">
     SELECT
     notice_id
     FROM notice
     WHERE topic_id = #{topicId}
+  </select>
+
+  <select id="checkTitle" parameterType="string" resultType="int">
+    SELECT count(1)
+    FROM notice
+    WHERE notice_title=#{noticeTitle}
+  </select>
+
+  <select id="checkById" resultType="int" parameterType="int">
+    SELECT count(1)
+    FROM notice
+    WHERE notice_id=#{noticeId}
+  </select>
+
+  <select id="selectNoticesByTopicId" resultMap="BaseResultMap" parameterType="int">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM notice
+    WHERE 1=1
+    <if test="_parameter != null">
+      AND topic_id = #{topicId, jdbcType=INTEGER}
+    </if>
   </select>
 
 </mapper>

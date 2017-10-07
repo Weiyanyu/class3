@@ -10,6 +10,7 @@ import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
 import top.yeonon.service.Impl.TopicService;
+import top.yeonon.vo.TopicDetailVo;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,7 +23,7 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
 
-    @RequestMapping("list.do")
+    @RequestMapping("list")
     @ResponseBody
     public ServerResponse<PageInfo> getList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -34,7 +35,17 @@ public class TopicController {
         return topicService.getTopicList(pageNum, pageSize);
     }
 
-    @RequestMapping("search.do")
+    @RequestMapping("detail")
+    @ResponseBody
+    public ServerResponse<TopicDetailVo> getList(Integer topicId, HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("用户未登录，请登录");
+        }
+        return topicService.getTopicDetail(topicId);
+    }
+
+    @RequestMapping("search")
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -46,4 +57,6 @@ public class TopicController {
         }
         return topicService.searchTopic(topicName, pageNum, pageSize);
     }
+
+
 }

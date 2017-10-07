@@ -17,6 +17,8 @@ import top.yeonon.dao.NoticeMapper;
 import top.yeonon.dao.TopicMapper;
 import top.yeonon.pojo.Topic;
 import top.yeonon.service.ITopicService;
+import top.yeonon.util.DateTimeUtil;
+import top.yeonon.vo.TopicDetailVo;
 import top.yeonon.vo.TopicListVo;
 
 import java.util.List;
@@ -36,18 +38,22 @@ public class TopicService implements ITopicService {
 
     private Logger logger = LoggerFactory.getLogger(TopicService.class);
 
+
+    //添加主题
     @Override
-    public ServerResponse<String> addTopic(String topicName) {
-        if (StringUtils.isBlank(topicName)) {
+    public ServerResponse<String> addTopic(Topic topic) {
+
+        if (topic == null || StringUtils.isBlank(topic.getTopicName())) {
             return ServerResponse.createByErrorMessage("参数错误，请检查后重新输入");
         }
-        int rowCount = topicMapper.selectTopicByName(topicName);
+        int rowCount = topicMapper.selectTopicByName(topic.getTopicName());
         if (rowCount > 0) {
             return ServerResponse.createByErrorMessage("该主题已存在，此操作无效");
         }
         Topic newTopic = new Topic();
-        newTopic.setTopicName(topicName);
-        newTopic.setTopicStatus(1);
+        newTopic.setTopicName(topic.getTopicName());
+        newTopic.setTopicStatus(topic.getTopicStatus());
+        newTopic.setTopicDesc(topic.getTopicDesc());
         rowCount = topicMapper.insert(newTopic);
         if (rowCount <= 0) {
             return ServerResponse.createByErrorMessage("添加失败，服务器异常");
@@ -85,7 +91,7 @@ public class TopicService implements ITopicService {
 
     private void deepDelete(Integer topicId) throws Exception {
 
-        List<Integer> noticeIdList = noticeMapper.selectNoticesByTopicId(topicId);
+        List<Integer> noticeIdList = noticeMapper.selectNoticesIdsByTopicId(topicId);
         for(Integer noticeId : noticeIdList) {
             List<Integer> commentIdList = commentMapper.selectCommentsByNoticeId(noticeId);
             for (Integer commentId: commentIdList) {
@@ -110,6 +116,20 @@ public class TopicService implements ITopicService {
         result.setList(topicListVoList);
         return ServerResponse.createBySuccess(result);
     }
+
+
+    //详情
+    @Override
+    public ServerResponse<TopicDetailVo> getTopicDetail(Integer topicId) {
+        Topic topic = topicMapper.selectByPrimaryKey(topicId);
+        if (topic == null) {
+            return ServerResponse.createByErrorMessage("改主题不存在");
+        }
+        TopicDetailVo topicDetailVo = assembleTopicDetailVo(topic);
+        return ServerResponse.createBySuccess(topicDetailVo);
+    }
+
+
 
     @Override
     public ServerResponse<PageInfo> searchTopic(String topicName, int pageNum, int pageSize) {
@@ -141,6 +161,7 @@ public class TopicService implements ITopicService {
 
         updateTopic.setTopicStatus(topic.getTopicStatus());
         updateTopic.setTopicName(topic.getTopicName());
+        updateTopic.setTopicDesc(topic.getTopicDesc());
 
         int rowCount = topicMapper.updateByPrimaryKey(updateTopic);
         if (rowCount <= 0) {
@@ -149,14 +170,24 @@ public class TopicService implements ITopicService {
         return ServerResponse.createBySuccessMessage("更新成功");
     }
 
-
+    //装配数据对象
     private TopicListVo assembleTopicListVo(Topic topic) {
         TopicListVo topicListVo = new TopicListVo();
         topicListVo.setId(topic.getTopicId());
         topicListVo.setStatus(topic.getTopicStatus());
         topicListVo.setTopicName(topic.getTopicName());
-        topicListVo.setDesc(topic.getTopicDesc());
         return topicListVo;
+    }
+
+    private TopicDetailVo assembleTopicDetailVo(Topic topic) {
+        TopicDetailVo topicDetailVo = new TopicDetailVo();
+        topicDetailVo.setId(topic.getTopicId());
+        topicDetailVo.setStatus(topic.getTopicStatus());
+        topicDetailVo.setTopicDesc(topic.getTopicDesc());
+        topicDetailVo.setTopicName(topic.getTopicName());
+        topicDetailVo.setCreateTime(DateTimeUtil.dateToStr(topic.getCreateTime()));
+        topicDetailVo.setUpdateTime(DateTimeUtil.dateToStr(topic.getUpdateTime()));
+        return topicDetailVo;
     }
 
 

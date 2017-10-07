@@ -1,37 +1,35 @@
 package top.yeonon.controller.backend;
-import com.github.pagehelper.PageInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
-import top.yeonon.pojo.Topic;
+import top.yeonon.pojo.Notice;
 import top.yeonon.pojo.User;
-import top.yeonon.service.ITopicService;
+import top.yeonon.service.INoticeService;
 import top.yeonon.service.IUserService;
-import top.yeonon.vo.TopicDetailVo;
-
+import top.yeonon.service.Impl.NoticeService;
+import top.yeonon.service.Impl.UserService;
+import top.yeonon.vo.NoticeDetailVo;
 
 import javax.servlet.http.HttpSession;
 
-
 @Controller
-@RequestMapping("/manage/topic/")
-public class TopicManageController {
+@RequestMapping("/manage/notice/")
+public class NoticeManageController {
 
     @Autowired
     private IUserService userService;
 
     @Autowired
-    private ITopicService topicService;
+    private INoticeService noticeService;
 
-    //添加主题，用过提交表单添加
-    @RequestMapping(value = "add_topic", method = RequestMethod.POST)
+    @RequestMapping("add_notice")
     @ResponseBody
-    public ServerResponse<String> addTopic(Topic topic, HttpSession session) {
+    public ServerResponse add(Notice notice, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
@@ -40,93 +38,87 @@ public class TopicManageController {
         if (!validResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
         }
-        return topicService.addTopic(topic);
+        notice.setUserId(user.getUserId());
+        return noticeService.addNotice(notice);
     }
 
-    //批量删除主题，单个删除同样可以使用
-    @RequestMapping("batch_delete_topic")
+    @RequestMapping("batch_delete_notice")
     @ResponseBody
-    public ServerResponse<String> batchDeleteTopic(String topicIds, HttpSession session) {
+    public ServerResponse batchDelete(String noticeIds, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
         }
-
         ServerResponse validResponse = userService.checkRole(user);
         if (!validResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
         }
-        return topicService.batchDelete(topicIds);
-    }
 
-
-    //返回List
-    @RequestMapping("list")
-    @ResponseBody
-    public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                         HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
-        }
-
-        ServerResponse validResponse = userService.checkRole(user);
-        if (!validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
-        }
-        return topicService.getTopicList(pageNum, pageSize);
-    }
-
-    //模糊查询
-    @RequestMapping("search")
-    @ResponseBody
-    public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                         String topicName,
-                                         HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
-        }
-
-        ServerResponse validResponse = userService.checkRole(user);
-        if (!validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
-        }
-        return topicService.searchTopic(topicName, pageNum, pageSize);
-
+        return noticeService.batchDeleteNotice(noticeIds);
     }
 
 
-    @RequestMapping("update_topic")
+    @RequestMapping("list_notice")
     @ResponseBody
-    public ServerResponse update(Topic topic, HttpSession session) {
+    public ServerResponse list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                               HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
         }
-
         ServerResponse validResponse = userService.checkRole(user);
         if (!validResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
         }
-
-        return topicService.updateTopic(topic);
+        return noticeService.getNoticeList(pageNum, pageSize, null);
     }
 
-    @RequestMapping("detail")
+
+
+    @RequestMapping("list_notice_by_topic")
     @ResponseBody
-    public ServerResponse<TopicDetailVo> detail(Integer topicId, HttpSession session) {
+    public ServerResponse listByTopic(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                      Integer topicId, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
         }
-
         ServerResponse validResponse = userService.checkRole(user);
         if (!validResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
         }
-        return topicService.getTopicDetail(topicId);
+        return noticeService.getNoticeList(pageNum, pageSize, topicId);
+    }
+
+    @RequestMapping("detail_notice")
+    @ResponseBody
+    public ServerResponse<NoticeDetailVo> detail(Integer noticeId, HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
+        }
+        ServerResponse validResponse = userService.checkRole(user);
+        if (!validResponse.isSuccess()) {
+            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
+        }
+        return noticeService.getDetail(noticeId);
+    }
+
+
+    @RequestMapping("update_notice")
+    @ResponseBody
+    public ServerResponse update(Notice notice, HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
+        }
+        ServerResponse validResponse = userService.checkRole(user);
+        if (!validResponse.isSuccess()) {
+            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
+        }
+        notice.setUserId(user.getUserId());
+        return noticeService.updateNotice(notice);
     }
 }

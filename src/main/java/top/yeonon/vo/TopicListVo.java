@@ -4,7 +4,6 @@ public class TopicListVo {
     private Integer id;
     private String topicName;
     private Integer status;
-    private String desc;
 
     public Integer getId() {
         return id;
@@ -30,11 +29,5 @@ public class TopicListVo {
         this.status = status;
     }
 
-    public String getDesc() {
-        return desc;
-    }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 }

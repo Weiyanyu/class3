@@ -1,8 +1,10 @@
 package top.yeonon.dao;
 
+import org.apache.ibatis.annotations.Param;
 import top.yeonon.pojo.Notice;
 
 import java.util.List;
+import java.util.zip.CheckedInputStream;
 
 public interface NoticeMapper {
     int deleteByPrimaryKey(Integer noticeId);
@@ -17,5 +19,13 @@ public interface NoticeMapper {
 
     int updateByPrimaryKey(Notice record);
 
-    List<Integer> selectNoticesByTopicId(Integer topicId);
+    List<Integer> selectNoticesIdsByTopicId(Integer topicId);
+
+    int checkTitle(String noticeTitle);
+
+    int checkById(Integer noticeId);
+
+    List<Notice> selectNoticesByTopicId(Integer topicId);
+
+
 }

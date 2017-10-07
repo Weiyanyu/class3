@@ -28,8 +28,8 @@
     insert into topic (topic_id, topic_name, create_time, 
       update_time, topic_status, topic_desc
       )
-    values (#{topicId,jdbcType=INTEGER}, #{topicName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{topicStatus,jdbcType=INTEGER}, #{topicDesc,jdbcType=VARCHAR}
+    values (#{topicId,jdbcType=INTEGER}, #{topicName,jdbcType=VARCHAR}, now(),
+      now(), #{topicStatus,jdbcType=INTEGER}, #{topicDesc,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="top.yeonon.pojo.Topic" >
@@ -62,10 +62,10 @@
         #{topicName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+        now(),
       </if>
       <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
+        now(),
       </if>
       <if test="topicStatus != null" >
         #{topicStatus,jdbcType=INTEGER},
@@ -85,7 +85,7 @@
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        update_time = now(),
       </if>
       <if test="topicStatus != null" >
         topic_status = #{topicStatus,jdbcType=INTEGER},
@@ -100,7 +100,7 @@
     update topic
     set topic_name = #{topicName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       topic_status = #{topicStatus,jdbcType=INTEGER},
       topic_desc = #{topicDesc,jdbcType=VARCHAR}
     where topic_id = #{topicId,jdbcType=INTEGER}

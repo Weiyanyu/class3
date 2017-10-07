@@ -2,6 +2,7 @@ package top.yeonon.controller.backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,18 +10,18 @@ import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
-import top.yeonon.service.Impl.UserService;
+
 
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/manage/user")
+@RequestMapping("/manage/user/")
 public class UserManageController {
 
     @Autowired
     private IUserService userService;
 
-    @RequestMapping(value = "login.do" , method = RequestMethod.POST)
+    @RequestMapping(value = "login" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> login(String studentId, String password, HttpSession session) {
         ServerResponse<User> response = userService.login(studentId, password);
