@@ -1,5 +1,6 @@
 package top.yeonon.controller.backend;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import top.yeonon.service.IUserService;
 import top.yeonon.service.Impl.NoticeService;
 import top.yeonon.service.Impl.UserService;
 import top.yeonon.vo.NoticeDetailVo;
+import top.yeonon.vo.NoticeListVo;
 
 import javax.servlet.http.HttpSession;
 
@@ -90,6 +92,22 @@ public class NoticeManageController {
             return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
         }
         return noticeService.getNoticeList(pageNum, pageSize, topicId);
+    }
+
+    @RequestMapping("search_notice")
+    @ResponseBody
+    public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                           String noticeTitle, HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
+        }
+        ServerResponse validResponse = userService.checkRole(user);
+        if (!validResponse.isSuccess()) {
+            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
+        }
+        return noticeService.searchNotice(pageNum, pageSize, noticeTitle);
     }
 
     @RequestMapping("detail_notice")

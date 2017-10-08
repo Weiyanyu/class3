@@ -16,4 +16,6 @@ public interface INoticeService {
     ServerResponse<NoticeDetailVo> getDetail(Integer noticeId);
 
     ServerResponse updateNotice(Notice notice);
+
+    ServerResponse<PageInfo> searchNotice(int pageNum, int pageSize, String noticeTitle);
 }

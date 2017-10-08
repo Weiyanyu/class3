@@ -27,5 +27,7 @@ public interface NoticeMapper {
 
     List<Notice> selectNoticesByTopicId(Integer topicId);
 
+    List<Notice> selectNoticesByNoticeTitle(String noticeTitle);
+
 
 }

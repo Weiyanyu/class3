@@ -171,4 +171,11 @@
     </if>
   </select>
 
+  <select id="selectNoticesByNoticeTitle" resultMap="BaseResultMap" parameterType="string" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM notice
+    WHERE notice_title LIKE CONCAT("%",#{noticeTitle},"%")
+  </select>
+
 </mapper>

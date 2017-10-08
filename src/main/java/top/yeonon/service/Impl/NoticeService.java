@@ -114,6 +114,20 @@ public class NoticeService implements INoticeService {
     }
 
 
+
+    @Override
+    public ServerResponse<PageInfo> searchNotice(int pageNum, int pageSize, String noticeTitle) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Notice> noticeList = noticeMapper.selectNoticesByNoticeTitle(noticeTitle);
+        List<NoticeListVo> noticeListVoList = Lists.newArrayList();
+        for (Notice notice : noticeList) {
+            noticeListVoList.add(assembleNoticeListVo(notice));
+        }
+        PageInfo result = new PageInfo(noticeList);
+        result.setList(noticeListVoList);
+        return ServerResponse.createBySuccess(result);
+    }
+
     @Override
     public ServerResponse updateNotice(Notice notice) {
         if (notice == null) {
