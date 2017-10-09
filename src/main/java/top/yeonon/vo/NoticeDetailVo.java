@@ -1,5 +1,9 @@
 package top.yeonon.vo;
 
+import top.yeonon.pojo.Comment;
+
+import java.util.List;
+
 public class NoticeDetailVo {
     private Integer noticeId;
 
@@ -20,6 +24,7 @@ public class NoticeDetailVo {
     private String subImage;
 
     private String imageHost;
+    private List<Comment> commentList;
 
 
 
@@ -101,5 +106,13 @@ public class NoticeDetailVo {
 
     public void setImageHost(String imageHost) {
         this.imageHost = imageHost;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 }

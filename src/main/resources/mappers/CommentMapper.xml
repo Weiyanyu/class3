@@ -117,13 +117,38 @@
     where comment_id = #{commentId,jdbcType=INTEGER}
   </update>
 
+  <select id="selectCommentsByNoticeId" resultMap="BaseResultMap" parameterType="int" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM comment
+    WHERE notice_id = #{noticeId}
+  </select>
 
 
-  <select id="selectCommentsByNoticeId" resultType="int" parameterType="int">
+
+  <select id="selectCommentsIdsByNoticeId" resultType="int" parameterType="int">
     SELECT
     comment_id
     FROM comment
     WHERE notice_id = #{noticeId}
+  </select>
+
+  <select id="selectCommentsByUserId" resultMap="BaseResultMap" parameterType="int" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM comment
+    WHERE user_id = #{userId}
+  </select>
+
+  <select id="selectCommentsByUserIdAndDesc" parameterType="map" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM comment
+    WHERE user_id = #{userId}
+    <if test="commentDesc != null">
+      AND comment_desc LIKE CONCAT("%",#{commentDesc},"%")
+    </if>
+
   </select>
 
 

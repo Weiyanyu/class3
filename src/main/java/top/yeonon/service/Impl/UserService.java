@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.yeonon.common.Const;
+import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.dao.UserMapper;
 import top.yeonon.pojo.User;
@@ -56,7 +57,7 @@ public class UserService implements IUserService {
         if (!validResponse.isSuccess()) {
             return validResponse;
         }
-        user.setRole(0);
+        user.setRole(Const.Role.ROLE_CUSTOMER);
 
         //TODO 这里还有设置头像的功能，因为现在FTP服务器还没有搭建，暂时不设置
         //user.setAvatar(user.getAvatar());
@@ -103,7 +104,7 @@ public class UserService implements IUserService {
     @Override
     public ServerResponse<String> forgetResetPassword(String studentId, String newPassword, String token) {
         if (StringUtils.isBlank(token)) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
         String savedToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + studentId);
         logger.warn("saved Token: " + savedToken);
@@ -203,7 +204,7 @@ public class UserService implements IUserService {
                 }
             }
         } else {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
         return ServerResponse.createBySuccessMessage("校验成功");
     }

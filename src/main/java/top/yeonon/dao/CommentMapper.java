@@ -19,7 +19,13 @@ public interface CommentMapper {
     int updateByPrimaryKey(Comment record);
 
 
-    List<Integer> selectCommentsByNoticeId(Integer noticeId);
+    List<Comment> selectCommentsByNoticeId(Integer noticeId);
+
+    List<Integer> selectCommentsIdsByNoticeId(Integer noticeId);
+
+    List<Comment> selectCommentsByUserId(Integer userId);
+
+    List<Comment> selectCommentsByUserIdAndDesc(@Param("commentDesc") String commentDesc, @Param("userId") Integer userId);
 
 
 }

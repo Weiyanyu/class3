@@ -1,5 +1,9 @@
 package top.yeonon.vo;
 
+import top.yeonon.pojo.Notice;
+
+import java.util.List;
+
 public class TopicDetailVo {
     private Integer id;
     private String topicName;
@@ -7,6 +11,8 @@ public class TopicDetailVo {
     private String topicDesc;
     private String createTime;
     private String updateTime;
+
+    private List<Notice> allNotice;
 
     public Integer getId() {
         return id;
@@ -54,5 +60,13 @@ public class TopicDetailVo {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<Notice> getAllNotice() {
+        return allNotice;
+    }
+
+    public void setAllNotice(List<Notice> allNotice) {
+        this.allNotice = allNotice;
     }
 }

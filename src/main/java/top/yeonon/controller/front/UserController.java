@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.yeonon.common.Const;
+import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
@@ -105,7 +106,7 @@ public class UserController {
     public ServerResponse forceGetInfo(HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录,强制登录status=10");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录,强制登录status=10");
         }
         return userService.forceGetInfo(user.getUserId());
     }

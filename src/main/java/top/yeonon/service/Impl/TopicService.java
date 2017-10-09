@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.dao.CommentMapper;
 import top.yeonon.dao.NoticeMapper;
 import top.yeonon.dao.TopicMapper;
+import top.yeonon.pojo.Notice;
 import top.yeonon.pojo.Topic;
 import top.yeonon.service.ITopicService;
 import top.yeonon.util.DateTimeUtil;
@@ -44,7 +46,7 @@ public class TopicService implements ITopicService {
     public ServerResponse<String> addTopic(Topic topic) {
 
         if (topic == null || StringUtils.isBlank(topic.getTopicName())) {
-            return ServerResponse.createByErrorMessage("参数错误，请检查后重新输入");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
         int rowCount = topicMapper.selectTopicByName(topic.getTopicName());
         if (rowCount > 0) {
@@ -70,7 +72,7 @@ public class TopicService implements ITopicService {
     public ServerResponse<String> batchDelete(String topicIds) {
         List<String> topicIdList = Splitter.on(",").splitToList(topicIds);
         if (CollectionUtils.isEmpty(topicIdList)) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
         for (String topicId : topicIdList) {
             Integer IntTopicId = Integer.parseInt(topicId);
@@ -93,7 +95,7 @@ public class TopicService implements ITopicService {
 
         List<Integer> noticeIdList = noticeMapper.selectNoticesIdsByTopicId(topicId);
         for(Integer noticeId : noticeIdList) {
-            List<Integer> commentIdList = commentMapper.selectCommentsByNoticeId(noticeId);
+            List<Integer> commentIdList = commentMapper.selectCommentsIdsByNoticeId(noticeId);
             for (Integer commentId: commentIdList) {
                 commentMapper.deleteByPrimaryKey(commentId);
             }
@@ -121,6 +123,11 @@ public class TopicService implements ITopicService {
     //详情
     @Override
     public ServerResponse<TopicDetailVo> getTopicDetail(Integer topicId) {
+
+        if (topicId == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
+        }
+
         Topic topic = topicMapper.selectByPrimaryKey(topicId);
         if (topic == null) {
             return ServerResponse.createByErrorMessage("改主题不存在");
@@ -134,7 +141,7 @@ public class TopicService implements ITopicService {
     @Override
     public ServerResponse<PageInfo> searchTopic(String topicName, int pageNum, int pageSize) {
         if (StringUtils.isBlank(topicName)) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
 
         PageHelper.startPage(pageNum, pageSize);
@@ -152,7 +159,7 @@ public class TopicService implements ITopicService {
     @Override
     public ServerResponse updateTopic(Topic topic) {
         if (topic == null) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
         Topic updateTopic = topicMapper.selectByPrimaryKey(topic.getTopicId());
         if (updateTopic == null) {
@@ -185,6 +192,9 @@ public class TopicService implements ITopicService {
         topicDetailVo.setStatus(topic.getTopicStatus());
         topicDetailVo.setTopicDesc(topic.getTopicDesc());
         topicDetailVo.setTopicName(topic.getTopicName());
+
+        List<Notice> noticeList = noticeMapper.selectNoticesByTopicId(topic.getTopicId());
+        topicDetailVo.setAllNotice(noticeList);
         topicDetailVo.setCreateTime(DateTimeUtil.dateToStr(topic.getCreateTime()));
         topicDetailVo.setUpdateTime(DateTimeUtil.dateToStr(topic.getUpdateTime()));
         return topicDetailVo;

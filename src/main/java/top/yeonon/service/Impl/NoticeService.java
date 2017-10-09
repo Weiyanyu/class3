@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.yeonon.common.Const;
+import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.dao.CommentMapper;
 import top.yeonon.dao.NoticeMapper;
@@ -37,7 +39,7 @@ public class NoticeService implements INoticeService {
     @Override
     public ServerResponse addNotice(Notice notice) {
         if (notice == null) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
         }
         int rowCount = noticeMapper.checkTitle(notice.getNoticeTitle());
         if (rowCount > 0) {
@@ -60,7 +62,7 @@ public class NoticeService implements INoticeService {
     @Override
     public ServerResponse batchDeleteNotice(String noticeIds) {
         if (StringUtils.isBlank(noticeIds)) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
 
         List<String> noticeIdList = Splitter.on(",").splitToList(noticeIds);
@@ -71,7 +73,7 @@ public class NoticeService implements INoticeService {
                 if (rowCount <= 0) {
                     return ServerResponse.createByErrorMessage("该公告不存在，删除失败");
                 }
-                List<Integer> commentIdList = commentMapper.selectCommentsByNoticeId(IntNoticeId);
+                List<Integer> commentIdList = commentMapper.selectCommentsIdsByNoticeId(IntNoticeId);
                 for (Integer commentId : commentIdList) {
                     commentMapper.deleteByPrimaryKey(commentId);
                 }
@@ -105,6 +107,9 @@ public class NoticeService implements INoticeService {
 
     @Override
     public ServerResponse<NoticeDetailVo> getDetail(Integer noticeId) {
+        if (noticeId == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
+        }
         Notice notice = noticeMapper.selectByPrimaryKey(noticeId);
         if (notice == null) {
             return ServerResponse.createByErrorMessage("该公告不存在");
@@ -131,7 +136,7 @@ public class NoticeService implements INoticeService {
     @Override
     public ServerResponse updateNotice(Notice notice) {
         if (notice == null) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
         Notice updateNotice = noticeMapper.selectByPrimaryKey(notice.getNoticeId());
         if (updateNotice == null) {
@@ -175,6 +180,9 @@ public class NoticeService implements INoticeService {
         noticeDetailVo.setNoticeDesc(notice.getNoticeDesc());
         noticeDetailVo.setMainImage(notice.getMainImage());
         noticeDetailVo.setSubImage(notice.getSubImage());
+
+        List<Comment> commentList = commentMapper.selectCommentsByNoticeId(notice.getNoticeId());
+        noticeDetailVo.setCommentList(commentList);
         noticeDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         noticeDetailVo.setCreateTime(DateTimeUtil.dateToStr(notice.getCreateTime()));
         noticeDetailVo.setUpdateTime(DateTimeUtil.dateToStr(notice.getUpdateTime()));
