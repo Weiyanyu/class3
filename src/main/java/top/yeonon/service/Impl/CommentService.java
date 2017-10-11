@@ -76,6 +76,39 @@ public class CommentService implements ICommentService{
 
     }
 
+    //backend
+
+    @Override
+    public ServerResponse<PageInfo> listByUserIdOrNoticeId(int pageNum, int pageSize, Integer userId, Integer noticeId) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Comment> commentList = commentMapper.selectCommentsByUserIdOrNoticeId(userId, noticeId);
+        List<CommentListVo> commentListVoList = Lists.newArrayList();
+        for (Comment comment : commentList) {
+            commentListVoList.add(assembleCommentListVo(comment));
+        }
+        PageInfo result = new PageInfo(commentList);
+        result.setList(commentListVoList);
+        return ServerResponse.createBySuccess(result);
+    }
+
+    @Override
+    public ServerResponse updateCommentDesc(Comment comment) {
+        if (comment == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
+        }
+        Comment updateComment = commentMapper.selectByPrimaryKey(comment.getCommentId());
+        if (updateComment == null) {
+            return ServerResponse.createBySuccessMessage("不存在该评论，无法修改");
+        }
+        updateComment.setCommentDesc(comment.getCommentDesc());
+        updateComment.setInsertImage(comment.getInsertImage());
+        int rowCount = commentMapper.updateByPrimaryKeySelective(updateComment);
+        if (rowCount <= 0) {
+            return ServerResponse.createByErrorMessage("修改失败，服务器异常");
+        }
+        return ServerResponse.createBySuccessMessage("修改成功");
+    }
+
     private CommentListVo assembleCommentListVo(Comment comment) {
         CommentListVo commentListVo = new CommentListVo();
         commentListVo.setUserId(comment.getUserId());

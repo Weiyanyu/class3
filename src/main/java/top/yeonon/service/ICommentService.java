@@ -12,4 +12,8 @@ public interface ICommentService {
     ServerResponse<PageInfo> listOrSearchComment(int pageNum, int pageSize, Integer userId, String commentDesc);
 
     ServerResponse<CommentDetailVo> detailComment(Integer commentId);
+
+    ServerResponse<PageInfo> listByUserIdOrNoticeId(int pageNum, int pageSize, Integer userId, Integer noticeId);
+
+    ServerResponse updateCommentDesc(Comment comment);
 }

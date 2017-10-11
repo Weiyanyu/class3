@@ -181,7 +181,7 @@ public class NoticeService implements INoticeService {
         noticeDetailVo.setMainImage(notice.getMainImage());
         noticeDetailVo.setSubImage(notice.getSubImage());
 
-        List<Comment> commentList = commentMapper.selectCommentsByNoticeId(notice.getNoticeId());
+        List<Comment> commentList = commentMapper.selectCommentsByUserIdOrNoticeId(null, notice.getNoticeId());
         noticeDetailVo.setCommentList(commentList);
         noticeDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         noticeDetailVo.setCreateTime(DateTimeUtil.dateToStr(notice.getCreateTime()));

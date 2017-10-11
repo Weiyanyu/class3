@@ -199,7 +199,4 @@ public class TopicService implements ITopicService {
         topicDetailVo.setUpdateTime(DateTimeUtil.dateToStr(topic.getUpdateTime()));
         return topicDetailVo;
     }
-
-
-
 }

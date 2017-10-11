@@ -133,11 +133,17 @@
     WHERE notice_id = #{noticeId}
   </select>
 
-  <select id="selectCommentsByUserId" resultMap="BaseResultMap" parameterType="int" >
+  <select id="selectCommentsByUserIdOrNoticeId" resultMap="BaseResultMap" parameterType="int" >
     SELECT
     <include refid="Base_Column_List" />
     FROM comment
-    WHERE user_id = #{userId}
+    WHERE 1=1
+    <if test="userId != null">
+      AND user_id = #{userId}
+    </if>
+    <if test="noticeId != null" >
+      AND notice_id = #{noticeId}
+    </if>
   </select>
 
   <select id="selectCommentsByUserIdAndDesc" parameterType="map" resultMap="BaseResultMap" >
