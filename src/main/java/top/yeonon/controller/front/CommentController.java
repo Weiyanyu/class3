@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
+import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.pojo.Comment;
 import top.yeonon.pojo.User;
 import top.yeonon.service.ICommentService;
@@ -23,29 +24,26 @@ public class CommentController {
     @Autowired
     private ICommentService commentService;
 
+    @CustomerPermission
     @RequestMapping("add_comment")
     @ResponseBody
     public ServerResponse add(Comment comment, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录");
-        }
         comment.setUserId(user.getUserId());
         return commentService.addComment(comment);
     }
 
+    @CustomerPermission
     @RequestMapping("list_comment")
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                          HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录");
-        }
         return commentService.listOrSearchComment(pageNum, pageSize, user.getUserId(), null);
     }
 
+    @CustomerPermission
     @RequestMapping("search_comment")
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -53,20 +51,13 @@ public class CommentController {
                                          String commentDesc,
                                          HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录");
-        }
         return commentService.listOrSearchComment(pageNum, pageSize, user.getUserId(), commentDesc);
     }
 
-
+    @CustomerPermission
     @RequestMapping("detail_comment")
     @ResponseBody
     public ServerResponse<CommentDetailVo> detail(Integer commentId, HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录");
-        }
         return commentService.detailComment(commentId);
     }
 

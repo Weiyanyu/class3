@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
+import top.yeonon.interceptor.ManagerPermission;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
 

@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:component-scan base-package="top.yeonon" annotation-config="true"/>
-
+    
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -30,7 +30,12 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="top.yeonon.interceptor.PermissionInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <!-- 文件上传 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

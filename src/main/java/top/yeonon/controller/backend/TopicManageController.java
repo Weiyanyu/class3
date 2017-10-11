@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
+import top.yeonon.interceptor.ManagerPermission;
 import top.yeonon.pojo.Topic;
 import top.yeonon.pojo.User;
 import top.yeonon.service.ITopicService;
@@ -29,104 +30,56 @@ public class TopicManageController {
     private ITopicService topicService;
 
     //添加主题，用过提交表单添加
+    @ManagerPermission
     @RequestMapping(value = "add_topic", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> addTopic(Topic topic, HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
-        }
-        ServerResponse validResponse = userService.checkRole(user);
-        if (!validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
-        }
         return topicService.addTopic(topic);
     }
 
     //批量删除主题，单个删除同样可以使用
+    @ManagerPermission
     @RequestMapping("batch_delete_topic")
     @ResponseBody
     public ServerResponse<String> batchDeleteTopic(String topicIds, HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
-        }
-
-        ServerResponse validResponse = userService.checkRole(user);
-        if (!validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
-        }
         return topicService.batchDelete(topicIds);
     }
 
 
     //返回List
+    @ManagerPermission
     @RequestMapping("list")
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                          HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
-        }
-
-        ServerResponse validResponse = userService.checkRole(user);
-        if (!validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
-        }
         return topicService.getTopicList(pageNum, pageSize);
     }
 
     //模糊查询
+    @ManagerPermission
     @RequestMapping("search")
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                          String topicName,
                                          HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
-        }
-
-        ServerResponse validResponse = userService.checkRole(user);
-        if (!validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
-        }
         return topicService.searchTopic(topicName, pageNum, pageSize);
 
     }
 
-
+    @ManagerPermission
     @RequestMapping("update_topic")
     @ResponseBody
     public ServerResponse update(Topic topic, HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
-        }
-
-        ServerResponse validResponse = userService.checkRole(user);
-        if (!validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
-        }
 
         return topicService.updateTopic(topic);
     }
 
+    @ManagerPermission
     @RequestMapping("detail")
     @ResponseBody
     public ServerResponse<TopicDetailVo> detail(Integer topicId, HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录，请登录管理员账号");
-        }
-
-        ServerResponse validResponse = userService.checkRole(user);
-        if (!validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("无权限，请登录管理员账号");
-        }
         return topicService.getTopicDetail(topicId);
     }
 }
