@@ -5,38 +5,41 @@ import java.util.Date;
 public class User {
     private Integer userId;
 
+    private String studentId;
+
     private String userName;
 
     private String password;
+
+    private String email;
+
+    private String avatar;
 
     private String question;
 
     private String answer;
 
-    private String email;
+    private Integer role;
 
     private Date createTime;
 
     private Date updateTime;
 
-    private Integer role;
+    private Byte banned;
 
-    private String avatar;
-
-    private String studentId;
-
-    public User(Integer userId, String userName, String password, String question, String answer, String email, Date createTime, Date updateTime, Integer role, String avatar, String studentId) {
+    public User(Integer userId, String studentId, String userName, String password, String email, String avatar, String question, String answer, Integer role, Date createTime, Date updateTime, Byte banned) {
         this.userId = userId;
+        this.studentId = studentId;
         this.userName = userName;
         this.password = password;
+        this.email = email;
+        this.avatar = avatar;
         this.question = question;
         this.answer = answer;
-        this.email = email;
+        this.role = role;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.role = role;
-        this.avatar = avatar;
-        this.studentId = studentId;
+        this.banned = banned;
     }
 
     public User() {
@@ -49,6 +52,14 @@ public class User {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId == null ? null : studentId.trim();
     }
 
     public String getUserName() {
@@ -67,6 +78,22 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar == null ? null : avatar.trim();
+    }
+
     public String getQuestion() {
         return question;
     }
@@ -83,12 +110,12 @@ public class User {
         this.answer = answer == null ? null : answer.trim();
     }
 
-    public String getEmail() {
-        return email;
+    public Integer getRole() {
+        return role;
     }
 
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     public Date getCreateTime() {
@@ -99,35 +126,19 @@ public class User {
         this.createTime = createTime;
     }
 
-    public Date getUptdaeTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUptdaeTime(Date updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
-    public Integer getRole() {
-        return role;
+    public Byte getBanned() {
+        return banned;
     }
 
-    public void setRole(Integer role) {
-        this.role = role;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar == null ? null : avatar.trim();
-    }
-
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId == null ? null : studentId.trim();
+    public void setBanned(Byte banned) {
+        this.banned = banned;
     }
 }

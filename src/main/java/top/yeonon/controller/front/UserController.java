@@ -15,6 +15,7 @@ import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.interceptor.PermissionInterceptor;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IFileService;
+import top.yeonon.service.IMailSenderService;
 import top.yeonon.service.IUserService;
 import top.yeonon.util.PropertiesUtil;
 
@@ -32,6 +33,9 @@ public class UserController {
     @Autowired
     private IFileService fileService;
 
+    @Autowired
+    private IMailSenderService mailSenderService;
+
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> login(String studentId, String password, HttpSession session) {
@@ -46,7 +50,7 @@ public class UserController {
     @RequestMapping("upload_avatar")
     @ResponseBody
     public ServerResponse uploadAvatar(@RequestParam(value = "upload_file", required = false)MultipartFile upload_file,
-                                       HttpSession session, HttpServletRequest request) {
+                                       HttpServletRequest request) {
         String path = request.getSession().getServletContext().getRealPath("upload");
         String targetFileName = fileService.upload(upload_file, path);
         String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
@@ -135,5 +139,14 @@ public class UserController {
     public ServerResponse<String> logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccessMessage("退出登录成功");
+    }
+
+
+    //以下是邮箱发送功能简单测试，暂时不作为正式代码
+    @CustomerPermission
+    @RequestMapping("send_mail")
+    @ResponseBody
+    public ServerResponse sendMail(String to, String content) {
+        return mailSenderService.sendMail(to, content);
     }
 }

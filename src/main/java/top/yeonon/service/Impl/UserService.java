@@ -10,6 +10,7 @@ import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.dao.UserMapper;
 import top.yeonon.pojo.User;
+import top.yeonon.service.IMailSenderService;
 import top.yeonon.service.IUserService;
 import top.yeonon.util.MD5Util;
 import top.yeonon.util.TokenCache;
@@ -23,6 +24,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private IMailSenderService mailSenderService;
 
 
     //登录功能，返回登录信息（密码设置为空），密码是通过MD5加密的
@@ -218,6 +222,8 @@ public class UserService implements IUserService {
         }
         return ServerResponse.createByError();
     }
+
+
 
 
 

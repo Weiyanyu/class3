@@ -25,9 +25,6 @@ import javax.servlet.http.HttpSession;
 public class NoticeManageController {
 
     @Autowired
-    private IUserService userService;
-
-    @Autowired
     private INoticeService noticeService;
 
     @ManagerPermission
@@ -51,8 +48,7 @@ public class NoticeManageController {
     @RequestMapping("list_notice")
     @ResponseBody
     public ServerResponse list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                               HttpSession session) {
+                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return noticeService.getNoticeList(pageNum, pageSize, null);
     }
 
@@ -63,7 +59,7 @@ public class NoticeManageController {
     @ResponseBody
     public ServerResponse listByTopic(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                      Integer topicId, HttpSession session) {
+                                      Integer topicId) {
         return noticeService.getNoticeList(pageNum, pageSize, topicId);
     }
 
@@ -72,14 +68,14 @@ public class NoticeManageController {
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                           String noticeTitle, HttpSession session) {
+                                           String noticeTitle) {
         return noticeService.searchNotice(pageNum, pageSize, noticeTitle);
     }
 
     @ManagerPermission
     @RequestMapping("detail_notice")
     @ResponseBody
-    public ServerResponse<NoticeDetailVo> detail(Integer noticeId, HttpSession session) {
+    public ServerResponse<NoticeDetailVo> detail(Integer noticeId) {
         return noticeService.getDetail(noticeId);
     }
 

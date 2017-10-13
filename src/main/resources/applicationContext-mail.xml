@@ -11,24 +11,22 @@
 
     <context:component-scan base-package="top.yeonon" annotation-config="true"/>
 
-    <!--<context:annotation-config/>-->
-    <aop:aspectj-autoproxy/>
 
-    <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="order" value="2"/>
-        <property name="ignoreUnresolvablePlaceholders" value="true"/>
-        <property name="locations">
-            <list>
-                <value>classpath:*.properties</value>
-            </list>
+    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
+        <property name="username" value="weiyanyu001@163.com" />
+        <property name="password" value="asd124563" />
+        <property name="host" value="smtp.163.com" />
+        <property name="port" value="25" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="protocol" value="smtp" />
+        <property name="javaMailProperties" >
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.timeout">25000</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
         </property>
-        <property name="fileEncoding" value="utf-8"/>
     </bean>
-
-    <import resource="applicationContext-datasource.xml"/>
-
-    <import resource="applicationContext-mail.xml" />
-
-
 </beans>

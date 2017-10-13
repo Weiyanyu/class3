@@ -57,7 +57,7 @@ public class CommentController {
     @CustomerPermission
     @RequestMapping("detail_comment")
     @ResponseBody
-    public ServerResponse<CommentDetailVo> detail(Integer commentId, HttpSession session) {
+    public ServerResponse<CommentDetailVo> detail(Integer commentId) {
         return commentService.detailComment(commentId);
     }
 

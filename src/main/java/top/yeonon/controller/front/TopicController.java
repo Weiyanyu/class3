@@ -28,15 +28,14 @@ public class TopicController {
     @RequestMapping("list")
     @ResponseBody
     public ServerResponse<PageInfo> getList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                            HttpSession session) {
+                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return topicService.getTopicList(pageNum, pageSize);
     }
 
     @CustomerPermission
     @RequestMapping("detail")
     @ResponseBody
-    public ServerResponse<TopicDetailVo> getList(Integer topicId, HttpSession session) {
+    public ServerResponse<TopicDetailVo> getList(Integer topicId) {
         return topicService.getTopicDetail(topicId);
     }
 
@@ -45,8 +44,7 @@ public class TopicController {
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                            String topicName,
-                                           HttpSession session) {
+                                            String topicName) {
         return topicService.searchTopic(topicName, pageNum, pageSize);
     }
 

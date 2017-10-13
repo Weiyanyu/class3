@@ -26,8 +26,7 @@ public class NoticeController {
     @RequestMapping("all_list")
     @ResponseBody
     public ServerResponse<PageInfo> getAllList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                            HttpSession session) {
+                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return noticeService.getNoticeList(pageNum, pageSize, null);
     }
 
@@ -36,7 +35,7 @@ public class NoticeController {
     @ResponseBody
     public ServerResponse<PageInfo> getListByTopic(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                               Integer topicId, HttpSession session) {
+                                               Integer topicId) {
         return noticeService.getNoticeList(pageNum, pageSize, topicId);
     }
 
@@ -45,7 +44,7 @@ public class NoticeController {
     @ResponseBody
     public ServerResponse<PageInfo> searchNotice(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                                   String noticeTitle, HttpSession session) {
+                                                   String noticeTitle) {
         return noticeService.searchNotice(pageNum, pageSize, noticeTitle);
     }
 
@@ -53,7 +52,7 @@ public class NoticeController {
     @CustomerPermission
     @RequestMapping("detail")
     @ResponseBody
-    public ServerResponse<NoticeDetailVo> getListByTopic(Integer noticeId, HttpSession session) {
+    public ServerResponse<NoticeDetailVo> getListByTopic(Integer noticeId) {
         return noticeService.getDetail(noticeId);
     }
 

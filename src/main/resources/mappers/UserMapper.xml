@@ -4,21 +4,22 @@
   <resultMap id="BaseResultMap" type="top.yeonon.pojo.User" >
     <constructor >
       <idArg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="student_id" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="avatar" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="question" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="answer" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="avatar" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="student_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="banned" jdbcType="TINYINT" javaType="java.lang.Byte" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    user_id, user_name, password, question, answer, email, create_time, update_time,
-    role, avatar, student_id
+    user_id, student_id, user_name, password, email, avatar, question, answer, role, 
+    create_time, update_time, banned
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -31,14 +32,16 @@
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="top.yeonon.pojo.User" >
-    insert into user (user_id, user_name, password, 
-      question, answer, email, 
-      create_time, update_time, role,
-      avatar, student_id)
-    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      now(), now(), #{role,jdbcType=INTEGER},
-      #{avatar,jdbcType=VARCHAR}, #{studentId,jdbcType=VARCHAR})
+    insert into user (user_id, student_id, user_name, 
+      password, email, avatar, 
+      question, answer, role, 
+      create_time, update_time, banned
+      )
+    values (#{userId,jdbcType=INTEGER}, #{studentId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
+      #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{banned,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="top.yeonon.pojo.User" >
     insert into user
@@ -46,11 +49,20 @@
       <if test="userId != null" >
         user_id,
       </if>
+      <if test="studentId != null" >
+        student_id,
+      </if>
       <if test="userName != null" >
         user_name,
       </if>
       <if test="password != null" >
         password,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="avatar != null" >
+        avatar,
       </if>
       <if test="question != null" >
         question,
@@ -58,28 +70,25 @@
       <if test="answer != null" >
         answer,
       </if>
-      <if test="email != null" >
-        email,
+      <if test="role != null" >
+        role,
       </if>
       <if test="createTime != null" >
         create_time,
       </if>
       <if test="updateTime != null" >
-        uptdae_time,
+        update_time,
       </if>
-      <if test="role != null" >
-        role,
-      </if>
-      <if test="avatar != null" >
-        avatar,
-      </if>
-      <if test="studentId != null" >
-        student_id,
+      <if test="banned != null" >
+        banned,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
         #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="studentId != null" >
+        #{studentId,jdbcType=VARCHAR},
       </if>
       <if test="userName != null" >
         #{userName,jdbcType=VARCHAR},
@@ -87,40 +96,49 @@
       <if test="password != null" >
         #{password,jdbcType=VARCHAR},
       </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null" >
+        #{avatar,jdbcType=VARCHAR},
+      </if>
       <if test="question != null" >
         #{question,jdbcType=VARCHAR},
       </if>
       <if test="answer != null" >
         #{answer,jdbcType=VARCHAR},
       </if>
-      <if test="email != null" >
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        now(),
-      </if>
-      <if test="updateTime != null" >
-        now(),
-      </if>
       <if test="role != null" >
         #{role,jdbcType=INTEGER},
       </if>
-      <if test="avatar != null" >
-        #{avatar,jdbcType=VARCHAR},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="studentId != null" >
-        #{studentId,jdbcType=VARCHAR},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="banned != null" >
+        #{banned,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="top.yeonon.pojo.User" >
     update user
     <set >
+      <if test="studentId != null" >
+        student_id = #{studentId,jdbcType=VARCHAR},
+      </if>
       <if test="userName != null" >
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
       <if test="password != null" >
         password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null" >
+        avatar = #{avatar,jdbcType=VARCHAR},
       </if>
       <if test="question != null" >
         question = #{question,jdbcType=VARCHAR},
@@ -128,42 +146,36 @@
       <if test="answer != null" >
         answer = #{answer,jdbcType=VARCHAR},
       </if>
-      <if test="email != null" >
-        email = #{email,jdbcType=VARCHAR},
+      <if test="role != null" >
+        role = #{role,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        update_time = now(),
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="role != null" >
-        role = #{role,jdbcType=INTEGER},
-      </if>
-      <if test="avatar != null" >
-        avatar = #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="studentId != null" >
-        student_id = #{studentId,jdbcType=VARCHAR},
+      <if test="banned != null" >
+        banned = #{banned,jdbcType=TINYINT},
       </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="top.yeonon.pojo.User" >
     update user
-    set user_name = #{userName,jdbcType=VARCHAR},
+    set student_id = #{studentId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
       question = #{question,jdbcType=VARCHAR},
       answer = #{answer,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = now(),
       role = #{role,jdbcType=INTEGER},
-      avatar = #{avatar,jdbcType=VARCHAR},
-      student_id = #{studentId,jdbcType=VARCHAR}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      banned = #{banned,jdbcType=TINYINT}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
-
   <select id="checkStudentId" resultType="int" parameterType="string" >
     SELECT count(1)
     <include refid="Base_Column_List"/>
@@ -214,5 +226,10 @@
     AND password=#{oldPassword}
   </select>
 
-
+  <select id="selectEmailByStudentId" parameterType="string" resultType="string" >
+    SELECT
+    email
+    FROM user
+    WHERE student_id = #{studentId}
+  </select>
 </mapper>

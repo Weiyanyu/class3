@@ -33,7 +33,7 @@ public class TopicManageController {
     @ManagerPermission
     @RequestMapping(value = "add_topic", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> addTopic(Topic topic, HttpSession session) {
+    public ServerResponse<String> addTopic(Topic topic) {
         return topicService.addTopic(topic);
     }
 
@@ -41,7 +41,7 @@ public class TopicManageController {
     @ManagerPermission
     @RequestMapping("batch_delete_topic")
     @ResponseBody
-    public ServerResponse<String> batchDeleteTopic(String topicIds, HttpSession session) {
+    public ServerResponse<String> batchDeleteTopic(String topicIds) {
         return topicService.batchDelete(topicIds);
     }
 
@@ -51,8 +51,7 @@ public class TopicManageController {
     @RequestMapping("list")
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                         HttpSession session) {
+                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return topicService.getTopicList(pageNum, pageSize);
     }
 
@@ -62,8 +61,7 @@ public class TopicManageController {
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                         String topicName,
-                                         HttpSession session) {
+                                         String topicName) {
         return topicService.searchTopic(topicName, pageNum, pageSize);
 
     }
@@ -71,7 +69,7 @@ public class TopicManageController {
     @ManagerPermission
     @RequestMapping("update_topic")
     @ResponseBody
-    public ServerResponse update(Topic topic, HttpSession session) {
+    public ServerResponse update(Topic topic) {
 
         return topicService.updateTopic(topic);
     }
@@ -79,7 +77,7 @@ public class TopicManageController {
     @ManagerPermission
     @RequestMapping("detail")
     @ResponseBody
-    public ServerResponse<TopicDetailVo> detail(Integer topicId, HttpSession session) {
+    public ServerResponse<TopicDetailVo> detail(Integer topicId) {
         return topicService.getTopicDetail(topicId);
     }
 }
