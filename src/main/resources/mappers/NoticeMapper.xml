@@ -3,46 +3,45 @@
 <mapper namespace="top.yeonon.dao.NoticeMapper" >
   <resultMap id="BaseResultMap" type="top.yeonon.pojo.Notice" >
     <constructor >
-      <idArg column="notice_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="topic_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="notice_title" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="notice_desc" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="description" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="sub_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    notice_id, user_id, topic_id, notice_title, notice_desc, create_time, update_time, 
-    main_image, sub_image
+    id, user_id, topic_id, title, description, main_image, sub_image, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from notice
-    where notice_id = #{noticeId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from notice
-    where notice_id = #{noticeId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="top.yeonon.pojo.Notice" >
-    insert into notice (notice_id, user_id, topic_id, 
-      notice_title, notice_desc, create_time, 
-      update_time, main_image, sub_image
+    insert into notice (id, user_id, topic_id, 
+      title, description, main_image, 
+      sub_image, create_time, update_time
       )
-    values (#{noticeId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{topicId,jdbcType=INTEGER}, 
-      #{noticeTitle,jdbcType=VARCHAR}, #{noticeDesc,jdbcType=VARCHAR}, now(),
-      now(), #{mainImage,jdbcType=VARCHAR}, #{subImage,jdbcType=VARCHAR}
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{topicId,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, 
+      #{subImage,jdbcType=VARCHAR}, now(), now()
       )
   </insert>
   <insert id="insertSelective" parameterType="top.yeonon.pojo.Notice" >
     insert into notice
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="noticeId != null" >
-        notice_id,
+      <if test="id != null" >
+        id,
       </if>
       <if test="userId != null" >
         user_id,
@@ -50,17 +49,11 @@
       <if test="topicId != null" >
         topic_id,
       </if>
-      <if test="noticeTitle != null" >
-        notice_title,
+      <if test="title != null" >
+        title,
       </if>
-      <if test="noticeDesc != null" >
-        notice_desc,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
+      <if test="description != null" >
+        description,
       </if>
       <if test="mainImage != null" >
         main_image,
@@ -68,10 +61,16 @@
       <if test="subImage != null" >
         sub_image,
       </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="noticeId != null" >
-        #{noticeId,jdbcType=INTEGER},
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=INTEGER},
@@ -79,23 +78,23 @@
       <if test="topicId != null" >
         #{topicId,jdbcType=INTEGER},
       </if>
-      <if test="noticeTitle != null" >
-        #{noticeTitle,jdbcType=VARCHAR},
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
       </if>
-      <if test="noticeDesc != null" >
-        #{noticeDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        now(),
-      </if>
-      <if test="updateTime != null" >
-        now(),
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
       </if>
       <if test="mainImage != null" >
         #{mainImage,jdbcType=VARCHAR},
       </if>
       <if test="subImage != null" >
         #{subImage,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        now(),
+      </if>
+      <if test="updateTime != null" >
+        now(),
       </if>
     </trim>
   </insert>
@@ -108,17 +107,11 @@
       <if test="topicId != null" >
         topic_id = #{topicId,jdbcType=INTEGER},
       </if>
-      <if test="noticeTitle != null" >
-        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="noticeDesc != null" >
-        notice_desc = #{noticeDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        now(),
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="mainImage != null" >
         main_image = #{mainImage,jdbcType=VARCHAR},
@@ -126,25 +119,32 @@
       <if test="subImage != null" >
         sub_image = #{subImage,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = now(),
+      </if>
     </set>
-    where notice_id = #{noticeId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="top.yeonon.pojo.Notice" >
     update notice
     set user_id = #{userId,jdbcType=INTEGER},
       topic_id = #{topicId,jdbcType=INTEGER},
-      notice_title = #{noticeTitle,jdbcType=VARCHAR},
-      notice_desc = #{noticeDesc,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = now(),
+      title = #{title,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
       main_image = #{mainImage,jdbcType=VARCHAR},
-      sub_image = #{subImage,jdbcType=VARCHAR}
-    where notice_id = #{noticeId,jdbcType=INTEGER}
+      sub_image = #{subImage,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
   </update>
+
 
   <select id="selectNoticesIdsByTopicId" parameterType="int" resultType="int">
     SELECT
-    notice_id
+    id
     FROM notice
     WHERE topic_id = #{topicId}
   </select>
@@ -152,13 +152,13 @@
   <select id="checkTitle" parameterType="string" resultType="int">
     SELECT count(1)
     FROM notice
-    WHERE notice_title=#{noticeTitle}
+    WHERE title=#{noticeTitle}
   </select>
 
   <select id="checkById" resultType="int" parameterType="int">
     SELECT count(1)
     FROM notice
-    WHERE notice_id=#{noticeId}
+    WHERE id=#{noticeId}
   </select>
 
   <select id="selectNoticesByTopicId" resultMap="BaseResultMap" parameterType="int">
@@ -175,7 +175,7 @@
     SELECT
     <include refid="Base_Column_List" />
     FROM notice
-    WHERE notice_title LIKE CONCAT("%",#{noticeTitle},"%")
+    WHERE title LIKE CONCAT("%",#{noticeTitle},"%")
   </select>
 
 </mapper>

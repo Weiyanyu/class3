@@ -3,13 +3,13 @@ package top.yeonon.pojo;
 import java.util.Date;
 
 public class Comment {
-    private Integer commentId;
+    private Integer id;
 
     private Integer userId;
 
     private Integer noticeId;
 
-    private String commentDesc;
+    private String description;
 
     private Date createTime;
 
@@ -17,11 +17,11 @@ public class Comment {
 
     private String insertImage;
 
-    public Comment(Integer commentId, Integer userId, Integer noticeId, String commentDesc, Date createTime, Date updateTime, String insertImage) {
-        this.commentId = commentId;
+    public Comment(Integer id, Integer userId, Integer noticeId, String description, Date createTime, Date updateTime, String insertImage) {
+        this.id = id;
         this.userId = userId;
         this.noticeId = noticeId;
-        this.commentDesc = commentDesc;
+        this.description = description;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.insertImage = insertImage;
@@ -31,12 +31,12 @@ public class Comment {
         super();
     }
 
-    public Integer getCommentId() {
-        return commentId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCommentId(Integer commentId) {
-        this.commentId = commentId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getUserId() {
@@ -55,12 +55,12 @@ public class Comment {
         this.noticeId = noticeId;
     }
 
-    public String getCommentDesc() {
-        return commentDesc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCommentDesc(String commentDesc) {
-        this.commentDesc = commentDesc == null ? null : commentDesc.trim();
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 
     public Date getCreateTime() {

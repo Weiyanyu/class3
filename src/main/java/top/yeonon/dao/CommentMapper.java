@@ -6,13 +6,13 @@ import top.yeonon.pojo.Comment;
 import java.util.List;
 
 public interface CommentMapper {
-    int deleteByPrimaryKey(Integer commentId);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(Comment record);
 
     int insertSelective(Comment record);
 
-    Comment selectByPrimaryKey(Integer commentId);
+    Comment selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(Comment record);
 
@@ -24,6 +24,4 @@ public interface CommentMapper {
     List<Comment> selectCommentsByUserIdOrNoticeId(@Param("userId") Integer userId, @Param("noticeId") Integer noticeId);
 
     List<Comment> selectCommentsByUserIdAndDesc(@Param("commentDesc") String commentDesc, @Param("userId") Integer userId);
-
-
 }

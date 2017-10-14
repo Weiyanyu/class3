@@ -13,9 +13,8 @@ public interface ITopicService {
 
     ServerResponse<String> batchDelete(String topicIds);
 
-    ServerResponse<PageInfo> getTopicList(int pageNum, int pageSize);
 
-    ServerResponse<PageInfo> searchTopic(String topicName, int pageNum, int pageSize);
+    ServerResponse<PageInfo> searchOrListAllTopic(String topicName, int pageNum, int pageSize, String orderBy);
 
     ServerResponse updateTopic(Topic topic);
 

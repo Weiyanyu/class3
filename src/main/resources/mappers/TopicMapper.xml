@@ -3,43 +3,49 @@
 <mapper namespace="top.yeonon.dao.TopicMapper" >
   <resultMap id="BaseResultMap" type="top.yeonon.pojo.Topic" >
     <constructor >
-      <idArg column="topic_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="topic_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="description" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="topic_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="topic_desc" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    topic_id, topic_name, create_time, update_time, topic_status, topic_desc
+    id, name, description, status, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from topic
-    where topic_id = #{topicId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from topic
-    where topic_id = #{topicId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="top.yeonon.pojo.Topic" >
-    insert into topic (topic_id, topic_name, create_time, 
-      update_time, topic_status, topic_desc
+    insert into topic (id, name, description, 
+      status, create_time, update_time
       )
-    values (#{topicId,jdbcType=INTEGER}, #{topicName,jdbcType=VARCHAR}, now(),
-      now(), #{topicStatus,jdbcType=INTEGER}, #{topicDesc,jdbcType=VARCHAR}
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, now(), now()
       )
   </insert>
   <insert id="insertSelective" parameterType="top.yeonon.pojo.Topic" >
     insert into topic
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="topicId != null" >
-        topic_id,
+      <if test="id != null" >
+        id,
       </if>
-      <if test="topicName != null" >
-        topic_name,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -47,19 +53,19 @@
       <if test="updateTime != null" >
         update_time,
       </if>
-      <if test="topicStatus != null" >
-        topic_status,
-      </if>
-      <if test="topicDesc != null" >
-        topic_desc,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="topicId != null" >
-        #{topicId,jdbcType=INTEGER},
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
       </if>
-      <if test="topicName != null" >
-        #{topicName,jdbcType=VARCHAR},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null" >
         now(),
@@ -67,19 +73,19 @@
       <if test="updateTime != null" >
         now(),
       </if>
-      <if test="topicStatus != null" >
-        #{topicStatus,jdbcType=INTEGER},
-      </if>
-      <if test="topicDesc != null" >
-        #{topicDesc,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="top.yeonon.pojo.Topic" >
     update topic
     <set >
-      <if test="topicName != null" >
-        topic_name = #{topicName,jdbcType=VARCHAR},
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -87,41 +93,32 @@
       <if test="updateTime != null" >
         update_time = now(),
       </if>
-      <if test="topicStatus != null" >
-        topic_status = #{topicStatus,jdbcType=INTEGER},
-      </if>
-      <if test="topicDesc != null" >
-        topic_desc = #{topicDesc,jdbcType=VARCHAR},
-      </if>
     </set>
-    where topic_id = #{topicId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="top.yeonon.pojo.Topic" >
     update topic
-    set topic_name = #{topicName,jdbcType=VARCHAR},
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = now(),
-      topic_status = #{topicStatus,jdbcType=INTEGER},
-      topic_desc = #{topicDesc,jdbcType=VARCHAR}
-    where topic_id = #{topicId,jdbcType=INTEGER}
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
   </update>
 
   <select id="selectTopicByName" parameterType="string" resultType="int">
     SELECT count(1)
     FROM topic
-    WHERE topic_name=#{topicName}
+    WHERE name=#{topicName}
   </select>
 
-  <select id="selectAll" resultMap="BaseResultMap">
+
+  <select id="searchOrListAllTopic" resultMap="BaseResultMap" parameterType="map" >
     SELECT
     <include refid="Base_Column_List" />
     FROM topic
-  </select>
-
-  <select id="selectTopicsByLikeName" resultMap="BaseResultMap" parameterType="string" >
-    SELECT
-    <include refid="Base_Column_List" />
-    FROM topic
-    WHERE topic_name LIKE CONCAT("%",#{topicName},"%")
+    <if test="topicName != null">
+      WHERE name LIKE CONCAT("%",#{topicName},"%")
+    </if>
   </select>
 </mapper>

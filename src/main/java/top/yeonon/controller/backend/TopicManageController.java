@@ -51,8 +51,9 @@ public class TopicManageController {
     @RequestMapping("list")
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        return topicService.getTopicList(pageNum, pageSize);
+                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                         String orderBy) {
+        return topicService.searchOrListAllTopic(null, pageNum, pageSize, orderBy);
     }
 
     //模糊查询
@@ -61,8 +62,8 @@ public class TopicManageController {
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                         String topicName) {
-        return topicService.searchTopic(topicName, pageNum, pageSize);
+                                         String topicName, String orderBy) {
+        return topicService.searchOrListAllTopic(topicName, pageNum, pageSize, orderBy);
 
     }
 

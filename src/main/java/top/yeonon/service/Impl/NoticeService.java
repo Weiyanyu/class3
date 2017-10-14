@@ -41,7 +41,7 @@ public class NoticeService implements INoticeService {
         if (notice == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
         }
-        int rowCount = noticeMapper.checkTitle(notice.getNoticeTitle());
+        int rowCount = noticeMapper.checkTitle(notice.getTitle());
         if (rowCount > 0) {
             return ServerResponse.createByErrorMessage("该标题的通知已存在");
         }
@@ -138,7 +138,7 @@ public class NoticeService implements INoticeService {
         if (notice == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
-        Notice updateNotice = noticeMapper.selectByPrimaryKey(notice.getNoticeId());
+        Notice updateNotice = noticeMapper.selectByPrimaryKey(notice.getId());
         if (updateNotice == null) {
             return ServerResponse.createByErrorMessage("不存在该公告，更新失败");
         }
@@ -150,8 +150,8 @@ public class NoticeService implements INoticeService {
             }
         }
         updateNotice.setTopicId(notice.getTopicId());
-        updateNotice.setNoticeDesc(notice.getNoticeDesc());
-        updateNotice.setNoticeTitle(notice.getNoticeTitle());
+        updateNotice.setDescription(notice.getDescription());
+        updateNotice.setTitle(notice.getTitle());
 
         int rowCount = noticeMapper.updateByPrimaryKey(updateNotice);
         if (rowCount <= 0) {
@@ -164,8 +164,8 @@ public class NoticeService implements INoticeService {
     //装配数据对象（VO）的高复用的方法
     private NoticeListVo assembleNoticeListVo(Notice notice) {
         NoticeListVo noticeListVo = new NoticeListVo();
-        noticeListVo.setNoticeId(notice.getNoticeId());
-        noticeListVo.setNoticeTitle(notice.getNoticeTitle());
+        noticeListVo.setNoticeId(notice.getId());
+        noticeListVo.setNoticeTitle(notice.getTitle());
         noticeListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         noticeListVo.setMainImage(notice.getMainImage());
         return noticeListVo;
@@ -175,13 +175,13 @@ public class NoticeService implements INoticeService {
         NoticeDetailVo noticeDetailVo = new NoticeDetailVo();
         noticeDetailVo.setUserId(notice.getUserId());
         noticeDetailVo.setTopicId(notice.getTopicId());
-        noticeDetailVo.setNoticeId(notice.getNoticeId());
-        noticeDetailVo.setNoticeTitle(notice.getNoticeTitle());
-        noticeDetailVo.setNoticeDesc(notice.getNoticeDesc());
+        noticeDetailVo.setNoticeId(notice.getId());
+        noticeDetailVo.setNoticeTitle(notice.getTitle());
+        noticeDetailVo.setNoticeDesc(notice.getDescription());
         noticeDetailVo.setMainImage(notice.getMainImage());
         noticeDetailVo.setSubImage(notice.getSubImage());
 
-        List<Comment> commentList = commentMapper.selectCommentsByUserIdOrNoticeId(null, notice.getNoticeId());
+        List<Comment> commentList = commentMapper.selectCommentsByUserIdOrNoticeId(null, notice.getId());
         noticeDetailVo.setCommentList(commentList);
         noticeDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         noticeDetailVo.setCreateTime(DateTimeUtil.dateToStr(notice.getCreateTime()));

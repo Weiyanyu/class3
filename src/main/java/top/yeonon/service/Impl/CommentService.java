@@ -31,7 +31,7 @@ public class CommentService implements ICommentService{
 
     @Override
     public ServerResponse addComment(Comment comment) {
-        if (comment == null || comment.getCommentDesc() == null) {
+        if (comment == null || comment.getDescription() == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
         }
 
@@ -96,11 +96,11 @@ public class CommentService implements ICommentService{
         if (comment == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
         }
-        Comment updateComment = commentMapper.selectByPrimaryKey(comment.getCommentId());
+        Comment updateComment = commentMapper.selectByPrimaryKey(comment.getId());
         if (updateComment == null) {
             return ServerResponse.createBySuccessMessage("不存在该评论，无法修改");
         }
-        updateComment.setCommentDesc(comment.getCommentDesc());
+        updateComment.setDescription(comment.getDescription());
         updateComment.setInsertImage(comment.getInsertImage());
         int rowCount = commentMapper.updateByPrimaryKeySelective(updateComment);
         if (rowCount <= 0) {
@@ -112,17 +112,17 @@ public class CommentService implements ICommentService{
     private CommentListVo assembleCommentListVo(Comment comment) {
         CommentListVo commentListVo = new CommentListVo();
         commentListVo.setUserId(comment.getUserId());
-        commentListVo.setCommentId(comment.getCommentId());
+        commentListVo.setCommentId(comment.getId());
         commentListVo.setNoticeId(comment.getNoticeId());
         commentListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
-        commentListVo.setBrief(getCommentBrief(comment.getCommentDesc()));
+        commentListVo.setBrief(getCommentBrief(comment.getDescription()));
         return commentListVo;
     }
 
     private CommentDetailVo assembleCommentDetailVo(Comment comment) {
         CommentDetailVo commentDetailVo = new CommentDetailVo();
-        commentDetailVo.setCommentDesc(comment.getCommentDesc());
-        commentDetailVo.setCommentId(comment.getCommentId());
+        commentDetailVo.setCommentDesc(comment.getDescription());
+        commentDetailVo.setCommentId(comment.getId());
         commentDetailVo.setNoticeId(comment.getNoticeId());
         commentDetailVo.setUserId(comment.getUserId());
         commentDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));

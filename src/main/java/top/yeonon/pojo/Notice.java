@@ -3,46 +3,46 @@ package top.yeonon.pojo;
 import java.util.Date;
 
 public class Notice {
-    private Integer noticeId;
+    private Integer id;
 
     private Integer userId;
 
     private Integer topicId;
 
-    private String noticeTitle;
+    private String title;
 
-    private String noticeDesc;
-
-    private Date createTime;
-
-    private Date updateTime;
+    private String description;
 
     private String mainImage;
 
     private String subImage;
 
-    public Notice(Integer noticeId, Integer userId, Integer topicId, String noticeTitle, String noticeDesc, Date createTime, Date updateTime, String mainImage, String subImage) {
-        this.noticeId = noticeId;
+    private Date createTime;
+
+    private Date updateTime;
+
+    public Notice(Integer id, Integer userId, Integer topicId, String title, String description, String mainImage, String subImage, Date createTime, Date updateTime) {
+        this.id = id;
         this.userId = userId;
         this.topicId = topicId;
-        this.noticeTitle = noticeTitle;
-        this.noticeDesc = noticeDesc;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
+        this.title = title;
+        this.description = description;
         this.mainImage = mainImage;
         this.subImage = subImage;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
 
     public Notice() {
         super();
     }
 
-    public Integer getNoticeId() {
-        return noticeId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setNoticeId(Integer noticeId) {
-        this.noticeId = noticeId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getUserId() {
@@ -61,36 +61,20 @@ public class Notice {
         this.topicId = topicId;
     }
 
-    public String getNoticeTitle() {
-        return noticeTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setNoticeTitle(String noticeTitle) {
-        this.noticeTitle = noticeTitle == null ? null : noticeTitle.trim();
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
     }
 
-    public String getNoticeDesc() {
-        return noticeDesc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setNoticeDesc(String noticeDesc) {
-        this.noticeDesc = noticeDesc == null ? null : noticeDesc.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 
     public String getMainImage() {
@@ -107,5 +91,21 @@ public class Notice {
 
     public void setSubImage(String subImage) {
         this.subImage = subImage == null ? null : subImage.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

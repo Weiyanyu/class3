@@ -3,45 +3,61 @@ package top.yeonon.pojo;
 import java.util.Date;
 
 public class Topic {
-    private Integer topicId;
+    private Integer id;
 
-    private String topicName;
+    private String name;
+
+    private String description;
+
+    private Integer status;
 
     private Date createTime;
 
     private Date updateTime;
 
-    private Integer topicStatus;
-
-    private String topicDesc;
-
-    public Topic(Integer topicId, String topicName, Date createTime, Date updateTime, Integer topicStatus, String topicDesc) {
-        this.topicId = topicId;
-        this.topicName = topicName;
+    public Topic(Integer id, String name, String description, Integer status, Date createTime, Date updateTime) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.topicStatus = topicStatus;
-        this.topicDesc = topicDesc;
     }
 
     public Topic() {
         super();
     }
 
-    public Integer getTopicId() {
-        return topicId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setTopicId(Integer topicId) {
-        this.topicId = topicId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getTopicName() {
-        return topicName;
+    public String getName() {
+        return name;
     }
 
-    public void setTopicName(String topicName) {
-        this.topicName = topicName == null ? null : topicName.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Date getCreateTime() {
@@ -58,21 +74,5 @@ public class Topic {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public Integer getTopicStatus() {
-        return topicStatus;
-    }
-
-    public void setTopicStatus(Integer topicStatus) {
-        this.topicStatus = topicStatus;
-    }
-
-    public String getTopicDesc() {
-        return topicDesc;
-    }
-
-    public void setTopicDesc(String topicDesc) {
-        this.topicDesc = topicDesc == null ? null : topicDesc.trim();
     }
 }
