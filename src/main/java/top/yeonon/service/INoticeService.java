@@ -11,11 +11,11 @@ public interface INoticeService {
 
     ServerResponse batchDeleteNotice(String noticeIds);
 
-    ServerResponse<PageInfo> getNoticeList(int pageNum, int pageSize, Integer topicId);
+    ServerResponse<PageInfo> getNoticeList(int pageNum, int pageSize, Integer topicId,String orderBy);
 
     ServerResponse<NoticeDetailVo> getDetail(Integer noticeId);
 
     ServerResponse updateNotice(Integer noticeId, Notice notice);
 
-    ServerResponse<PageInfo> searchNotice(int pageNum, int pageSize, String noticeTitle);
+    ServerResponse<PageInfo> searchNotice(int pageNum, int pageSize, String noticeTitle, String orderBy);
 }

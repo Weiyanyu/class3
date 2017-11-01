@@ -91,8 +91,14 @@ public class NoticeService implements INoticeService {
 
     //通过制定topicId查询或者直接查询所有都可以
     @Override
-    public ServerResponse<PageInfo> getNoticeList(int pageNum, int pageSize, Integer topicId) {
+    public ServerResponse<PageInfo> getNoticeList(int pageNum, int pageSize, Integer topicId, String orderBy) {
         PageHelper.startPage(pageNum, pageSize);
+        if (StringUtils.isNotBlank(orderBy)) {
+            if (Const.TopicOrderBy.ID_ASC_DESC.contains(orderBy) || Const.TopicOrderBy.NAME_ASC_DESC.contains(orderBy)) {
+                String[] orderByArray = orderBy.split("_");
+                PageHelper.orderBy(orderByArray[0] + " " + orderByArray[1]);
+            }
+        }
         List<Notice> noticeList = noticeMapper.selectNoticesByTopicId(topicId);
         List<NoticeListVo> noticeListVoList = Lists.newArrayList();
         for (Notice notice : noticeList) {
@@ -120,9 +126,17 @@ public class NoticeService implements INoticeService {
 
 
 
+
+
     @Override
-    public ServerResponse<PageInfo> searchNotice(int pageNum, int pageSize, String noticeTitle) {
+    public ServerResponse<PageInfo> searchNotice(int pageNum, int pageSize, String noticeTitle, String orderBy) {
         PageHelper.startPage(pageNum, pageSize);
+        if (StringUtils.isNotBlank(orderBy)) {
+            if (Const.TopicOrderBy.ID_ASC_DESC.contains(orderBy) || Const.TopicOrderBy.NAME_ASC_DESC.contains(orderBy)) {
+                String[] orderByArray = orderBy.split("_");
+                PageHelper.orderBy(orderByArray[0] + " " + orderByArray[1]);
+            }
+        }
         List<Notice> noticeList = noticeMapper.selectNoticesByNoticeTitle(noticeTitle);
         List<NoticeListVo> noticeListVoList = Lists.newArrayList();
         for (Notice notice : noticeList) {

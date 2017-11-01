@@ -26,8 +26,4 @@ public class Const {
         Set<String> ID_ASC_DESC = Sets.newHashSet("id_asc", "id_desc");
     }
 
-    public interface CommentOrderBy {
-        Set<String> BRIEF_ASC_DESC = Sets.newHashSet("brief_asc", "brief_desc");
-        Set<String> ID_ASC_DESC = Sets.newHashSet("id_asc", "id_desc");
-    }
 }

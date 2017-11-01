@@ -61,7 +61,6 @@ public class CommentService implements ICommentService{
         return ServerResponse.createBySuccess(result);
     }
 
-
     @Override
     public ServerResponse<CommentDetailVo> detailComment(Integer commentId) {
         if (commentId == null) {
@@ -73,7 +72,6 @@ public class CommentService implements ICommentService{
         }
         CommentDetailVo commentDetailVo = assembleCommentDetailVo(comment);
         return ServerResponse.createBySuccess(commentDetailVo);
-
     }
 
     //backend
