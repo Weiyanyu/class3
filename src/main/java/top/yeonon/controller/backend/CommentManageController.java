@@ -3,9 +3,7 @@ package top.yeonon.controller.backend;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import top.yeonon.common.ServerResponse;
 import top.yeonon.interceptor.ManagerPermission;
@@ -18,7 +16,7 @@ import top.yeonon.vo.CommentDetailVo;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/manage/comment/")
+@RequestMapping("/manage/comments/")
 public class CommentManageController {
 
 
@@ -28,7 +26,7 @@ public class CommentManageController {
 
 
     @ManagerPermission
-    @RequestMapping("/list")
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -38,17 +36,17 @@ public class CommentManageController {
     }
 
     @ManagerPermission
-    @RequestMapping("/detail")
+    @RequestMapping(value = "{commentId}",method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<CommentDetailVo> detail(Integer commentId, HttpSession session) {
+    public ServerResponse<CommentDetailVo> detail(@PathVariable("commentId") Integer commentId, HttpSession session) {
         return commentService.detailComment(commentId);
     }
 
     @ManagerPermission
-    @RequestMapping("/update")
+    @RequestMapping(value = "{commentId}", method = RequestMethod.PUT)
     @ResponseBody
-    public ServerResponse update(Comment comment) {
-        return commentService.updateCommentDesc(comment);
+    public ServerResponse update(@PathVariable("commentId") Integer commentId, Comment comment) {
+        return commentService.updateCommentDesc(commentId ,comment);
     }
 
 }

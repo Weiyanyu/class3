@@ -2,17 +2,13 @@ package top.yeonon.controller.backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
-import top.yeonon.interceptor.ManagerPermission;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
-
-
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -39,7 +35,5 @@ public class UserManageController {
         return response;
     }
 
-
     //这里退出登录就不写了，因为在前端的用户控制器中已经先了，管理员也是用户，退出登录相同
-
 }

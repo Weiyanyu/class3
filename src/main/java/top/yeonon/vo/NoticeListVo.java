@@ -6,6 +6,7 @@ public class NoticeListVo {
     private String noticeTitle;
     private String mainImage;
     private String imageHost;
+    private String brief;
 
 
     public Integer getNoticeId() {
@@ -38,5 +39,13 @@ public class NoticeListVo {
 
     public void setImageHost(String imageHost) {
         this.imageHost = imageHost;
+    }
+
+    public String getBrief() {
+        return brief;
+    }
+
+    public void setBrief(String brief) {
+        this.brief = brief;
     }
 }

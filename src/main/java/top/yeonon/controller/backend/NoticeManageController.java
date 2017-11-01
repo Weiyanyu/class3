@@ -3,9 +3,7 @@ package top.yeonon.controller.backend;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.interceptor.ManagerPermission;
@@ -21,14 +19,14 @@ import top.yeonon.vo.NoticeListVo;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/manage/notice/")
+@RequestMapping("/manage/notices/")
 public class NoticeManageController {
 
     @Autowired
     private INoticeService noticeService;
 
     @ManagerPermission
-    @RequestMapping("add_notice")
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse add(Notice notice, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -37,25 +35,16 @@ public class NoticeManageController {
     }
 
     @ManagerPermission
-    @RequestMapping("batch_delete_notice")
+    @RequestMapping(value = "{noticeIds}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ServerResponse batchDelete(String noticeIds, HttpSession session) {
+    public ServerResponse batchDelete(@PathVariable("noticeIds") String noticeIds) {
 
         return noticeService.batchDeleteNotice(noticeIds);
     }
 
-    @ManagerPermission
-    @RequestMapping("list_notice")
-    @ResponseBody
-    public ServerResponse list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        return noticeService.getNoticeList(pageNum, pageSize, null);
-    }
-
-
 
     @ManagerPermission
-    @RequestMapping("list_notice_by_topic")
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse listByTopic(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -64,7 +53,7 @@ public class NoticeManageController {
     }
 
     @ManagerPermission
-    @RequestMapping("search_notice")
+    @RequestMapping(value = "search", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -73,19 +62,20 @@ public class NoticeManageController {
     }
 
     @ManagerPermission
-    @RequestMapping("detail_notice")
+    @RequestMapping(value = "{noticeId}", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<NoticeDetailVo> detail(Integer noticeId) {
+    public ServerResponse<NoticeDetailVo> detail(@PathVariable("noticeId") Integer noticeId) {
         return noticeService.getDetail(noticeId);
     }
 
 
     @ManagerPermission
-    @RequestMapping("update_notice")
+    @RequestMapping(value = "{noticeId}", method = RequestMethod.PUT)
     @ResponseBody
-    public ServerResponse update(Notice notice, HttpSession session) {
+    public ServerResponse update(@PathVariable("noticeId") Integer noticeId,
+                                 Notice notice, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         notice.setUserId(user.getUserId());
-        return noticeService.updateNotice(notice);
+        return noticeService.updateNotice(noticeId,notice);
     }
 }

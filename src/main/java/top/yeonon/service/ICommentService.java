@@ -15,5 +15,5 @@ public interface ICommentService {
 
     ServerResponse<PageInfo> listByUserIdOrNoticeId(int pageNum, int pageSize, Integer userId, Integer noticeId);
 
-    ServerResponse updateCommentDesc(Comment comment);
+    ServerResponse updateCommentDesc(Integer commentId, Comment comment);
 }

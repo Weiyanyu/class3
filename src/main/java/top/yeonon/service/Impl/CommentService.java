@@ -92,11 +92,11 @@ public class CommentService implements ICommentService{
     }
 
     @Override
-    public ServerResponse updateCommentDesc(Comment comment) {
+    public ServerResponse updateCommentDesc(Integer commentId, Comment comment) {
         if (comment == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
         }
-        Comment updateComment = commentMapper.selectByPrimaryKey(comment.getId());
+        Comment updateComment = commentMapper.selectByPrimaryKey(commentId);
         if (updateComment == null) {
             return ServerResponse.createBySuccessMessage("不存在该评论，无法修改");
         }

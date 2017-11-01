@@ -134,11 +134,11 @@ public class NoticeService implements INoticeService {
     }
 
     @Override
-    public ServerResponse updateNotice(Notice notice) {
+    public ServerResponse updateNotice(Integer noticeId, Notice notice) {
         if (notice == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
-        Notice updateNotice = noticeMapper.selectByPrimaryKey(notice.getId());
+        Notice updateNotice = noticeMapper.selectByPrimaryKey(noticeId);
         if (updateNotice == null) {
             return ServerResponse.createByErrorMessage("不存在该公告，更新失败");
         }
@@ -168,6 +168,7 @@ public class NoticeService implements INoticeService {
         noticeListVo.setNoticeTitle(notice.getTitle());
         noticeListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         noticeListVo.setMainImage(notice.getMainImage());
+        noticeListVo.setBrief(getNoticeBrief(notice.getDescription()));
         return noticeListVo;
     }
 
@@ -187,6 +188,13 @@ public class NoticeService implements INoticeService {
         noticeDetailVo.setCreateTime(DateTimeUtil.dateToStr(notice.getCreateTime()));
         noticeDetailVo.setUpdateTime(DateTimeUtil.dateToStr(notice.getUpdateTime()));
         return noticeDetailVo;
+    }
+
+    private String getNoticeBrief(String noticeDesc) {
+        if (noticeDesc.length() >= 10) {
+            return noticeDesc.substring(0,10);
+        }
+        return noticeDesc;
     }
 
 

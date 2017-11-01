@@ -16,7 +16,7 @@ public interface ITopicService {
 
     ServerResponse<PageInfo> searchOrListAllTopic(String topicName, int pageNum, int pageSize, String orderBy);
 
-    ServerResponse updateTopic(Topic topic);
+    ServerResponse updateTopic(Integer topicId, Topic topic);
 
     ServerResponse<TopicDetailVo> getTopicDetail(Integer topicId);
 }

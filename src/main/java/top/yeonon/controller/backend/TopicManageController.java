@@ -2,10 +2,7 @@ package top.yeonon.controller.backend;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.interceptor.ManagerPermission;
@@ -20,18 +17,16 @@ import javax.servlet.http.HttpSession;
 
 
 @Controller
-@RequestMapping("/manage/topic/")
+@RequestMapping("/manage/topics/")
 public class TopicManageController {
 
-    @Autowired
-    private IUserService userService;
 
     @Autowired
     private ITopicService topicService;
 
     //添加主题，用过提交表单添加
     @ManagerPermission
-    @RequestMapping(value = "add_topic", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> addTopic(Topic topic) {
         return topicService.addTopic(topic);
@@ -39,16 +34,16 @@ public class TopicManageController {
 
     //批量删除主题，单个删除同样可以使用
     @ManagerPermission
-    @RequestMapping("batch_delete_topic")
+    @RequestMapping(value = "{topicIds}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ServerResponse<String> batchDeleteTopic(String topicIds) {
+    public ServerResponse<String> batchDeleteTopic(@PathVariable("topicIds") String topicIds) {
         return topicService.batchDelete(topicIds);
     }
 
 
     //返回List
     @ManagerPermission
-    @RequestMapping("list")
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -58,7 +53,7 @@ public class TopicManageController {
 
     //模糊查询
     @ManagerPermission
-    @RequestMapping("search")
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -68,17 +63,18 @@ public class TopicManageController {
     }
 
     @ManagerPermission
-    @RequestMapping("update_topic")
+    @RequestMapping(value = "{topicId}", method = RequestMethod.PUT)
     @ResponseBody
-    public ServerResponse update(Topic topic) {
+    public ServerResponse update(@PathVariable("topicId") Integer topicId,
+                                 Topic topic) {
 
-        return topicService.updateTopic(topic);
+        return topicService.updateTopic(topicId, topic);
     }
 
     @ManagerPermission
-    @RequestMapping("detail")
+    @RequestMapping(value = "{topicId}", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<TopicDetailVo> detail(Integer topicId) {
+    public ServerResponse<TopicDetailVo> detail(@PathVariable("topicId") Integer topicId) {
         return topicService.getTopicDetail(topicId);
     }
 }

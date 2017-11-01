@@ -92,8 +92,9 @@ public class TopicService implements ITopicService {
         return ServerResponse.createBySuccessMessage("删除成功");
     }
 
+    //这里不太适合递归的删除，因为这些数据的类型删除方式是不一样的，删除方法也不一样，不满足递归的条件，
+    //TODO 这里删除效率最差的情况就是O(n³)，不过删除的整个主题的可能性不大，所以暂时不考虑优化问题。
     private void deepDelete(Integer topicId) throws Exception {
-
         List<Integer> noticeIdList = noticeMapper.selectNoticesIdsByTopicId(topicId);
         for(Integer noticeId : noticeIdList) {
             List<Integer> commentIdList = commentMapper.selectCommentsIdsByNoticeId(noticeId);
@@ -104,6 +105,7 @@ public class TopicService implements ITopicService {
         }
         topicMapper.deleteByPrimaryKey(topicId);
     }
+
 
 
     //详情
@@ -145,11 +147,11 @@ public class TopicService implements ITopicService {
 
 
     @Override
-    public ServerResponse updateTopic(Topic topic) {
+    public ServerResponse updateTopic(Integer topicId, Topic topic) {
         if (topic == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
-        Topic updateTopic = topicMapper.selectByPrimaryKey(topic.getId());
+        Topic updateTopic = topicMapper.selectByPrimaryKey(topicId);
         if (updateTopic == null) {
             return ServerResponse.createBySuccessMessage("找不到该主题，更新失败");
         }

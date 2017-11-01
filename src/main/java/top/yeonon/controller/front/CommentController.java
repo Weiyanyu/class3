@@ -4,9 +4,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.interceptor.CustomerPermission;
@@ -18,14 +16,14 @@ import top.yeonon.vo.CommentDetailVo;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/comment/")
+@RequestMapping("/comments/")
 public class CommentController {
 
     @Autowired
     private ICommentService commentService;
 
     @CustomerPermission
-    @RequestMapping("add_comment")
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse add(Comment comment, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -34,7 +32,7 @@ public class CommentController {
     }
 
     @CustomerPermission
-    @RequestMapping("list_comment")
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -44,7 +42,7 @@ public class CommentController {
     }
 
     @CustomerPermission
-    @RequestMapping("search_comment")
+    @RequestMapping(value = "search", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
@@ -55,9 +53,9 @@ public class CommentController {
     }
 
     @CustomerPermission
-    @RequestMapping("detail_comment")
+    @RequestMapping(value = "{commentId}", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<CommentDetailVo> detail(Integer commentId) {
+    public ServerResponse<CommentDetailVo> detail(@PathVariable("commentId") Integer commentId) {
         return commentService.detailComment(commentId);
     }
 

@@ -34,8 +34,10 @@ public class FileService implements IFileService {
         try {
             file.transferTo(targetFile);
 
-            FTPUtil.uploadFile(Lists.<File>newArrayList(targetFile));
+            FTPUtil.uploadFile(Lists.newArrayList(targetFile));
 
+            //删除本地文件
+            targetFile.delete();
         } catch (IOException e) {
             logger.error("上传文件异常", e);
             e.printStackTrace();

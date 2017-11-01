@@ -100,11 +100,16 @@
     </dependency>
 
     <!--Json转换器-->
+
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
       <version>1.9.12</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+
+
+
     <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
     <dependency>
       <groupId>com.google.code.gson</groupId>

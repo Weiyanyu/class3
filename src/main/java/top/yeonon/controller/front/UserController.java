@@ -47,24 +47,26 @@ public class UserController {
         return response;
     }
 
-    @RequestMapping("upload_avatar")
+
+    @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse uploadAvatar(@RequestParam(value = "upload_file", required = false)MultipartFile upload_file,
+    public ServerResponse<String> register(User user) {
+        return userService.register(user);
+    }
+
+
+    @RequestMapping(value = "upload_avatar")
+    @ResponseBody
+    public ServerResponse uploadAvatar(@RequestParam(value = "wangEditorH5File", required = false)MultipartFile wangEditorH5File,
                                        HttpServletRequest request) {
         String path = request.getSession().getServletContext().getRealPath("upload");
-        String targetFileName = fileService.upload(upload_file, path);
+        String targetFileName = fileService.upload(wangEditorH5File, path);
         String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
 
         Map fileMap = Maps.newHashMap();
         fileMap.put("uri", targetFileName);
         fileMap.put("url", url);
         return ServerResponse.createBySuccess(fileMap);
-    }
-
-    @RequestMapping(value = "register", method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse<String> register(User user) {
-        return userService.register(user);
     }
 
 
@@ -111,6 +113,7 @@ public class UserController {
     public ServerResponse<String> resetPassword(String oldPassword, String newPassword, HttpSession session) {
         ServerResponse<String> response = userService.resetPassword((User) session.getAttribute(Const.CURRENT_USER), oldPassword, newPassword);
         if (response.isSuccess()) {
+
             session.removeAttribute(Const.CURRENT_USER);
         }
         return response;
@@ -131,6 +134,9 @@ public class UserController {
     @ResponseBody
     public ServerResponse forceGetInfo(HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，强制登录status=10");
+        }
         return userService.forceGetInfo(user.getUserId());
     }
 
