@@ -9,7 +9,7 @@ public class Const {
     public static final String STUDENT_ID = "STUDENT_ID";
     public static final String EMAIL = "EMAIL";
 
-
+    public static final Integer TOKEN_EXPIRES_HOUR = 72;
 
     public interface Role {
         int ROLE_CUSTOMER = 0;

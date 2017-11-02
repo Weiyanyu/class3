@@ -1,7 +1,6 @@
 package top.yeonon.controller.front;
 
 import com.github.pagehelper.PageInfo;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,6 @@ public class CommentController {
 
     @CustomerPermission
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
     public ServerResponse add(Comment comment, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         comment.setUserId(user.getUserId());
@@ -33,7 +31,6 @@ public class CommentController {
 
     @CustomerPermission
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                          HttpSession session) {
@@ -43,7 +40,6 @@ public class CommentController {
 
     @CustomerPermission
     @RequestMapping(value = "search", method = RequestMethod.GET)
-    @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                          String commentDesc,
@@ -54,7 +50,6 @@ public class CommentController {
 
     @CustomerPermission
     @RequestMapping(value = "{commentId}", method = RequestMethod.GET)
-    @ResponseBody
     public ServerResponse<CommentDetailVo> detail(@PathVariable("commentId") Integer commentId) {
         return commentService.detailComment(commentId);
     }

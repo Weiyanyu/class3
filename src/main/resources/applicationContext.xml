@@ -30,5 +30,7 @@
 
     <import resource="applicationContext-mail.xml" />
 
+    <import resource="redis.xml" />
+
 
 </beans>

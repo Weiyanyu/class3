@@ -10,11 +10,7 @@ import top.yeonon.interceptor.ManagerPermission;
 import top.yeonon.pojo.Notice;
 import top.yeonon.pojo.User;
 import top.yeonon.service.INoticeService;
-import top.yeonon.service.IUserService;
-import top.yeonon.service.Impl.NoticeService;
-import top.yeonon.service.Impl.UserService;
 import top.yeonon.vo.NoticeDetailVo;
-import top.yeonon.vo.NoticeListVo;
 
 import javax.servlet.http.HttpSession;
 
@@ -27,7 +23,6 @@ public class NoticeManageController {
 
     @ManagerPermission
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
     public ServerResponse add(Notice notice, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         notice.setUserId(user.getUserId());
@@ -36,7 +31,6 @@ public class NoticeManageController {
 
     @ManagerPermission
     @RequestMapping(value = "{noticeIds}", method = RequestMethod.DELETE)
-    @ResponseBody
     public ServerResponse batchDelete(@PathVariable("noticeIds") String noticeIds) {
 
         return noticeService.batchDeleteNotice(noticeIds);
@@ -45,25 +39,20 @@ public class NoticeManageController {
 
     @ManagerPermission
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
     public ServerResponse listByTopic(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                      Integer topicId) {
-        return noticeService.getNoticeList(pageNum, pageSize, topicId);
+                                      Integer topicId, String orderBy) {
+        return noticeService.getNoticeList(pageNum, pageSize, topicId, orderBy);
     }
-
     @ManagerPermission
     @RequestMapping(value = "search", method = RequestMethod.GET)
-    @ResponseBody
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                           String noticeTitle) {
-        return noticeService.searchNotice(pageNum, pageSize, noticeTitle);
+                                           String noticeTitle, String orderBy) {
+        return noticeService.searchNotice(pageNum, pageSize, noticeTitle, orderBy);
     }
-
     @ManagerPermission
     @RequestMapping(value = "{noticeId}", method = RequestMethod.GET)
-    @ResponseBody
     public ServerResponse<NoticeDetailVo> detail(@PathVariable("noticeId") Integer noticeId) {
         return noticeService.getDetail(noticeId);
     }
@@ -71,7 +60,6 @@ public class NoticeManageController {
 
     @ManagerPermission
     @RequestMapping(value = "{noticeId}", method = RequestMethod.PUT)
-    @ResponseBody
     public ServerResponse update(@PathVariable("noticeId") Integer noticeId,
                                  Notice notice, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);

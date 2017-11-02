@@ -25,6 +25,11 @@
       <artifactId>tomcat-servlet-api</artifactId>
       <version>7.0.64</version>
     </dependency>
+    <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib</artifactId>
+      <version>3.1</version>
+    </dependency>
 
     <!--Spring 相关-->
     <dependency>
@@ -60,6 +65,14 @@
       <artifactId>spring-jdbc</artifactId>
       <version>${org.springframework.version}</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>${org.springframework.version}</version>
+    </dependency>
+
 
     <dependency>
       <groupId>org.springframework</groupId>
@@ -147,6 +160,20 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.6</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-redis</artifactId>
+      <version>1.4.2.RELEASE</version>
+    </dependency>
+
+    <!-- jedis -->
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>2.6.2</version>
     </dependency>
 
     <!--google 开源框架，拥有强大的集合操作-->

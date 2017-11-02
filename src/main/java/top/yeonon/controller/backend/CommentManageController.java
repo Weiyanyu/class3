@@ -27,24 +27,21 @@ public class CommentManageController {
 
     @ManagerPermission
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                          Integer userId,
                                          Integer noticeId) {
         return commentService.listByUserIdOrNoticeId(pageNum, pageSize, userId, noticeId);
     }
-
     @ManagerPermission
     @RequestMapping(value = "{commentId}",method = RequestMethod.GET)
-    @ResponseBody
+    
     public ServerResponse<CommentDetailVo> detail(@PathVariable("commentId") Integer commentId, HttpSession session) {
         return commentService.detailComment(commentId);
     }
 
     @ManagerPermission
     @RequestMapping(value = "{commentId}", method = RequestMethod.PUT)
-    @ResponseBody
     public ServerResponse update(@PathVariable("commentId") Integer commentId, Comment comment) {
         return commentService.updateCommentDesc(commentId ,comment);
     }
