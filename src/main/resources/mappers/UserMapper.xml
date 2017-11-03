@@ -198,17 +198,18 @@
     AND password = #{password}
   </select>
 
-  <select id="selectQuestionByStudentId" resultType="string" parameterType="string">
+  <select id="selectQuestionByStudentIdAndUserId" resultType="string" parameterType="map">
     SELECT
     question
     FROM user
     WHERE student_id = #{studentId}
+    AND user_id=#{userId}
   </select>
 
-  <select id="checkAnswer" resultType="int" parameterType="map" >
+    <select id="checkAnswer" resultType="int" parameterType="map" >
     SELECT count(1)
     FROM user
-    WHERE student_id = #{studentId}
+    WHERE user_id = #{userId}
     AND question=#{question}
     AND answer=#{answer}
   </select>
@@ -216,7 +217,7 @@
   <update id="updatePasswordByStudentId" parameterType="map">
     UPDATE user
     SET password=#{newPassword}
-    WHERE student_id=#{studentId}
+    WHERE user_id=#{userId}
   </update>
 
   <select id="checkPassword" parameterType="map" resultType="int">
@@ -232,4 +233,10 @@
     FROM user
     WHERE student_id = #{studentId}
   </select>
+
+  <update id="updatePasswordByUserId" parameterType="map" >
+    UPDATE user
+    SET password=#{newPassword}
+    WHERE user_id=#{userId}
+  </update>
 </mapper>

@@ -19,13 +19,13 @@ public class LoginMangerController {
     private IUserService userService;
 
     @RequestMapping(value = "login" , method = RequestMethod.POST)
-    public ServerResponse<User> login(String studentId, String password, HttpSession session) {
-        ServerResponse<User> response = userService.login(studentId, password);
+    public ServerResponse<Integer> login(String studentId, String password, HttpSession session) {
+        ServerResponse<Integer> response = userService.login(studentId, password);
         if (response.isSuccess()) {
-            User user = response.getData();
-            ServerResponse checkResponse = userService.checkRole(user);
+            Integer userId = response.getData();
+            ServerResponse checkResponse = userService.checkRole(userId);
             if (checkResponse.isSuccess()) {
-                session.setAttribute(Const.CURRENT_USER, user);
+                session.setAttribute(Const.CURRENT_USER, userId);
                 return response;
             } else {
                 return ServerResponse.createByErrorMessage("不是管理员，请登录管理员账号");

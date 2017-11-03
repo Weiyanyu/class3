@@ -11,7 +11,7 @@ import top.yeonon.vo.TopicDetailVo;
 
 
 
-@Controller
+@RestController
 @RequestMapping("/manage/topics/")
 public class TopicManageController {
 
@@ -28,8 +28,8 @@ public class TopicManageController {
 
     //批量删除主题，单个删除同样可以使用
     @ManagerPermission
-    @RequestMapping(value = "{topicIds}", method = RequestMethod.DELETE)
-    public ServerResponse<String> batchDeleteTopic(@PathVariable("topicIds") String topicIds) {
+    @RequestMapping(value = "{ids}", method = RequestMethod.DELETE)
+    public ServerResponse<String> batchDeleteTopic(@PathVariable("ids") String topicIds) {
         return topicService.batchDelete(topicIds);
     }
 
@@ -45,7 +45,7 @@ public class TopicManageController {
 
     //模糊查询
     @ManagerPermission
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @RequestMapping(value = "search", method = RequestMethod.POST)
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                          String topicName, String orderBy) {
@@ -53,15 +53,15 @@ public class TopicManageController {
     }
 
     @ManagerPermission
-    @RequestMapping(value = "{topicId}", method = RequestMethod.PUT)
-    public ServerResponse update(@PathVariable("topicId") Integer topicId,
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public ServerResponse update(@PathVariable("id") Integer topicId,
                                  Topic topic) {
         return topicService.updateTopic(topicId, topic);
     }
 
     @ManagerPermission
-    @RequestMapping(value = "{topicId}", method = RequestMethod.GET)
-    public ServerResponse<TopicDetailVo> detail(@PathVariable("topicId") Integer topicId) {
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public ServerResponse<TopicDetailVo> detail(@PathVariable("id") Integer topicId) {
         return topicService.getTopicDetail(topicId);
     }
 }

@@ -19,8 +19,8 @@ public class LoginController {
     private IUserService userService;
     
     @RequestMapping(method = RequestMethod.POST)
-    public ServerResponse<User> login(String studentId, String password, HttpSession session) {
-        ServerResponse<User> response = userService.login(studentId, password);
+    public ServerResponse<Integer> login(String studentId, String password, HttpSession session) {
+        ServerResponse<Integer> response = userService.login(studentId, password);
         if (response.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, response.getData());
         }

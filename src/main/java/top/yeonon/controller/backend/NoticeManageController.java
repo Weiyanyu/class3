@@ -14,7 +14,7 @@ import top.yeonon.vo.NoticeDetailVo;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequestMapping("/manage/notices/")
 public class NoticeManageController {
 
@@ -30,8 +30,8 @@ public class NoticeManageController {
     }
 
     @ManagerPermission
-    @RequestMapping(value = "{noticeIds}", method = RequestMethod.DELETE)
-    public ServerResponse batchDelete(@PathVariable("noticeIds") String noticeIds) {
+    @RequestMapping(value = "{ids}", method = RequestMethod.DELETE)
+    public ServerResponse batchDelete(@PathVariable("ids") String noticeIds) {
 
         return noticeService.batchDeleteNotice(noticeIds);
     }
@@ -52,15 +52,15 @@ public class NoticeManageController {
         return noticeService.searchNotice(pageNum, pageSize, noticeTitle, orderBy);
     }
     @ManagerPermission
-    @RequestMapping(value = "{noticeId}", method = RequestMethod.GET)
-    public ServerResponse<NoticeDetailVo> detail(@PathVariable("noticeId") Integer noticeId) {
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public ServerResponse<NoticeDetailVo> detail(@PathVariable("id") Integer noticeId) {
         return noticeService.getDetail(noticeId);
     }
 
 
     @ManagerPermission
-    @RequestMapping(value = "{noticeId}", method = RequestMethod.PUT)
-    public ServerResponse update(@PathVariable("noticeId") Integer noticeId,
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public ServerResponse update(@PathVariable("id") Integer noticeId,
                                  Notice notice, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         notice.setUserId(user.getUserId());

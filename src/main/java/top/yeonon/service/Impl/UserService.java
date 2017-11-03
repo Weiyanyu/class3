@@ -31,7 +31,7 @@ public class UserService implements IUserService {
 
     //登录功能，返回登录信息（密码设置为空），密码是通过MD5加密的
     @Override
-    public ServerResponse<User> login(String studentId, String password) {
+    public ServerResponse<Integer> login(String studentId, String password) {
         int rowCount = userMapper.checkStudentId(studentId);
         if (rowCount == 0) {
             return ServerResponse.createByErrorMessage("登录失败，不存在该学号");
@@ -46,7 +46,7 @@ public class UserService implements IUserService {
         }
         userMapper.updateByPrimaryKeySelective(user);
         user.setPassword(StringUtils.EMPTY);
-        return ServerResponse.createBySuccess(user, "登录成功");
+        return ServerResponse.createBySuccess(user.getUserId(), "登录成功");
     }
 
 
@@ -62,7 +62,8 @@ public class UserService implements IUserService {
             return validResponse;
         }
         user.setRole(Const.Role.ROLE_CUSTOMER);
-
+        byte baned = 1;
+        user.setBanned(baned);
         //TODO 这里还有设置头像的功能，因为现在FTP服务器还没有搭建，暂时不设置
         //user.setAvatar(user.getAvatar());
         //MD5加密
@@ -77,13 +78,13 @@ public class UserService implements IUserService {
     //TODO 这里比较好的方式是发送邮件，邮件里包含带有TOKEN的URL，比较安全
     //填写学号，在没有登录状态下就可以获得对应的找回密码提示问题
     @Override
-    public ServerResponse<String> getQuestion(String studentId) {
+    public ServerResponse<String> getQuestion(Integer userId, String studentId) {
         ServerResponse validResponse = this.checkValid(studentId, Const.STUDENT_ID);
         if (validResponse.isSuccess()) {
             //学号不存在
             return ServerResponse.createByErrorMessage("该学号不存在");
         }
-        String question = userMapper.selectQuestionByStudentId(studentId);
+        String question = userMapper.selectQuestionByStudentIdAndUserId(studentId, userId);
         if (StringUtils.isBlank(question)) {
             return ServerResponse.createByErrorMessage("该用户没有填写找回密码问题");
         }
@@ -92,12 +93,12 @@ public class UserService implements IUserService {
 
     //验证用户填写的答案是否和数据库中的一致，成功会返回一个Token，供给前端界面调用
     @Override
-    public ServerResponse<String> checkAnswer(String studentId, String question, String answer) {
-        int rowCount = userMapper.checkAnswer(studentId, question, answer);
+    public ServerResponse<String> checkAnswer(Integer userId, String question, String answer) {
+        int rowCount = userMapper.checkAnswer(userId,question, answer);
         if (rowCount > 0) {
             //说明问题答案和问题对应，且用户ID也对应
             String token = UUID.randomUUID().toString();
-            TokenCache.setKey(TokenCache.TOKEN_PREFIX + studentId, token);
+            TokenCache.setKey(TokenCache.TOKEN_PREFIX + userId, token);
             return ServerResponse.createBySuccess(token);
         }
         return ServerResponse.createByErrorMessage("问题答案错误");
@@ -106,11 +107,11 @@ public class UserService implements IUserService {
 
     //通过拿到的token，用过一系列验证token就可以重设密码了
     @Override
-    public ServerResponse<String> forgetResetPassword(String studentId, String newPassword, String token) {
+    public ServerResponse<String> forgetResetPassword(Integer userId, String newPassword, String token) {
         if (StringUtils.isBlank(token)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
-        String savedToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + studentId);
+        String savedToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + userId);
         logger.warn("saved Token: " + savedToken);
         if (StringUtils.isBlank(savedToken)) {
             //有可能该student_id的用户并没有申请修改账号密码，也就没有token，这里就防止横向越权了
@@ -122,15 +123,10 @@ public class UserService implements IUserService {
         }
 
 
-        ServerResponse validResponse = this.checkValid(studentId, Const.STUDENT_ID);
-        if (validResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("用户名不存在");
-        }
-
         String md5Password = MD5Util.MD5EncodeUtf8(newPassword);
-        int rowCount = userMapper.updatePasswordByStudentId(studentId, md5Password);
+        int rowCount = userMapper.updatePasswordByStudentId(userId, md5Password);
         if (rowCount > 0) {
-            return ServerResponse.createBySuccessMessage("修改密码成功，请使用密码重新登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "修改密码成功，请使用新密码重新登录");
         }
         return ServerResponse.createByErrorMessage("修改密码失败，有可能是服务器异常");
     }
@@ -138,18 +134,17 @@ public class UserService implements IUserService {
 
     //在登录状态下可以直接通过旧密码来更新新密码，设置完成后强制退出登录
     @Override
-    public ServerResponse<String> resetPassword(User user, String oldPassword, String newPassword) {
-        int rowCount = userMapper.checkPassword(user.getUserId(), MD5Util.MD5EncodeUtf8(oldPassword));
+    public ServerResponse<String> resetPassword(Integer userId, String oldPassword, String newPassword) {
+        int rowCount = userMapper.checkPassword(userId, MD5Util.MD5EncodeUtf8(oldPassword));
         if (rowCount <= 0) {
             return ServerResponse.createByErrorMessage("原密码错误，请检查后重新输入");
         }
         String MD5Password = MD5Util.MD5EncodeUtf8(newPassword);
-        user.setPassword(MD5Password);
-        rowCount = userMapper.updateByPrimaryKeySelective(user);
+        rowCount = userMapper.updatePasswordByUserId(userId, MD5Password);
         if (rowCount <= 0) {
             return ServerResponse.createByErrorMessage("修改密码失败，可能是服务器异常");
         }
-        return ServerResponse.createBySuccessMessage("修改密码成功，请重新登录");
+        return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "修改密码成功，请重新登录");
     }
 
 
@@ -179,7 +174,7 @@ public class UserService implements IUserService {
 
     //在未登录的状态下使用此功能，正确的话直接强制用户登录，并返回用户信息
     @Override
-    public ServerResponse<User> forceGetInfo(Integer userId) {
+    public ServerResponse<User> getInfo(Integer userId) {
         User user = userMapper.selectByPrimaryKey(userId);
         if (user == null) {
             return ServerResponse.createByErrorMessage("该用户不存在");
@@ -216,7 +211,8 @@ public class UserService implements IUserService {
 
     //后台管理员登录,检验该用户的身份（role）是否是管理员
     @Override
-    public ServerResponse checkRole(User user) {
+    public ServerResponse checkRole(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
         if (user != null && user.getRole().equals(Const.Role.ROLE_ADMIN)) {
             return ServerResponse.createBySuccess();
         }

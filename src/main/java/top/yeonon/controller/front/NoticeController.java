@@ -10,7 +10,7 @@ import top.yeonon.service.INoticeService;
 import top.yeonon.vo.NoticeDetailVo;
 
 
-@Controller
+@RestController
 @RequestMapping("/notices/")
 public class NoticeController {
 
@@ -36,8 +36,8 @@ public class NoticeController {
 
 
     @CustomerPermission
-    @RequestMapping(value = "{noticeId}", method = RequestMethod.GET)
-    public ServerResponse<NoticeDetailVo> getListByTopic(@PathVariable("noticeId") Integer noticeId) {
+    @RequestMapping(value = "{topicId}", method = RequestMethod.GET)
+    public ServerResponse<NoticeDetailVo> getListByTopic(@PathVariable("topicId") Integer noticeId) {
         return noticeService.getDetail(noticeId);
     }
 

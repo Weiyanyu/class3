@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import top.yeonon.common.Const;
+import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
@@ -40,10 +41,11 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
             Gson gson = new Gson();
             ServerResponse serverResponse = null;
             if (StringUtils.equals(permissionType, "customer")) {
-                serverResponse = ServerResponse.createByErrorMessage("用户未登录，请登录");
+                serverResponse = ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
+
             }
             if (StringUtils.equals(permissionType, "manager")) {
-                serverResponse = ServerResponse.createByErrorMessage("用户未登录或者无权限操作，请登录管理员账号");
+                serverResponse = ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN_ADMIN.getCode(),"用户未登录或者无权限操作，请登录管理员账号");
             }
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
@@ -54,8 +56,8 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     private boolean isCustomer(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
+        Integer userId = (Integer) session.getAttribute(Const.CURRENT_USER);
+        if (userId == null) {
             return false;
         }
         return true;
@@ -63,11 +65,11 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     private boolean isManager(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
+        Integer userId = (Integer) session.getAttribute(Const.CURRENT_USER);
+        if (userId == null) {
             return false;
         }
-        ServerResponse validResponse = userService.checkRole(user);
+        ServerResponse validResponse = userService.checkRole(userId);
         if (!validResponse.isSuccess()) {
             return false;
         }

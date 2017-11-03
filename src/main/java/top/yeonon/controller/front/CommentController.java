@@ -14,7 +14,7 @@ import top.yeonon.vo.CommentDetailVo;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequestMapping("/comments/")
 public class CommentController {
 
@@ -49,8 +49,8 @@ public class CommentController {
     }
 
     @CustomerPermission
-    @RequestMapping(value = "{commentId}", method = RequestMethod.GET)
-    public ServerResponse<CommentDetailVo> detail(@PathVariable("commentId") Integer commentId) {
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public ServerResponse<CommentDetailVo> detail(@PathVariable("id") Integer commentId) {
         return commentService.detailComment(commentId);
     }
 

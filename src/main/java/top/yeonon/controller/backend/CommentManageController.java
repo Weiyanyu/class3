@@ -15,7 +15,7 @@ import top.yeonon.vo.CommentDetailVo;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequestMapping("/manage/comments/")
 public class CommentManageController {
 
@@ -34,15 +34,15 @@ public class CommentManageController {
         return commentService.listByUserIdOrNoticeId(pageNum, pageSize, userId, noticeId);
     }
     @ManagerPermission
-    @RequestMapping(value = "{commentId}",method = RequestMethod.GET)
+    @RequestMapping(value = "{id}",method = RequestMethod.GET)
     
-    public ServerResponse<CommentDetailVo> detail(@PathVariable("commentId") Integer commentId, HttpSession session) {
+    public ServerResponse<CommentDetailVo> detail(@PathVariable("id") Integer commentId, HttpSession session) {
         return commentService.detailComment(commentId);
     }
 
     @ManagerPermission
-    @RequestMapping(value = "{commentId}", method = RequestMethod.PUT)
-    public ServerResponse update(@PathVariable("commentId") Integer commentId, Comment comment) {
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public ServerResponse update(@PathVariable("id") Integer commentId, Comment comment) {
         return commentService.updateCommentDesc(commentId ,comment);
     }
 

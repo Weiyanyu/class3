@@ -27,8 +27,8 @@ public class TopicController {
     }
 
     @CustomerPermission
-    @RequestMapping(value = "{topicId}", method = RequestMethod.GET)
-    public ServerResponse<TopicDetailVo> getDetail(@PathVariable("topicId") Integer topicId) {
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public ServerResponse<TopicDetailVo> getDetail(@PathVariable("id") Integer topicId) {
         return topicService.getTopicDetail(topicId);
     }
 
