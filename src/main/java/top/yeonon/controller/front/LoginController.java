@@ -32,4 +32,14 @@ public class LoginController {
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccessMessage("退出登录成功");
     }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ServerResponse<Integer> getSession(HttpSession session) {
+        Integer userId = (Integer) session.getAttribute(Const.CURRENT_USER);
+        if (userId == null) {
+            return ServerResponse.createBySuccess(-1);
+        }
+        return ServerResponse.createBySuccess(userId);
+
+    }
 }

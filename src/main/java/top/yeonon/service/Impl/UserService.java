@@ -49,6 +49,19 @@ public class UserService implements IUserService {
         return ServerResponse.createBySuccess(user.getUserId(), "登录成功");
     }
 
+    @Override
+    public ServerResponse<User> getPublicInfo(String studentId) {
+        User user = userMapper.selectUserByStudentId(studentId);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("该用户不存在");
+        }
+        user.setEmail(StringUtils.EMPTY);
+        user.setAnswer(StringUtils.EMPTY);
+        user.setQuestion(StringUtils.EMPTY);
+        user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
+    }
+
 
     //注册功能，通过填写表单信息，比如邮箱，用户名，学号，密码，头像等等提交，密码会经过MD5加密
     @Override
@@ -65,7 +78,7 @@ public class UserService implements IUserService {
         byte baned = 1;
         user.setBanned(baned);
         //TODO 这里还有设置头像的功能，因为现在FTP服务器还没有搭建，暂时不设置
-        //user.setAvatar(user.getAvatar());
+        user.setAvatar(user.getAvatar());
         //MD5加密
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
         int rowCount = userMapper.insert(user);
@@ -75,16 +88,20 @@ public class UserService implements IUserService {
         return ServerResponse.createBySuccessMessage("注册成功");
     }
 
+    /*
+    *   以下是用户个人操作的部分，比如修改密码，获取密保问题等等
+    * */
+
     //TODO 这里比较好的方式是发送邮件，邮件里包含带有TOKEN的URL，比较安全
     //填写学号，在没有登录状态下就可以获得对应的找回密码提示问题
     @Override
-    public ServerResponse<String> getQuestion(Integer userId, String studentId) {
+    public ServerResponse<String> getQuestion(String studentId) {
         ServerResponse validResponse = this.checkValid(studentId, Const.STUDENT_ID);
         if (validResponse.isSuccess()) {
             //学号不存在
             return ServerResponse.createByErrorMessage("该学号不存在");
         }
-        String question = userMapper.selectQuestionByStudentIdAndUserId(studentId, userId);
+        String question = userMapper.selectQuestionByStudentId(studentId);
         if (StringUtils.isBlank(question)) {
             return ServerResponse.createByErrorMessage("该用户没有填写找回密码问题");
         }
@@ -93,12 +110,12 @@ public class UserService implements IUserService {
 
     //验证用户填写的答案是否和数据库中的一致，成功会返回一个Token，供给前端界面调用
     @Override
-    public ServerResponse<String> checkAnswer(Integer userId, String question, String answer) {
-        int rowCount = userMapper.checkAnswer(userId,question, answer);
+    public ServerResponse<String> checkAnswer(String studentId, String question, String answer) {
+        int rowCount = userMapper.checkAnswer(studentId,question, answer);
         if (rowCount > 0) {
             //说明问题答案和问题对应，且用户ID也对应
             String token = UUID.randomUUID().toString();
-            TokenCache.setKey(TokenCache.TOKEN_PREFIX + userId, token);
+            TokenCache.setKey(TokenCache.TOKEN_PREFIX + studentId, token);
             return ServerResponse.createBySuccess(token);
         }
         return ServerResponse.createByErrorMessage("问题答案错误");
@@ -107,11 +124,11 @@ public class UserService implements IUserService {
 
     //通过拿到的token，用过一系列验证token就可以重设密码了
     @Override
-    public ServerResponse<String> forgetResetPassword(Integer userId, String newPassword, String token) {
+    public ServerResponse<String> forgetResetPassword(String studentId, String newPassword, String token) {
         if (StringUtils.isBlank(token)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
-        String savedToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + userId);
+        String savedToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + studentId);
         logger.warn("saved Token: " + savedToken);
         if (StringUtils.isBlank(savedToken)) {
             //有可能该student_id的用户并没有申请修改账号密码，也就没有token，这里就防止横向越权了
@@ -124,7 +141,7 @@ public class UserService implements IUserService {
 
 
         String md5Password = MD5Util.MD5EncodeUtf8(newPassword);
-        int rowCount = userMapper.updatePasswordByStudentId(userId, md5Password);
+        int rowCount = userMapper.updatePasswordByStudentId(studentId, md5Password);
         if (rowCount > 0) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "修改密码成功，请使用新密码重新登录");
         }
@@ -151,6 +168,7 @@ public class UserService implements IUserService {
     //在登录状态下修改个人信息，但是不能修改学号和用户id以及用户权限
     @Override
     public ServerResponse updateInfo(User user) {
+        System.out.println("用户名是" + user.getUserName());
         ServerResponse<String> validResponse = this.checkValid(user.getEmail(), Const.EMAIL);
         if (!validResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage("邮箱已存在");
@@ -172,9 +190,8 @@ public class UserService implements IUserService {
     }
 
 
-    //在未登录的状态下使用此功能，正确的话直接强制用户登录，并返回用户信息
     @Override
-    public ServerResponse<User> getInfo(Integer userId) {
+    public ServerResponse<User> getPersonalInfo(Integer userId) {
         User user = userMapper.selectByPrimaryKey(userId);
         if (user == null) {
             return ServerResponse.createByErrorMessage("该用户不存在");

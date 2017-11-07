@@ -10,17 +10,19 @@ public interface IUserService {
 
     ServerResponse<String> register(User user);
 
-    ServerResponse<String> getQuestion(Integer userId, String studentId);
+    ServerResponse<String> getQuestion(String studentId);
 
-    ServerResponse<String> checkAnswer(Integer userId, String question, String answer);
+    ServerResponse<String> checkAnswer(String studentId, String question, String answer);
 
-    ServerResponse<String> forgetResetPassword(Integer userId, String newPassword, String token);
+    ServerResponse<String> forgetResetPassword(String studentId, String newPassword, String token);
 
     ServerResponse<String> resetPassword(Integer userId, String oldPassword, String newPassword);
 
     ServerResponse updateInfo(User user);
 
-    ServerResponse<User> getInfo(Integer userId);
+    ServerResponse<User> getPublicInfo(String studentId);
+
+    ServerResponse<User> getPersonalInfo(Integer userId);
 
     ServerResponse checkRole(Integer userId);
 }

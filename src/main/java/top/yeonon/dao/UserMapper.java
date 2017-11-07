@@ -22,11 +22,13 @@ public interface UserMapper {
 
     User login(@Param("studentId") String studentId, @Param("password") String password);
 
-    String selectQuestionByStudentIdAndUserId(@Param("studentId") String studentId, @Param("userId") Integer userId);
+    String selectQuestionByStudentId(@Param("studentId") String studentId);
 
-    int checkAnswer(@Param("userId")Integer userId, @Param("question") String question, @Param("answer") String answer);
+    int checkAnswer(@Param("studentId")String studentId, @Param("question") String question, @Param("answer") String answer);
 
-    int updatePasswordByStudentId(@Param("userId") Integer userId, @Param("newPassword") String newPassword);
+    User selectUserByStudentId(String studentId);
+
+    int updatePasswordByStudentId(@Param("studentId") String studentId, @Param("newPassword") String newPassword);
 
     int checkPassword(@Param("userId") Integer userId, @Param("oldPassword") String oldPassword);
 
