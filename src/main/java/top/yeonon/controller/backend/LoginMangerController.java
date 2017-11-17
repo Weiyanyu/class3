@@ -12,20 +12,19 @@ import top.yeonon.service.IUserService;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/session")
+@RequestMapping("manage/session")
 public class LoginMangerController {
 
     @Autowired
     private IUserService userService;
 
-    @RequestMapping(value = "login" , method = RequestMethod.POST)
-    public ServerResponse<Integer> login(String studentId, String password, HttpSession session) {
-        ServerResponse<Integer> response = userService.login(studentId, password);
+    @RequestMapping(method = RequestMethod.POST)
+    public ServerResponse<User> login(String studentId, String password, HttpSession session) {
+        ServerResponse<User> response = userService.login(studentId, password);
         if (response.isSuccess()) {
-            Integer userId = response.getData();
-            ServerResponse checkResponse = userService.checkRole(userId);
+            ServerResponse checkResponse = userService.checkRole(response.getData().getUserId());
             if (checkResponse.isSuccess()) {
-                session.setAttribute(Const.CURRENT_USER, userId);
+                session.setAttribute(Const.CURRENT_USER, response.getData());
                 return response;
             } else {
                 return ServerResponse.createByErrorMessage("不是管理员，请登录管理员账号");

@@ -19,8 +19,8 @@ public class LoginController {
     private IUserService userService;
     
     @RequestMapping(method = RequestMethod.POST)
-    public ServerResponse<Integer> login(String studentId, String password, HttpSession session) {
-        ServerResponse<Integer> response = userService.login(studentId, password);
+    public ServerResponse<User> login(String studentId, String password, HttpSession session) {
+        ServerResponse<User> response = userService.login(studentId, password);
         if (response.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, response.getData());
         }
@@ -33,13 +33,11 @@ public class LoginController {
         return ServerResponse.createBySuccessMessage("退出登录成功");
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ServerResponse<Integer> getSession(HttpSession session) {
-        Integer userId = (Integer) session.getAttribute(Const.CURRENT_USER);
-        if (userId == null) {
-            return ServerResponse.createBySuccess(-1);
-        }
-        return ServerResponse.createBySuccess(userId);
 
+    //TODO 这里可能会用不到，暂时保存吧
+    @RequestMapping(method = RequestMethod.GET)
+    public ServerResponse<User> getSession(HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        return ServerResponse.createBySuccess(currentUser);
     }
 }

@@ -56,8 +56,8 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     private boolean isCustomer(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute(Const.CURRENT_USER);
-        if (userId == null) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
             return false;
         }
         return true;
@@ -65,11 +65,11 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     private boolean isManager(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute(Const.CURRENT_USER);
-        if (userId == null) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
             return false;
         }
-        ServerResponse validResponse = userService.checkRole(userId);
+        ServerResponse validResponse = userService.checkRole(user.getUserId());
         if (!validResponse.isSuccess()) {
             return false;
         }

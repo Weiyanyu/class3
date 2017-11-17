@@ -3,24 +3,35 @@
  */
 
 package top.yeonon.controller.front;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import top.yeonon.common.Const;
 import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.pojo.User;
+import top.yeonon.service.IFileService;
 import top.yeonon.service.IUserService;
+import top.yeonon.util.PropertiesUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/personal")
 public class PersonalController {
+
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IFileService fileService;
 
     /**
      *
@@ -33,11 +44,11 @@ public class PersonalController {
     @CustomerPermission
     @RequestMapping(method = RequestMethod.GET)
     public ServerResponse<User> getPersonalInfo(HttpSession session) {
-        Integer userId = (Integer) session.getAttribute(Const.CURRENT_USER);
-        if (userId == null) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "需要登录");
         }
-        return userService.getPersonalInfo(userId);
+        return userService.getPersonalInfo(user.getUserId());
     }
 
 
@@ -96,7 +107,8 @@ public class PersonalController {
     @CustomerPermission
     @RequestMapping(value = "/password/update", method = RequestMethod.POST)
     public ServerResponse<String> resetPassword(String oldPassword, String newPassword, HttpSession session) {
-        ServerResponse<String> response = userService.resetPassword((Integer) session.getAttribute(Const.CURRENT_USER), oldPassword, newPassword);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        ServerResponse<String> response = userService.resetPassword(currentUser.getUserId(), oldPassword, newPassword);
         if (response.isSuccess()) {
             session.removeAttribute(Const.CURRENT_USER);
         }
@@ -113,8 +125,30 @@ public class PersonalController {
     @CustomerPermission
     @RequestMapping(method = RequestMethod.PUT)
     public ServerResponse updateInfo(User user, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute(Const.CURRENT_USER);
-        user.setUserId(userId);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        user.setUserId(currentUser.getUserId());
         return userService.updateInfo(user);
+    }
+
+    /**
+     *
+     * @param avatar            文件类型， 必填
+     * @param request           框架自动填入
+     * @return
+     * 上传头像
+     */
+    @RequestMapping(value = "avatar/upload", method = RequestMethod.POST)
+    public ServerResponse uploadAvatar(@RequestParam(value = "avatar", required = false)MultipartFile avatar,
+                                       HttpServletRequest request, HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        String targetFileName = fileService.upload(avatar, path);
+        String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
+
+        Map fileMap = Maps.newHashMap();
+        fileMap.put("uri", targetFileName);
+        fileMap.put("url", url);
+
+        return ServerResponse.createBySuccess(fileMap);
     }
 }

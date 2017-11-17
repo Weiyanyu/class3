@@ -27,7 +27,9 @@ public class User {
 
     private Byte banned;
 
-    public User(Integer userId, String studentId, String userName, String password, String email, String avatar, String question, String answer, Integer role, Date createTime, Date updateTime, Byte banned) {
+    private String profile;
+
+    public User(Integer userId, String studentId, String userName, String password, String email, String avatar, String question, String answer, Integer role, Date createTime, Date updateTime, Byte banned, String profile) {
         this.userId = userId;
         this.studentId = studentId;
         this.userName = userName;
@@ -40,6 +42,7 @@ public class User {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.banned = banned;
+        this.profile = profile;
     }
 
     public User() {
@@ -140,5 +143,13 @@ public class User {
 
     public void setBanned(Byte banned) {
         this.banned = banned;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 }

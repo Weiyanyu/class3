@@ -12,8 +12,11 @@ import top.yeonon.dao.UserMapper;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IMailSenderService;
 import top.yeonon.service.IUserService;
+import top.yeonon.util.DateTimeUtil;
 import top.yeonon.util.MD5Util;
 import top.yeonon.util.TokenCache;
+import top.yeonon.util.token.TokenManager;
+import top.yeonon.util.token.TokenModel;
 
 import java.util.UUID;
 
@@ -26,12 +29,15 @@ public class UserService implements IUserService {
     private UserMapper userMapper;
 
     @Autowired
+    private TokenManager tokenManager;
+
+    @Autowired
     private IMailSenderService mailSenderService;
 
 
     //登录功能，返回登录信息（密码设置为空），密码是通过MD5加密的
     @Override
-    public ServerResponse<Integer> login(String studentId, String password) {
+    public ServerResponse<User> login(String studentId, String password) {
         int rowCount = userMapper.checkStudentId(studentId);
         if (rowCount == 0) {
             return ServerResponse.createByErrorMessage("登录失败，不存在该学号");
@@ -46,7 +52,7 @@ public class UserService implements IUserService {
         }
         userMapper.updateByPrimaryKeySelective(user);
         user.setPassword(StringUtils.EMPTY);
-        return ServerResponse.createBySuccess(user.getUserId(), "登录成功");
+        return ServerResponse.createBySuccess(user, "登录成功");
     }
 
     @Override
@@ -128,6 +134,8 @@ public class UserService implements IUserService {
         if (StringUtils.isBlank(token)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
         }
+
+
         String savedToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + studentId);
         logger.warn("saved Token: " + savedToken);
         if (StringUtils.isBlank(savedToken)) {
@@ -161,7 +169,7 @@ public class UserService implements IUserService {
         if (rowCount <= 0) {
             return ServerResponse.createByErrorMessage("修改密码失败，可能是服务器异常");
         }
-        return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "修改密码成功，请重新登录");
+        return ServerResponse.createBySuccessMessage("修改密码成功，请重新登录");
     }
 
 
@@ -180,6 +188,7 @@ public class UserService implements IUserService {
         updateUser.setUserName(user.getUserName());
         updateUser.setEmail(user.getEmail());
         updateUser.setAnswer(user.getAnswer());
+        updateUser.setProfile(user.getProfile());
 
         int rowCount = userMapper.updateByPrimaryKeySelective(updateUser);
         if (rowCount <= 0) {

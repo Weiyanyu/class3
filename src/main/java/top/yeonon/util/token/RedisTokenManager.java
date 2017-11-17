@@ -28,7 +28,7 @@ public class RedisTokenManager implements TokenManager {
     public TokenModel createToken(Integer userId) {
         String token = UUID.randomUUID().toString().replace("_","");
         TokenModel model = new TokenModel(userId, token);
-        redisTemplate.boundValueOps(userId).set(token, Const.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
+        redisTemplate.boundValueOps(userId).set(token, Const.LOGIN_TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
         return model;
     }
 
@@ -58,7 +58,7 @@ public class RedisTokenManager implements TokenManager {
 
         //到这说明已经验证成功了，给当前用户延长token过期时间
 
-        redisTemplate.boundValueOps(model.getUserId()).expire(Const.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
+        redisTemplate.boundValueOps(model.getUserId()).expire(Const.LOGIN_TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
         return true;
     }
 

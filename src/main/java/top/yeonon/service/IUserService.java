@@ -4,7 +4,7 @@ import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
 
 public interface IUserService {
-    ServerResponse<Integer> login(String studentId, String password);
+    ServerResponse<User> login(String studentId, String password);
 
     ServerResponse checkValid(String str, String type);
 

@@ -25,8 +25,7 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private IFileService fileService;
+
 
     @Autowired
     private IMailSenderService mailSenderService;
@@ -44,25 +43,6 @@ public class UserController {
         return userService.register(user);
     }
 
-    /**
-     *
-     * @param avatar            文件类型， 必填
-     * @param request           框架自动填入
-     * @return
-     * 上传头像
-     */
-    @RequestMapping(value = "upload_avatar")
-    public ServerResponse uploadAvatar(@RequestParam(value = "avatar", required = false)MultipartFile avatar,
-                                       HttpServletRequest request) {
-        String path = request.getSession().getServletContext().getRealPath("upload");
-        String targetFileName = fileService.upload(avatar, path);
-        String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
-
-        Map fileMap = Maps.newHashMap();
-        fileMap.put("uri", targetFileName);
-        fileMap.put("url", url);
-        return ServerResponse.createBySuccess(fileMap);
-    }
 
     /**
      *
