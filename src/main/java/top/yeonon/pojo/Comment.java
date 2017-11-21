@@ -86,4 +86,5 @@ public class Comment {
     public void setInsertImage(String insertImage) {
         this.insertImage = insertImage == null ? null : insertImage.trim();
     }
+
 }

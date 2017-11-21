@@ -18,8 +18,9 @@ public interface CommentMapper {
 
     int updateByPrimaryKey(Comment record);
 
-
     List<Integer> selectCommentsIdsByNoticeId(Integer noticeId);
+
+    List<Comment> selectCommentsByUserId(Integer userId);
 
     List<Comment> selectCommentsByUserIdOrNoticeId(@Param("userId") Integer userId, @Param("noticeId") Integer noticeId);
 

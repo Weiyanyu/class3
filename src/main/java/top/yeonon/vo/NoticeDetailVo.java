@@ -24,7 +24,7 @@ public class NoticeDetailVo {
     private String subImage;
 
     private String imageHost;
-    private List<Comment> commentList;
+    private List<CommentDetailVo> commentDetailVoList;
 
 
 
@@ -108,11 +108,11 @@ public class NoticeDetailVo {
         this.imageHost = imageHost;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
+    public List<CommentDetailVo> getCommentDetailVoList() {
+        return commentDetailVoList;
     }
 
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
+    public void setCommentDetailVoList(List<CommentDetailVo> commentDetailVoList) {
+        this.commentDetailVoList = commentDetailVoList;
     }
 }

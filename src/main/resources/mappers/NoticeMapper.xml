@@ -141,6 +141,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <select id="selectNameById" parameterType="int" resultType="string">
+    SELECT title
+    FROM notice
+    WHERE id=#{id}
+  </select>
+
 
   <select id="selectNoticesIdsByTopicId" parameterType="int" resultType="int">
     SELECT
@@ -176,6 +182,14 @@
     <include refid="Base_Column_List" />
     FROM notice
     WHERE title LIKE CONCAT("%",#{noticeTitle},"%")
+  </select>
+
+  <select id="selectNoticesByUserId" resultMap="BaseResultMap" parameterType="int">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM notice
+    WHERE user_id = #{userId}
+    ORDER BY topic_id
   </select>
 
 </mapper>

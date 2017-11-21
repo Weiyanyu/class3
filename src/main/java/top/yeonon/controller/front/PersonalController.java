@@ -137,13 +137,17 @@ public class PersonalController {
      * @return
      * 上传头像
      */
+    @CustomerPermission
     @RequestMapping(value = "avatar/upload", method = RequestMethod.POST)
     public ServerResponse uploadAvatar(@RequestParam(value = "avatar", required = false)MultipartFile avatar,
                                        HttpServletRequest request, HttpSession session) {
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+
         String path = request.getSession().getServletContext().getRealPath("upload");
-        String targetFileName = fileService.upload(avatar, path);
-        String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
+        String remotePath = "img/avatar";
+        String avatarName = currentUser.getUserId() + "-avatar";
+        String targetFileName = fileService.upload(avatar, path, remotePath, avatarName);
+        String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + "avatar/" + targetFileName;
 
         Map fileMap = Maps.newHashMap();
         fileMap.put("uri", targetFileName);

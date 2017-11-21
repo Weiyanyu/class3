@@ -32,10 +32,10 @@ public class FTPUtil {
     }
 
 
-    public static boolean uploadFile(List<File> fileList) throws IOException {
+    public static boolean uploadFile(List<File> fileList, String remotePath) throws IOException {
         FTPUtil ftpUtil = new FTPUtil(ftpIp, 21, ftpUser, ftpPwd);
         logger.info("开始连接服务器");
-        boolean result = ftpUtil.uploadFile("img", fileList);
+        boolean result = ftpUtil.uploadFile(remotePath, fileList);
         logger.info("开始上传,上传结果是： " + result);
         return result;
     }

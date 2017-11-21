@@ -14,11 +14,14 @@ import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.dao.CommentMapper;
 import top.yeonon.dao.NoticeMapper;
+import top.yeonon.dao.UserMapper;
 import top.yeonon.pojo.Comment;
 import top.yeonon.pojo.Notice;
+import top.yeonon.pojo.User;
 import top.yeonon.service.INoticeService;
 import top.yeonon.util.DateTimeUtil;
 import top.yeonon.util.PropertiesUtil;
+import top.yeonon.vo.CommentDetailVo;
 import top.yeonon.vo.NoticeDetailVo;
 import top.yeonon.vo.NoticeListVo;
 
@@ -29,6 +32,9 @@ import java.util.List;
 public class NoticeService implements INoticeService {
 
     private final Logger logger = LoggerFactory.getLogger(NoticeService.class);
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private NoticeMapper noticeMapper;
@@ -172,7 +178,16 @@ public class NoticeService implements INoticeService {
             return ServerResponse.createBySuccessMessage("服务器异常，更新失败");
         }
         return ServerResponse.createBySuccessMessage("更新成功");
+    }
 
+
+    @Override
+    public ServerResponse getNoticeListByUserId(Integer userId) {
+        List<Notice> notices = noticeMapper.selectNoticesByUserId(userId);
+        if (notices == null) {
+            return ServerResponse.createByErrorMessage("该用户没有发布任何公告");
+        }
+        return ServerResponse.createBySuccess(notices);
     }
 
     //装配数据对象（VO）的高复用的方法
@@ -197,11 +212,28 @@ public class NoticeService implements INoticeService {
         noticeDetailVo.setSubImage(notice.getSubImage());
 
         List<Comment> commentList = commentMapper.selectCommentsByUserIdOrNoticeId(null, notice.getId());
-        noticeDetailVo.setCommentList(commentList);
+        List<CommentDetailVo> detailVos = Lists.newArrayList();
+        for (Comment comment : commentList) {
+            detailVos.add(assembleCommentDetailVo(comment));
+        }
+        noticeDetailVo.setCommentDetailVoList(detailVos);
         noticeDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         noticeDetailVo.setCreateTime(DateTimeUtil.dateToStr(notice.getCreateTime()));
         noticeDetailVo.setUpdateTime(DateTimeUtil.dateToStr(notice.getUpdateTime()));
         return noticeDetailVo;
+    }
+
+    private CommentDetailVo assembleCommentDetailVo(Comment comment) {
+        CommentDetailVo commentDetailVo = new CommentDetailVo();
+        commentDetailVo.setCommentDesc(comment.getDescription());
+        commentDetailVo.setUserId(comment.getUserId());
+
+        User user = userMapper.selectByPrimaryKey(comment.getUserId());
+        commentDetailVo.setUserName(user.getUserName());
+        commentDetailVo.setUserAvatar(user.getAvatar());
+        commentDetailVo.setCreateTime(DateTimeUtil.dateToStr(comment.getCreateTime()));
+        commentDetailVo.setUpdateTime(DateTimeUtil.dateToStr(comment.getUpdateTime()));
+        return commentDetailVo;
     }
 
     private String getNoticeBrief(String noticeDesc) {

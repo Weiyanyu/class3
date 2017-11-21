@@ -9,11 +9,9 @@ public interface ICommentService {
 
     ServerResponse addComment(Comment comment);
 
-    ServerResponse<PageInfo> listOrSearchComment(int pageNum, int pageSize, Integer userId, String commentDesc);
 
-    ServerResponse<CommentDetailVo> detailComment(Integer commentId);
 
-    ServerResponse<PageInfo> listByUserIdOrNoticeId(int pageNum, int pageSize, Integer userId, Integer noticeId);
+    ServerResponse<PageInfo> getCommentByUserId(Integer userId);
 
     ServerResponse updateCommentDesc(Integer commentId, Comment comment);
 }

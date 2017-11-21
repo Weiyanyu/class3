@@ -10,8 +10,10 @@ import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.dao.CommentMapper;
 import top.yeonon.dao.NoticeMapper;
+import top.yeonon.dao.UserMapper;
 import top.yeonon.pojo.Comment;
 import top.yeonon.pojo.Notice;
+import top.yeonon.pojo.User;
 import top.yeonon.service.ICommentService;
 import top.yeonon.util.DateTimeUtil;
 import top.yeonon.util.PropertiesUtil;
@@ -19,6 +21,7 @@ import top.yeonon.vo.CommentDetailVo;
 import top.yeonon.vo.CommentListVo;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("commentService")
 public class CommentService implements ICommentService{
@@ -28,6 +31,9 @@ public class CommentService implements ICommentService{
 
     @Autowired
     private NoticeMapper noticeMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public ServerResponse addComment(Comment comment) {
@@ -48,45 +54,31 @@ public class CommentService implements ICommentService{
     }
 
 
-    @Override
-    public ServerResponse<PageInfo> listOrSearchComment(int pageNum, int pageSize, Integer userId, String commentDesc) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Comment> commentList = commentMapper.selectCommentsByUserIdAndDesc(commentDesc, userId);
-        List<CommentListVo> commentListVoList = Lists.newArrayList();
-        for (Comment comment : commentList) {
-            commentListVoList.add(assembleCommentListVo(comment));
-        }
-        PageInfo result = new PageInfo(commentList);
-        result.setList(commentListVoList);
-        return ServerResponse.createBySuccess(result);
-    }
+//    @Override
+//    public ServerResponse<PageInfo> searchComment(int pageNum, int pageSize, Integer userId, String commentDesc) {
+//        PageHelper.startPage(pageNum, pageSize);
+//        List<Comment> commentList = commentMapper.selectCommentsByUserIdAndDesc(commentDesc, userId);
+//        List<CommentListVo> commentListVoList = Lists.newArrayList();
+//        for (Comment comment : commentList) {
+//            commentListVoList.add(assembleCommentListVo(comment));
+//        }
+//        PageInfo result = new PageInfo(commentList);
+//        result.setList(commentListVoList);
+//        return ServerResponse.createBySuccess(result);
+//    }
 
-    @Override
-    public ServerResponse<CommentDetailVo> detailComment(Integer commentId) {
-        if (commentId == null) {
-            return ServerResponse.createByErrorMessage("参数错误");
-        }
-        Comment comment = commentMapper.selectByPrimaryKey(commentId);
-        if (comment == null) {
-            return ServerResponse.createByErrorMessage("不存在该评论");
-        }
-        CommentDetailVo commentDetailVo = assembleCommentDetailVo(comment);
-        return ServerResponse.createBySuccess(commentDetailVo);
-    }
 
     //backend
 
     @Override
-    public ServerResponse<PageInfo> listByUserIdOrNoticeId(int pageNum, int pageSize, Integer userId, Integer noticeId) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Comment> commentList = commentMapper.selectCommentsByUserIdOrNoticeId(userId, noticeId);
+    public ServerResponse getCommentByUserId(Integer userId) {
+        List<Comment> commentList = commentMapper.selectCommentsByUserId(userId);
         List<CommentListVo> commentListVoList = Lists.newArrayList();
         for (Comment comment : commentList) {
             commentListVoList.add(assembleCommentListVo(comment));
         }
-        PageInfo result = new PageInfo(commentList);
-        result.setList(commentListVoList);
-        return ServerResponse.createBySuccess(result);
+
+        return ServerResponse.createBySuccess(commentListVoList);
     }
 
     @Override
@@ -108,32 +100,16 @@ public class CommentService implements ICommentService{
     }
 
     private CommentListVo assembleCommentListVo(Comment comment) {
-        CommentListVo commentListVo = new CommentListVo();
-        commentListVo.setUserId(comment.getUserId());
-        commentListVo.setCommentId(comment.getId());
-        commentListVo.setNoticeId(comment.getNoticeId());
-        commentListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
-        commentListVo.setBrief(getCommentBrief(comment.getDescription()));
-        return commentListVo;
+        CommentListVo listVo = new CommentListVo();
+        listVo.setUserId(comment.getUserId());
+        listVo.setNoticeId(comment.getNoticeId());
+        listVo.setCommentId(comment.getId());
+        listVo.setCommentDesc(comment.getDescription());
+        User user = userMapper.selectByPrimaryKey(comment.getUserId());
+        listVo.setUserName(user.getUserName());
+        listVo.setUserAvatar(user.getAvatar());
+        String noticeTitle = noticeMapper.selectNameById(comment.getNoticeId());
+        listVo.setNoticeTitle(noticeTitle);
+        return listVo;
     }
-
-    private CommentDetailVo assembleCommentDetailVo(Comment comment) {
-        CommentDetailVo commentDetailVo = new CommentDetailVo();
-        commentDetailVo.setCommentDesc(comment.getDescription());
-        commentDetailVo.setCommentId(comment.getId());
-        commentDetailVo.setNoticeId(comment.getNoticeId());
-        commentDetailVo.setUserId(comment.getUserId());
-        commentDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
-        commentDetailVo.setCreateTime(DateTimeUtil.dateToStr(comment.getCreateTime()));
-        commentDetailVo.setUpdateTime(DateTimeUtil.dateToStr(comment.getUpdateTime()));
-        return commentDetailVo;
-    }
-
-    private String getCommentBrief(String commentDesc) {
-        if (commentDesc.length() >= 10) {
-            return commentDesc.substring(0,10);
-        }
-        return commentDesc;
-    }
-
 }

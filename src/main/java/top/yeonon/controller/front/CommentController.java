@@ -40,55 +40,18 @@ public class CommentController {
         return commentService.addComment(comment);
     }
 
-    /**
-     *
-     * @param pageNum           默认1， 可选
-     * @param pageSize          默认10， 可选
-     * @param session           框架填入
-     * @return
-     * 返回当前用户的所有评论
-     */
-    @CustomerPermission
+
     @RequestMapping(method = RequestMethod.GET)
-    public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                         HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        return commentService.listOrSearchComment(pageNum, pageSize, user.getUserId(), null);
+    public ServerResponse<PageInfo> getCommentByUserId(Integer userId) {
+        return commentService.getCommentByUserId(userId);
     }
 
-    /**
-     *
-     * @param pageNum           默认1， 可选
-     * @param pageSize          默认10， 可选
-     * @param commentDesc       描述关键词
-     * @param session           框架自动填入
-     * @return
-     * 根据内容关键词搜索评论
-     */
-    @CustomerPermission
-    @RequestMapping(value = "search", method = RequestMethod.GET)
-    public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                         String commentDesc,
-                                         HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        return commentService.listOrSearchComment(pageNum, pageSize, user.getUserId(), commentDesc);
-    }
-
-
-    /***
-     *
-     * @param commentId  必填
-     * @return
-     * 用过id获取详细内容
-     */
-    @CustomerPermission
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ServerResponse<CommentDetailVo> detail(@PathVariable("id") Integer commentId) {
-        return commentService.detailComment(commentId);
-    }
-
+//    @RequestMapping(value = "search", method = RequestMethod.GET)
+//    public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+//                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+//                                         String commentDesc) {
+//        return commentService.searchComment(pageNum, pageSize, commentDesc);
+//    }
 
 
 }

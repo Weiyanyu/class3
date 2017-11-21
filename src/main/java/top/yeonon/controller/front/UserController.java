@@ -57,14 +57,14 @@ public class UserController {
 
     /**
      *
-     * @param studentId             某个用户的学号,必填
+     * @param userId            某个用户的学号,必填
      * @return
      * 获取用户信息，这里指的是可以公开的信息
      */
     //查看其它用户的信息,用户可以公开的信息,比如头像，个人简介等等。
-    @RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
-    public ServerResponse<User> getUserInfo(@PathVariable("studentId") String studentId) {
-        return userService.getPublicInfo(studentId);
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    public ServerResponse<User> getUserInfo(@PathVariable("userId") Integer userId) {
+        return userService.getPublicInfo(userId);
     }
 
 

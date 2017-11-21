@@ -133,6 +133,14 @@
     WHERE notice_id = #{noticeId}
   </select>
 
+  <select id="selectCommentsByUserId" resultMap="BaseResultMap" parameterType="int">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM comment
+    WHERE user_id = #{userId}
+    ORDER BY notice_id
+  </select>
+
   <select id="selectCommentsByUserIdOrNoticeId" resultMap="BaseResultMap" parameterType="int" >
     SELECT
     <include refid="Base_Column_List" />
@@ -144,6 +152,7 @@
     <if test="noticeId != null" >
       AND notice_id = #{noticeId}
     </if>
+    ORDER BY create_time
   </select>
 
   <select id="selectCommentsByUserIdAndDesc" parameterType="map" resultMap="BaseResultMap" >

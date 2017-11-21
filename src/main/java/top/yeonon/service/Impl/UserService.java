@@ -28,11 +28,6 @@ public class UserService implements IUserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private TokenManager tokenManager;
-
-    @Autowired
-    private IMailSenderService mailSenderService;
 
 
     //登录功能，返回登录信息（密码设置为空），密码是通过MD5加密的
@@ -56,8 +51,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ServerResponse<User> getPublicInfo(String studentId) {
-        User user = userMapper.selectUserByStudentId(studentId);
+    public ServerResponse<User> getPublicInfo(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
         if (user == null) {
             return ServerResponse.createByErrorMessage("该用户不存在");
         }

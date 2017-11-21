@@ -20,7 +20,7 @@ public interface IUserService {
 
     ServerResponse updateInfo(User user);
 
-    ServerResponse<User> getPublicInfo(String studentId);
+    ServerResponse<User> getPublicInfo(Integer userId);
 
     ServerResponse<User> getPersonalInfo(Integer userId);
 

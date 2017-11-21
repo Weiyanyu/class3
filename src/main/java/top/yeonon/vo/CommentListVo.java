@@ -1,11 +1,18 @@
 package top.yeonon.vo;
 
+import top.yeonon.pojo.Comment;
+
+import java.util.List;
+import java.util.Map;
+
 public class CommentListVo {
     private Integer commentId;
+    private String commentDesc;
     private Integer userId;
     private Integer noticeId;
-    private String brief;
-    private String imageHost;
+    private String noticeTitle;
+    private String userName;
+    private String userAvatar;
 
     public Integer getCommentId() {
         return commentId;
@@ -31,19 +38,35 @@ public class CommentListVo {
         this.noticeId = noticeId;
     }
 
-    public String getBrief() {
-        return brief;
+    public String getNoticeTitle() {
+        return noticeTitle;
     }
 
-    public void setBrief(String brief) {
-        this.brief = brief;
+    public void setNoticeTitle(String noticeTitle) {
+        this.noticeTitle = noticeTitle;
     }
 
-    public String getImageHost() {
-        return imageHost;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setImageHost(String imageHost) {
-        this.imageHost = imageHost;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
+    }
+
+    public String getCommentDesc() {
+        return commentDesc;
+    }
+
+    public void setCommentDesc(String commentDesc) {
+        this.commentDesc = commentDesc;
     }
 }

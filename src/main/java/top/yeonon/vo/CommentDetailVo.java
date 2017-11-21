@@ -5,6 +5,10 @@ public class CommentDetailVo {
 
     private Integer userId;
 
+    private String userName;
+
+    private String userAvatar;
+
     private Integer noticeId;
 
     private String commentDesc;
@@ -79,5 +83,22 @@ public class CommentDetailVo {
 
     public void setImageHost(String imageHost) {
         this.imageHost = imageHost;
+    }
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

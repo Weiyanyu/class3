@@ -34,8 +34,9 @@ public class NoticeController {
     @CustomerPermission
     @RequestMapping(method = RequestMethod.GET)
     public ServerResponse<PageInfo> getListByTopic(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                              Integer topicId, String orderBy) {
+                                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                                    Integer topicId,
+                                                    @RequestParam(value = "orderBy", defaultValue = "id_asc", required = false) String orderBy) {
         return noticeService.getNoticeList(pageNum, pageSize, topicId, orderBy);
     }
 
@@ -68,5 +69,11 @@ public class NoticeController {
     public ServerResponse<NoticeDetailVo> getDetail(@PathVariable("id") Integer noticeId) {
         return noticeService.getDetail(noticeId);
     }
+
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    public ServerResponse getNoticesByUserId(@PathVariable("userId") Integer userId) {
+        return noticeService.getNoticeListByUserId(userId);
+    }
+
 
 }
