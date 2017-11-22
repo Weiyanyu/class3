@@ -197,7 +197,7 @@ public class NoticeService implements INoticeService {
         noticeListVo.setNoticeTitle(notice.getTitle());
         noticeListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         noticeListVo.setMainImage(notice.getMainImage());
-        noticeListVo.setBrief(getNoticeBrief(notice.getDescription()));
+        noticeListVo.setBrief(notice.getDescription());
         return noticeListVo;
     }
 
