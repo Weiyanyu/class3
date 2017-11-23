@@ -49,6 +49,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
             }
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
+            response.setHeader("Access-Control-Allow-Credentials", "true");
             response.getWriter().write(gson.toJson(serverResponse));
         }
         return isPass;
