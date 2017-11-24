@@ -49,6 +49,7 @@ public class FTPUtil {
                 ftpClient.setBufferSize(1024);
                 ftpClient.setControlEncoding("UTF-8");
                 ftpClient.enterLocalPassiveMode();
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
                 for (File file : fileList) {
                     fis = new FileInputStream(file);
                     String name = new String(file.getName().getBytes("UTF-8"), "iso-8859-1");
