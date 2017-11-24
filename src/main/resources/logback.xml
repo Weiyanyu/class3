@@ -27,7 +27,7 @@
 
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--<File>d:/mmalllog/error.log</File>-->
-        <File>/developer/apache-tomcat-8.5.20/logs/class3/logs/error.log</File>
+        <File>/developer/apache-tomcat-7.0.73/logs/class3/logs/error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--E:\apache-tomcat-8.5.20\logs-->
             <fileNamePattern>/developer/apache-tomcat-7.0.73/logs/class3/logs/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
