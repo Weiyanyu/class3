@@ -48,11 +48,11 @@ public class FTPUtil {
                 ftpClient.changeWorkingDirectory(remotePath);
                 ftpClient.setBufferSize(1024);
                 ftpClient.setControlEncoding("UTF-8");
-                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
                 ftpClient.enterLocalPassiveMode();
                 for (File file : fileList) {
                     fis = new FileInputStream(file);
-                    ftpClient.storeFile(file.getName(), fis);
+                    String name = new String(file.getName().getBytes("UTF-8"), "iso-8859-1");
+                    ftpClient.storeFile(name, fis);
                 }
             } catch (IOException e) {
                 logger.error("上传文件失败，服务器异常");
