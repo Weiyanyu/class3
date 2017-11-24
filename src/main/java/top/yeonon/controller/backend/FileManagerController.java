@@ -30,7 +30,7 @@ public class FileManagerController {
     public ServerResponse uploadWorkFiles(@RequestParam("uploadFiles")MultipartFile uploadFiles,
                                       HttpServletRequest request) {
         String path = request.getSession().getServletContext().getRealPath("upload");
-        String targetFileName = fileService.upload(uploadFiles, path, "multiFile", null);
+        String targetFileName = fileService.uploadMulitFile(uploadFiles, path, "multiFile");
         String url = PropertiesUtil.getProperty("ftp.server.http.multifile.prefix") + targetFileName;
 
         Map fileMap = Maps.newHashMap();

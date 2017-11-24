@@ -43,7 +43,34 @@ public class FileService implements IFileService {
             FTPUtil.uploadFile(Lists.newArrayList(targetFile), remotePath);
             targetFile.delete();
         } catch (IOException e) {
-            logger.error("上传文件异常", e);
+            logger.error("上传文件异常1", e);
+            e.printStackTrace();
+            return null;
+        }
+        return targetFile.getName();
+    }
+
+    @Override
+    public String uploadMulitFile(MultipartFile file, String path, String remotePath) {
+
+        String fileName = file.getOriginalFilename();
+
+
+        logger.info("开始上传文件,上传文件的文件名:{},上传的路径:{},新文件名:{}",fileName,path);
+
+        File fileDir = new File(path);
+        if(!fileDir.exists()){
+            fileDir.setWritable(true);
+            fileDir.mkdirs();
+        }
+        File targetFile = new File(path,fileName);
+
+        try {
+            file.transferTo(targetFile);
+            FTPUtil.uploadFile(Lists.newArrayList(targetFile), remotePath);
+            targetFile.delete();
+        } catch (IOException e) {
+            logger.error("上传文件错误", e);
             e.printStackTrace();
             return null;
         }
