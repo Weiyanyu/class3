@@ -15,16 +15,13 @@ public class Comment {
 
     private Date updateTime;
 
-    private String insertImage;
-
-    public Comment(Integer id, Integer userId, Integer noticeId, String description, Date createTime, Date updateTime, String insertImage) {
+    public Comment(Integer id, Integer userId, Integer noticeId, String description, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.noticeId = noticeId;
         this.description = description;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.insertImage = insertImage;
     }
 
     public Comment() {
@@ -79,12 +76,5 @@ public class Comment {
         this.updateTime = updateTime;
     }
 
-    public String getInsertImage() {
-        return insertImage;
-    }
-
-    public void setInsertImage(String insertImage) {
-        this.insertImage = insertImage == null ? null : insertImage.trim();
-    }
 
 }

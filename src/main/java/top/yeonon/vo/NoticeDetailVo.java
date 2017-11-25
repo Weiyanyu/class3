@@ -19,11 +19,6 @@ public class NoticeDetailVo {
 
     private String updateTime;
 
-    private String mainImage;
-
-    private String subImage;
-
-    private String imageHost;
     private List<CommentDetailVo> commentDetailVoList;
 
 
@@ -84,29 +79,6 @@ public class NoticeDetailVo {
         this.updateTime = updateTime;
     }
 
-    public String getMainImage() {
-        return mainImage;
-    }
-
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage;
-    }
-
-    public String getSubImage() {
-        return subImage;
-    }
-
-    public void setSubImage(String subImage) {
-        this.subImage = subImage;
-    }
-
-    public String getImageHost() {
-        return imageHost;
-    }
-
-    public void setImageHost(String imageHost) {
-        this.imageHost = imageHost;
-    }
 
     public List<CommentDetailVo> getCommentDetailVoList() {
         return commentDetailVoList;

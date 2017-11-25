@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.service.Impl.TopicService;
-import top.yeonon.vo.TopicDetailVo;
 
 
 
@@ -39,18 +38,6 @@ public class TopicController {
         return topicService.searchOrListAllTopic(null, pageNum, pageSize, orderBy);
     }
 
-
-    /**
-     *
-     * @param topicId  需要传入参数ID,restful接口i，d可以再路径上
-     * @return
-     * 根据主题id来获取详细内容
-     */
-    @CustomerPermission
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ServerResponse<TopicDetailVo> getDetail(@PathVariable("id") Integer topicId) {
-        return topicService.getTopicDetail(topicId);
-    }
 
     /**
      *

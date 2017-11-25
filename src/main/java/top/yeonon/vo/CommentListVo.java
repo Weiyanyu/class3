@@ -1,9 +1,5 @@
 package top.yeonon.vo;
 
-import top.yeonon.pojo.Comment;
-
-import java.util.List;
-import java.util.Map;
 
 public class CommentListVo {
     private Integer commentId;

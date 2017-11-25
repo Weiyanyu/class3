@@ -17,11 +17,8 @@ import top.yeonon.common.ServerResponse;
 import top.yeonon.dao.CommentMapper;
 import top.yeonon.dao.NoticeMapper;
 import top.yeonon.dao.TopicMapper;
-import top.yeonon.pojo.Notice;
 import top.yeonon.pojo.Topic;
 import top.yeonon.service.ITopicService;
-import top.yeonon.util.DateTimeUtil;
-import top.yeonon.vo.TopicDetailVo;
 import top.yeonon.vo.TopicListVo;
 
 import java.util.List;
@@ -42,7 +39,11 @@ public class TopicService implements ITopicService {
     private Logger logger = LoggerFactory.getLogger(TopicService.class);
 
 
-    //添加主题
+    /**
+     *  添加主题，比较简单，没什么好解释的
+     * @param topic
+     * @return
+     */
     @Override
     public ServerResponse<String> addTopic(Topic topic) {
 
@@ -65,11 +66,14 @@ public class TopicService implements ITopicService {
     }
 
 
-    //这里可能会出现其中有一个topic id 错误，就立即停止了，后续无法继续执行的问题。但是在真是环境中，前端会负责给用户展示一个列表
-    //让用户选择topic ，所以不会出现ID错误的情况，在这里也仅仅是防止错误，而且如果前端出现一个ID错误，说明数据被截取了，我们不应该删除
-    //TODO 应该还可以改进
+    /**
+     *
+     * 批量删除，传入id序列，以逗号分隔，所以要解析一下
+     *
+     * @param topicIds
+     * @return
+     */
     @Override
-    @Transactional
     public ServerResponse<String> batchDelete(String topicIds) {
         List<String> topicIdList = Splitter.on(",").splitToList(topicIds);
         if (CollectionUtils.isEmpty(topicIdList)) {
@@ -92,8 +96,12 @@ public class TopicService implements ITopicService {
         return ServerResponse.createBySuccessMessage("删除成功");
     }
 
-    //这里不太适合递归的删除，因为这些数据的类型删除方式是不一样的，删除方法也不一样，不满足递归的条件，
-    //TODO 这里删除效率最差的情况就是O(n³)，不过删除的整个主题的可能性不大，所以暂时不考虑优化问题。
+
+    /**
+     * 这里不太适合递归的删除，因为这些数据的类型删除方式是不一样的，删除方法也不一样，不满足递归的条件，
+     * @param topicId
+     * @throws Exception
+     */
     private void deepDelete(Integer topicId) throws Exception {
         List<Integer> noticeIdList = noticeMapper.selectNoticesIdsByTopicId(topicId);
         for(Integer noticeId : noticeIdList) {
@@ -107,25 +115,15 @@ public class TopicService implements ITopicService {
     }
 
 
-
-    //详情
-    @Override
-    public ServerResponse<TopicDetailVo> getTopicDetail(Integer topicId) {
-
-        if (topicId == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "参数错误");
-        }
-
-        Topic topic = topicMapper.selectByPrimaryKey(topicId);
-        if (topic == null) {
-            return ServerResponse.createByErrorMessage("改主题不存在");
-        }
-        TopicDetailVo topicDetailVo = assembleTopicDetailVo(topic);
-        return ServerResponse.createBySuccess(topicDetailVo);
-    }
-
-
-
+    /**
+     * 搜索或者返回整个列表，因为这两个功能是包含关系，重复代码很多，所以就把他们合并了，根据传入的参数是否为null判断
+     * 返回的内容
+     * @param topicName
+     * @param pageNum
+     * @param pageSize
+     * @param orderBy
+     * @return
+     */
     @Override
     public ServerResponse<PageInfo> searchOrListAllTopic(String topicName, int pageNum, int pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize);
@@ -146,6 +144,12 @@ public class TopicService implements ITopicService {
     }
 
 
+    /**
+     * 更新，没什么好说的，和其他差不多
+     * @param topicId
+     * @param topic
+     * @return
+     */
     @Override
     public ServerResponse updateTopic(Integer topicId, Topic topic) {
         if (topic == null) {
@@ -167,27 +171,17 @@ public class TopicService implements ITopicService {
         return ServerResponse.createBySuccessMessage("更新成功");
     }
 
-    //装配数据对象
+    /**
+     * 组装视图对象
+     * @param topic
+     * @return
+     */
     private TopicListVo assembleTopicListVo(Topic topic) {
         TopicListVo topicListVo = new TopicListVo();
         topicListVo.setId(topic.getId());
         topicListVo.setStatus(topic.getStatus());
         topicListVo.setTopicName(topic.getName());
         return topicListVo;
-    }
-
-    private TopicDetailVo assembleTopicDetailVo(Topic topic) {
-        TopicDetailVo topicDetailVo = new TopicDetailVo();
-        topicDetailVo.setId(topic.getId());
-        topicDetailVo.setStatus(topic.getStatus());
-        topicDetailVo.setTopicDesc(topic.getDescription());
-        topicDetailVo.setTopicName(topic.getName());
-
-        List<Notice> noticeList = noticeMapper.selectNoticesByTopicId(topic.getId());
-        topicDetailVo.setAllNotice(noticeList);
-        topicDetailVo.setCreateTime(DateTimeUtil.dateToStr(topic.getCreateTime()));
-        topicDetailVo.setUpdateTime(DateTimeUtil.dateToStr(topic.getUpdateTime()));
-        return topicDetailVo;
     }
 
 }

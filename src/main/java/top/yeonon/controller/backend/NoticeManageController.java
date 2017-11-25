@@ -57,8 +57,8 @@ public class NoticeManageController {
     }
 
     @ManagerPermission
-    @RequestMapping(value = "{ids}", method = RequestMethod.DELETE)
-    public ServerResponse batchDelete(@PathVariable("ids") String noticeIds) {
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ServerResponse batchDelete(String noticeIds) {
         return noticeService.batchDeleteNotice(noticeIds);
     }
 
@@ -70,6 +70,8 @@ public class NoticeManageController {
                                       Integer topicId, String orderBy) {
         return noticeService.getNoticeList(pageNum, pageSize, topicId, orderBy);
     }
+
+
     @ManagerPermission
     @RequestMapping(value = "search", method = RequestMethod.GET)
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,

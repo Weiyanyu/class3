@@ -9,11 +9,10 @@
       <arg column="description" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="insert_image" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_id, notice_id, description, create_time, update_time, insert_image
+    id, user_id, notice_id, description, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -27,11 +26,9 @@
   </delete>
   <insert id="insert" parameterType="top.yeonon.pojo.Comment" >
     insert into comment (id, user_id, notice_id, 
-      description, create_time, update_time, 
-      insert_image)
+      description, create_time, update_time)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{noticeId,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, now(), now(),
-      #{insertImage,jdbcType=VARCHAR})
+      #{description,jdbcType=VARCHAR}, now(), now())
   </insert>
   <insert id="insertSelective" parameterType="top.yeonon.pojo.Comment" >
     insert into comment
@@ -54,9 +51,6 @@
       <if test="updateTime != null" >
         now(),
       </if>
-      <if test="insertImage != null" >
-        insert_image,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -76,9 +70,6 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="insertImage != null" >
-        #{insertImage,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -100,9 +91,6 @@
       <if test="updateTime != null" >
         update_time = now(),
       </if>
-      <if test="insertImage != null" >
-        insert_image = #{insertImage,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -113,7 +101,6 @@
       description = #{description,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = now(),
-      insert_image = #{insertImage,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

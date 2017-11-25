@@ -4,9 +4,7 @@ public class NoticeListVo {
 
     private Integer noticeId;
     private String noticeTitle;
-    private String mainImage;
-    private String imageHost;
-    private String brief;
+    private String description;
 
 
     public Integer getNoticeId() {
@@ -25,27 +23,11 @@ public class NoticeListVo {
         this.noticeTitle = noticeTitle;
     }
 
-    public String getMainImage() {
-        return mainImage;
+    public String getDescription() {
+        return description;
     }
 
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage;
-    }
-
-    public String getImageHost() {
-        return imageHost;
-    }
-
-    public void setImageHost(String imageHost) {
-        this.imageHost = imageHost;
-    }
-
-    public String getBrief() {
-        return brief;
-    }
-
-    public void setBrief(String brief) {
-        this.brief = brief;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

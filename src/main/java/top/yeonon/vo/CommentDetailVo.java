@@ -17,10 +17,6 @@ public class CommentDetailVo {
 
     private String updateTime;
 
-    private String insertImage;
-
-    private String imageHost;
-
     public Integer getCommentId() {
         return commentId;
     }
@@ -69,21 +65,6 @@ public class CommentDetailVo {
         this.updateTime = updateTime;
     }
 
-    public String getInsertImage() {
-        return insertImage;
-    }
-
-    public void setInsertImage(String insertImage) {
-        this.insertImage = insertImage;
-    }
-
-    public String getImageHost() {
-        return imageHost;
-    }
-
-    public void setImageHost(String imageHost) {
-        this.imageHost = imageHost;
-    }
 
 
     public String getUserName() {

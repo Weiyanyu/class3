@@ -1,13 +1,12 @@
 package top.yeonon.controller.backend;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.interceptor.ManagerPermission;
 import top.yeonon.pojo.Topic;
 import top.yeonon.service.ITopicService;
-import top.yeonon.vo.TopicDetailVo;
+
 
 
 
@@ -59,9 +58,4 @@ public class TopicManageController {
         return topicService.updateTopic(topicId, topic);
     }
 
-    @ManagerPermission
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ServerResponse<TopicDetailVo> detail(@PathVariable("id") Integer topicId) {
-        return topicService.getTopicDetail(topicId);
-    }
 }

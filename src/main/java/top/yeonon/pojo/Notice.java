@@ -13,22 +13,16 @@ public class Notice {
 
     private String description;
 
-    private String mainImage;
-
-    private String subImage;
-
     private Date createTime;
 
     private Date updateTime;
 
-    public Notice(Integer id, Integer userId, Integer topicId, String title, String description, String mainImage, String subImage, Date createTime, Date updateTime) {
+    public Notice(Integer id, Integer userId, Integer topicId, String title, String description, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.topicId = topicId;
         this.title = title;
         this.description = description;
-        this.mainImage = mainImage;
-        this.subImage = subImage;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -77,21 +71,6 @@ public class Notice {
         this.description = description == null ? null : description.trim();
     }
 
-    public String getMainImage() {
-        return mainImage;
-    }
-
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage == null ? null : mainImage.trim();
-    }
-
-    public String getSubImage() {
-        return subImage;
-    }
-
-    public void setSubImage(String subImage) {
-        this.subImage = subImage == null ? null : subImage.trim();
-    }
 
     public Date getCreateTime() {
         return createTime;

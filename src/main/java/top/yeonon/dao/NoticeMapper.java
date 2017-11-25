@@ -13,10 +13,11 @@ public interface NoticeMapper {
 
     Notice selectByPrimaryKey(Integer id);
 
-
     int updateByPrimaryKeySelective(Notice record);
 
     int updateByPrimaryKey(Notice record);
+
+
 
     String selectNameById(Integer id);
 

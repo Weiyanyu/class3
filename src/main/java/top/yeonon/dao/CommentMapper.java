@@ -22,7 +22,7 @@ public interface CommentMapper {
 
     List<Comment> selectCommentsByUserId(Integer userId);
 
-    List<Comment> selectCommentsByUserIdOrNoticeId(@Param("userId") Integer userId, @Param("noticeId") Integer noticeId);
+    List<Comment> selectCommentsByNoticeId(Integer noticeId);
 
     List<Comment> selectCommentsByUserIdAndDesc(@Param("commentDesc") String commentDesc, @Param("userId") Integer userId);
 }

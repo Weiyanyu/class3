@@ -33,11 +33,4 @@ public class LoginController {
         return ServerResponse.createBySuccessMessage("退出登录成功");
     }
 
-
-    //TODO 这里可能会用不到，暂时保存吧
-    @RequestMapping(method = RequestMethod.GET)
-    public ServerResponse<User> getSession(HttpSession session) {
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        return ServerResponse.createBySuccess(currentUser);
-    }
 }

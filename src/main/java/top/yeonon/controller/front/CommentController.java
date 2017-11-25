@@ -15,8 +15,10 @@ import top.yeonon.pojo.Comment;
 import top.yeonon.pojo.User;
 import top.yeonon.service.ICommentService;
 import top.yeonon.vo.CommentDetailVo;
+import top.yeonon.vo.CommentListVo;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/comments/")
@@ -42,16 +44,10 @@ public class CommentController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public ServerResponse<PageInfo> getCommentByUserId(Integer userId) {
+    public ServerResponse<List<CommentListVo>> getCommentByUserId(Integer userId) {
         return commentService.getCommentByUserId(userId);
     }
 
-//    @RequestMapping(value = "search", method = RequestMethod.GET)
-//    public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-//                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-//                                         String commentDesc) {
-//        return commentService.searchComment(pageNum, pageSize, commentDesc);
-//    }
 
 
 }
