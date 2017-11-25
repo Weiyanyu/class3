@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.yeonon.common.Const;
 import top.yeonon.common.ServerResponse;
+import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
 
@@ -31,6 +32,13 @@ public class LoginController {
     public ServerResponse<String> logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccessMessage("退出登录成功");
+    }
+
+    @CustomerPermission
+    @RequestMapping(method = RequestMethod.GET)
+    public ServerResponse<User> getSession(HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        return ServerResponse.createBySuccess(currentUser);
     }
 
 }
