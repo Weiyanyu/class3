@@ -16,7 +16,8 @@ public class PropertiesUtil {
     private static Properties props;
 
     static {
-        String fileName = "class3.properties";
+        //TODO 这里线上环境记得改
+        String fileName = "class3-dev.properties";
         props = new Properties();
         try {
             props.load(new InputStreamReader(PropertiesUtil.class.getClassLoader().getResourceAsStream(fileName),"UTF-8"));

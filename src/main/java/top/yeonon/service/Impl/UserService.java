@@ -17,6 +17,7 @@ import top.yeonon.util.MD5Util;
 import top.yeonon.util.TokenCache;
 import top.yeonon.util.token.TokenManager;
 import top.yeonon.util.token.TokenModel;
+import top.yeonon.vo.UserInfoVo;
 
 import java.util.UUID;
 
@@ -32,12 +33,11 @@ public class UserService implements IUserService {
 
     //登录功能，返回登录信息（密码设置为空），密码是通过MD5加密的
     @Override
-    public ServerResponse<User> login(String studentId, String password) {
+    public ServerResponse<UserInfoVo> login(String studentId, String password) {
         int rowCount = userMapper.checkStudentId(studentId);
         if (rowCount == 0) {
             return ServerResponse.createByErrorMessage("登录失败，不存在该学号");
         }
-
 
         String MD5Password = MD5Util.MD5EncodeUtf8(password);
 
@@ -46,21 +46,18 @@ public class UserService implements IUserService {
             return ServerResponse.createByErrorMessage("登录失败，密码错误，请检查密码");
         }
         userMapper.updateByPrimaryKeySelective(user);
-        user.setPassword(StringUtils.EMPTY);
-        return ServerResponse.createBySuccess(user, "登录成功");
+        UserInfoVo userInfoVo = assembleUserInfoVo(user);
+        return ServerResponse.createBySuccess(userInfoVo, "登录成功");
     }
 
     @Override
-    public ServerResponse<User> getPublicInfo(Integer userId) {
+    public ServerResponse<UserInfoVo> getPublicInfo(Integer userId) {
         User user = userMapper.selectByPrimaryKey(userId);
         if (user == null) {
             return ServerResponse.createByErrorMessage("该用户不存在");
         }
-        user.setEmail(StringUtils.EMPTY);
-        user.setAnswer(StringUtils.EMPTY);
-        user.setQuestion(StringUtils.EMPTY);
-        user.setPassword(StringUtils.EMPTY);
-        return ServerResponse.createBySuccess(user);
+        UserInfoVo userInfoVo = assembleUserInfoVo(user);
+        return ServerResponse.createBySuccess(userInfoVo);
     }
 
 
@@ -194,18 +191,6 @@ public class UserService implements IUserService {
     }
 
 
-    @Override
-    public ServerResponse<User> getPersonalInfo(Integer userId) {
-        User user = userMapper.selectByPrimaryKey(userId);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("该用户不存在");
-        }
-
-        user.setPassword(StringUtils.EMPTY);
-        return ServerResponse.createBySuccess(user);
-    }
-
-
     //校验学号，邮箱的可用性（没有重复）
     @Override
     public ServerResponse<String> checkValid(String str, String type) {
@@ -238,5 +223,22 @@ public class UserService implements IUserService {
             return ServerResponse.createBySuccess();
         }
         return ServerResponse.createByError();
+    }
+
+
+    /**
+     * 装配视图对象VO
+     */
+    private UserInfoVo assembleUserInfoVo(User user) {
+        UserInfoVo userInfoVo = new UserInfoVo();
+        userInfoVo.setUserId(user.getUserId());
+        userInfoVo.setUserName(user.getUserName());
+        userInfoVo.setStudentId(user.getStudentId());
+        userInfoVo.setAvatar(user.getAvatar());
+        userInfoVo.setRole(user.getRole());
+        //将数据库自动生成的时间戳(unix 毫秒时间)转换成YYYY-MM-DD HH-mm-ss格式的时间
+        userInfoVo.setCreateTime(DateTimeUtil.dateToStr(user.getCreateTime()));
+        userInfoVo.setUpdateTime(DateTimeUtil.dateToStr(user.getUpdateTime()));
+        return userInfoVo;
     }
 }

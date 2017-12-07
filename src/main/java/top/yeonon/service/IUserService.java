@@ -2,9 +2,10 @@ package top.yeonon.service;
 
 import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
+import top.yeonon.vo.UserInfoVo;
 
 public interface IUserService {
-    ServerResponse<User> login(String studentId, String password);
+    ServerResponse<UserInfoVo> login(String studentId, String password);
 
     ServerResponse checkValid(String str, String type);
 
@@ -20,9 +21,7 @@ public interface IUserService {
 
     ServerResponse updateInfo(User user);
 
-    ServerResponse<User> getPublicInfo(Integer userId);
-
-    ServerResponse<User> getPersonalInfo(Integer userId);
+    ServerResponse<UserInfoVo> getPublicInfo(Integer userId);
 
     ServerResponse checkRole(Integer userId);
 }

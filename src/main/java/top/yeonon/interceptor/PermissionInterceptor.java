@@ -10,6 +10,7 @@ import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
+import top.yeonon.vo.UserInfoVo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,7 +58,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     private boolean isCustomer(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        UserInfoVo user = (UserInfoVo) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return false;
         }
@@ -66,7 +67,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     private boolean isManager(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        UserInfoVo user = (UserInfoVo) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return false;
         }

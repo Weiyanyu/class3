@@ -9,6 +9,7 @@ import top.yeonon.common.ServerResponse;
 import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
+import top.yeonon.vo.UserInfoVo;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,8 +21,8 @@ public class LoginController {
     private IUserService userService;
     
     @RequestMapping(method = RequestMethod.POST)
-    public ServerResponse<User> login(String studentId, String password, HttpSession session) {
-        ServerResponse<User> response = userService.login(studentId, password);
+    public ServerResponse<UserInfoVo> login(String studentId, String password, HttpSession session) {
+        ServerResponse<UserInfoVo> response = userService.login(studentId, password);
         if (response.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, response.getData());
         }
@@ -36,8 +37,8 @@ public class LoginController {
 
     @CustomerPermission
     @RequestMapping(method = RequestMethod.GET)
-    public ServerResponse<User> getSession(HttpSession session) {
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<UserInfoVo> getSession(HttpSession session) {
+        UserInfoVo currentUser = (UserInfoVo) session.getAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccess(currentUser);
     }
 
