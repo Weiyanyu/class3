@@ -45,9 +45,6 @@ public class NoticeService implements INoticeService {
 
     /**
      * 添加通知的service
-     *
-     * @param notice  通知对象
-     * @return
      */
     @Override
     public ServerResponse addNotice(Notice notice) {
@@ -69,8 +66,6 @@ public class NoticeService implements INoticeService {
     /**
      * 批量删除Notice,需要级联删除，而且因为数据库没有外键，所以需要自己写删除逻辑，时间复杂度应该是平方级别的，
      * 用到的情况不多，问题不大。
-     * @param noticeIds
-     * @return
      */
     @Override
     public ServerResponse batchDeleteNotice(String noticeIds) {
@@ -107,12 +102,6 @@ public class NoticeService implements INoticeService {
      * 这里就是获取Notice列表，因为可能存在很多记录，所以要分页，避免一次请求太多数据
      * 需要注意的是topicId这个参数，这个参数是可以为null的，不传该参数就是返回所有的Notice
      * 这应该是一种比较低级的实现复用的办法（因为是业务逻辑，如果要使用一些设计模式来解决的话，逻辑就比较复杂了，就有些过分了）
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param topicId
-     * @param orderBy
-     * @return
      */
     @Override
     public ServerResponse<PageInfo> getNoticeList(int pageNum, int pageSize, Integer topicId, String orderBy) {
@@ -139,8 +128,6 @@ public class NoticeService implements INoticeService {
 
     /**
      * 获取某个Notice的详情，包括创建时间等等几乎所有数据库里存在的内容，而返回list的那块，并没有返回如此详细的信息（因为不需要）
-     * @param noticeId
-     * @return
      */
     @Override
     public ServerResponse<NoticeDetailVo> getDetail(Integer noticeId) {
@@ -158,12 +145,6 @@ public class NoticeService implements INoticeService {
 
     /**
      * 目前仅仅实现了一种比较简陋的搜索（利用mysql的模糊查询）
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param noticeTitle
-     * @param orderBy
-     * @return
      */
     @Override
     public ServerResponse<PageInfo> searchNotice(int pageNum, int pageSize, String noticeTitle, String orderBy) {
@@ -187,12 +168,7 @@ public class NoticeService implements INoticeService {
 
 
     /**
-     *
      * 更新Notice，需要传递一个Notice对象，不需要修改的字段可以为空（MyBatis带来的便利）
-     *
-     * @param noticeId
-     * @param notice
-     * @return
      */
     @Override
     public ServerResponse updateNotice(Integer noticeId, Notice notice) {

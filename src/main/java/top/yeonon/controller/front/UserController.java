@@ -38,9 +38,6 @@ public class UserController {
 
     /**
      *
-     * @param user          必填
-     * @return
-     *
      * 注册一个用户
      */
     @RequestMapping(method = RequestMethod.POST)
@@ -51,9 +48,6 @@ public class UserController {
 
     /**
      *
-     * @param str           学号或者邮箱字符串， 必填
-     * @param type          学号或者邮箱,表示类型的参数, 必填
-     * @return
      * 检查学号或者邮箱是否合法（主要是检查是否已经存在）
      */
     @RequestMapping(value = "/check", method = RequestMethod.GET)
@@ -63,8 +57,6 @@ public class UserController {
 
     /**
      *
-     * @param userId            某个用户的学号,必填
-     * @return
      * 获取用户信息，这里指的是可以公开的信息
      */
     //查看其它用户的信息,用户可以公开的信息,比如头像，个人简介等等。
@@ -76,8 +68,6 @@ public class UserController {
 
     /**
      *
-     * @param studentId                 学号
-     * @return
      * 忘记密码的情况下获取指定学号的密保问题
      */
     @RequestMapping(value = "/question", method = RequestMethod.GET)
@@ -87,10 +77,6 @@ public class UserController {
 
     /**
      *
-     * @param studentId                 学号
-     * @param question                  密保问题
-     * @param answer                    密保答案
-     * @return
      * 用户输入答案，服务器来检查该密保答案是否和密保问题对应
      */
     @RequestMapping(value = "/answer", method = RequestMethod.POST)
@@ -104,11 +90,6 @@ public class UserController {
 
     /***
      *
-     * @param studentId                     学号
-     * @param newPassword                   新密码
-     * @param token                         token（服务器产生的）
-     * @param session                       框架自动填入
-     * @return
      * 用户输入密码正确后，前端调用这个接口，用户输入新密码，TOKEN验证正确后，即可修改密码，完成后返回一个status : 10，指明
      * 前端需要让用户重新登录
      */
@@ -123,10 +104,6 @@ public class UserController {
 
     /**
      *
-     * @param oldPassword                   旧密码
-     * @param newPassword                   新密码
-     * @param session                       框架自动填入
-     * @return
      * 这是在用户登录的情况下，直接使用原密码修改密码的接口,需要用户在登录状态下，有@CustomerPermission注解拦截
      */
 
@@ -142,10 +119,6 @@ public class UserController {
     }
 
     /**
-     *
-     * @param user                          必填,（关键信息）
-     * @param session                       框架自动注入
-     * @return
      * 更新用户的个人信息，需要登录状态，有@CustomerPermission注解拦截控制
      */
     @CustomerPermission
@@ -159,11 +132,9 @@ public class UserController {
 
     /**
      *
-     * @param avatar            文件类型， 必填
-     * @param request           框架自动填入
-     * @return
      * 上传头像
      */
+    @SuppressWarnings("unchecked")
     @CustomerPermission
     @RequestMapping(value = "avatar/upload", method = RequestMethod.POST)
     public ServerResponse uploadAvatar(@RequestParam(value = "avatar", required = false)MultipartFile avatar,
@@ -186,9 +157,6 @@ public class UserController {
 
     /**
      *
-     * @param to                        目标邮箱
-     * @param content                   邮件内容
-     * @return
      * 发送通知邮箱，比如找回密码的时候，连同token一起发送给用户
      */
     //以下是邮箱发送功能简单测试，暂时不作为正式代码

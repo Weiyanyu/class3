@@ -22,6 +22,9 @@ public class NoticeController {
     @Autowired
     private INoticeService noticeService;
 
+    /**
+     *获取notice 列表 (可以通过topic id获取， 默认是获取全部)
+     */
     @CustomerPermission
     @RequestMapping(method = RequestMethod.GET)
     public ServerResponse<PageInfo> getListByTopic(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -31,7 +34,9 @@ public class NoticeController {
         return noticeService.getNoticeList(pageNum, pageSize, topicId, orderBy);
     }
 
-
+    /**
+     *查找notice（通过notice 的标题）
+     */
     @CustomerPermission
     @RequestMapping(value = "search" , method = RequestMethod.GET)
     public ServerResponse<PageInfo> searchNotice(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -41,7 +46,9 @@ public class NoticeController {
     }
 
 
-
+    /**
+     *获取某个notice 的详细信息
+     */
     @CustomerPermission
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ServerResponse<NoticeDetailVo> getDetail(@PathVariable("id") Integer noticeId) {

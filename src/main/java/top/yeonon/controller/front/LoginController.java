@@ -19,7 +19,10 @@ public class LoginController {
     
     @Autowired
     private IUserService userService;
-    
+
+    /**
+     *用户登录
+     */
     @RequestMapping(method = RequestMethod.POST)
     public ServerResponse<UserInfoVo> login(String studentId, String password, HttpSession session) {
         ServerResponse<UserInfoVo> response = userService.login(studentId, password);
@@ -29,12 +32,18 @@ public class LoginController {
         return response;
     }
 
+    /**
+     *用户退出
+     */
     @RequestMapping(method = RequestMethod.DELETE)
     public ServerResponse<String> logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccessMessage("退出登录成功");
     }
 
+    /**
+     *获取session存储的信息（主要用于检查是否登录）
+     */
     @CustomerPermission
     @RequestMapping(method = RequestMethod.GET)
     public ServerResponse<UserInfoVo> getSession(HttpSession session) {

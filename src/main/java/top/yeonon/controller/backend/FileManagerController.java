@@ -25,6 +25,10 @@ public class FileManagerController {
     @Autowired
     private IFileService fileService;
 
+    /**
+     *上传非图片文件
+     */
+    @SuppressWarnings("unchecked")
     @ManagerPermission
     @RequestMapping(method = RequestMethod.POST)
     public ServerResponse uploadWorkFiles(@RequestParam("uploadFiles")MultipartFile uploadFiles,

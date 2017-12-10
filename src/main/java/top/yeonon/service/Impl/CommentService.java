@@ -32,8 +32,6 @@ public class CommentService implements ICommentService{
 
     /**
      * 添加评论
-     * @param comment
-     * @return
      */
     @Override
     public ServerResponse addComment(Comment comment) {
@@ -59,8 +57,6 @@ public class CommentService implements ICommentService{
 
     /**
      * 通过用户id获取用户评论
-     * @param userId
-     * @return
      */
     @Override
     public ServerResponse<List<CommentListVo>> getCommentByUserId(Integer userId) {
@@ -75,9 +71,6 @@ public class CommentService implements ICommentService{
 
     /**
      * 更新评论内容
-     * @param commentId
-     * @param comment
-     * @return
      */
     @Override
     public ServerResponse updateCommentDesc(Integer commentId, Comment comment) {

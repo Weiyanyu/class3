@@ -32,6 +32,9 @@ public class NoticeManageController {
     @Autowired
     private FileService fileService;
 
+    /**
+     *添加notice
+     */
     @ManagerPermission
     @RequestMapping(method = RequestMethod.POST)
     public ServerResponse add(Notice notice, HttpSession session) {
@@ -40,7 +43,9 @@ public class NoticeManageController {
         return noticeService.addNotice(notice);
     }
 
-
+    /**
+     *上传文件，这里主要就是专门上传notice里的图片文件
+     */
     @ManagerPermission
     @RequestMapping(value = "upload_file", method = RequestMethod.POST)
     public ServerResponse uploadFile(@RequestParam("noticeFile")MultipartFile noticeFile,
@@ -56,13 +61,18 @@ public class NoticeManageController {
         return ServerResponse.createBySuccess(fileMap);
     }
 
+    /**
+     *批量删除notice，逗号分隔id，当然也可以删除单个
+     */
     @ManagerPermission
     @RequestMapping(method = RequestMethod.DELETE)
     public ServerResponse batchDelete(String noticeIds) {
         return noticeService.batchDeleteNotice(noticeIds);
     }
 
-
+    /**
+     *列出某个主题下的所有notice
+     */
     @ManagerPermission
     @RequestMapping(method = RequestMethod.GET)
     public ServerResponse listByTopic(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -71,7 +81,9 @@ public class NoticeManageController {
         return noticeService.getNoticeList(pageNum, pageSize, topicId, orderBy);
     }
 
-
+    /**
+     *通过标题关键字查找notice
+     */
     @ManagerPermission
     @RequestMapping(value = "search", method = RequestMethod.GET)
     public ServerResponse<PageInfo> search(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -79,13 +91,19 @@ public class NoticeManageController {
                                            String noticeTitle, String orderBy) {
         return noticeService.searchNotice(pageNum, pageSize, noticeTitle, orderBy);
     }
+
+    /**
+     *获取Notice详细信息
+     */
     @ManagerPermission
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ServerResponse<NoticeDetailVo> detail(@PathVariable("id") Integer noticeId) {
         return noticeService.getDetail(noticeId);
     }
 
-
+    /**
+     *更新某个notice的信息
+     */
     @ManagerPermission
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public ServerResponse update(@PathVariable("id") Integer noticeId,

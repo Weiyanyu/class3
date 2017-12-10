@@ -29,9 +29,6 @@ public class CommentController {
 
     /**
      *
-     * @param comment      必填
-     * @param session      框架自动填入
-     * @return
      * 新增一条评论
      */
     @CustomerPermission

@@ -30,8 +30,9 @@ public class UserService implements IUserService {
     private UserMapper userMapper;
 
 
-
-    //登录功能，返回登录信息（密码设置为空），密码是通过MD5加密的
+    /**
+     * 登录功能，返回登录信息（密码设置为空），密码是通过MD5加密的
+     */
     @Override
     public ServerResponse<UserInfoVo> login(String studentId, String password) {
         int rowCount = userMapper.checkStudentId(studentId);
@@ -60,8 +61,9 @@ public class UserService implements IUserService {
         return ServerResponse.createBySuccess(userInfoVo);
     }
 
-
-    //注册功能，通过填写表单信息，比如邮箱，用户名，学号，密码，头像等等提交，密码会经过MD5加密
+    /**
+     * 注册功能，通过填写表单信息，比如邮箱，用户名，学号，密码，头像等等提交，密码会经过MD5加密
+     */
     @Override
     public ServerResponse<String> register(User user) {
         ServerResponse<String> validResponse = checkValid(user.getStudentId(),Const.STUDENT_ID);
@@ -86,12 +88,14 @@ public class UserService implements IUserService {
         return ServerResponse.createBySuccessMessage("注册成功");
     }
 
-    /*
+    /**
     *   以下是用户个人操作的部分，比如修改密码，获取密保问题等等
     * */
 
     //TODO 这里比较好的方式是发送邮件，邮件里包含带有TOKEN的URL，比较安全
-    //填写学号，在没有登录状态下就可以获得对应的找回密码提示问题
+    /**
+     *     填写学号，在没有登录状态下就可以获得对应的找回密码提示问题
+     */
     @Override
     public ServerResponse<String> getQuestion(String studentId) {
         ServerResponse validResponse = this.checkValid(studentId, Const.STUDENT_ID);
@@ -106,7 +110,9 @@ public class UserService implements IUserService {
         return ServerResponse.createBySuccess(question);
     }
 
-    //验证用户填写的答案是否和数据库中的一致，成功会返回一个Token，供给前端界面调用
+    /**
+     *验证用户填写的答案是否和数据库中的一致，成功会返回一个Token，供给前端界面调用
+     */
     @Override
     public ServerResponse<String> checkAnswer(String studentId, String question, String answer) {
         int rowCount = userMapper.checkAnswer(studentId,question, answer);
@@ -120,7 +126,9 @@ public class UserService implements IUserService {
     }
 
 
-    //通过拿到的token，用过一系列验证token就可以重设密码了
+    /**
+     *     通过拿到的token，用过一系列验证token就可以重设密码了
+     */
     @Override
     public ServerResponse<String> forgetResetPassword(String studentId, String newPassword, String token) {
         if (StringUtils.isBlank(token)) {
@@ -148,8 +156,9 @@ public class UserService implements IUserService {
         return ServerResponse.createByErrorMessage("修改密码失败，有可能是服务器异常");
     }
 
-
-    //在登录状态下可以直接通过旧密码来更新新密码，设置完成后强制退出登录
+    /**
+     *在登录状态下可以直接通过旧密码来更新新密码，设置完成后强制退出登录
+     */
     @Override
     public ServerResponse<String> resetPassword(Integer userId, String oldPassword, String newPassword) {
         int rowCount = userMapper.checkPassword(userId, MD5Util.MD5EncodeUtf8(oldPassword));
@@ -165,7 +174,10 @@ public class UserService implements IUserService {
     }
 
 
-    //在登录状态下修改个人信息，但是不能修改学号和用户id以及用户权限
+    /**
+     *  在登录状态下修改个人信息，但是不能修改学号和用户id以及用户权限
+     */
+
     @Override
     public ServerResponse updateInfo(User user) {
         System.out.println("用户名是" + user.getUserName());
@@ -190,8 +202,9 @@ public class UserService implements IUserService {
         return ServerResponse.createBySuccess("更新成功");
     }
 
-
-    //校验学号，邮箱的可用性（没有重复）
+    /**
+     *  校验学号，邮箱的可用性（没有重复）
+     */
     @Override
     public ServerResponse<String> checkValid(String str, String type) {
         if (StringUtils.isNotBlank(type)) {
@@ -214,8 +227,9 @@ public class UserService implements IUserService {
         return ServerResponse.createBySuccessMessage("校验成功");
     }
 
-
-    //后台管理员登录,检验该用户的身份（role）是否是管理员
+    /**
+     * 后台管理员登录,检验该用户的身份（role）是否是管理员
+     */
     @Override
     public ServerResponse checkRole(Integer userId) {
         User user = userMapper.selectByPrimaryKey(userId);

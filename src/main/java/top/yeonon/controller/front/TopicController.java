@@ -24,10 +24,6 @@ public class TopicController {
 
     /***
      *
-     * @param pageNum   默认为1， 可选
-     * @param pageSize  默认为10， 可选
-     * @param orderBy   没有默认值， 可以为null, 可选
-     * @return
      * 获取所有主题
      */
     @CustomerPermission
@@ -41,11 +37,6 @@ public class TopicController {
 
     /**
      *
-     * @param pageNum       默认1， 可选
-     * @param pageSize      默认10， 可选
-     * @param topicName     理论上可选，但是最好不要为null，要不然没有意义，前端应该控制这里不能为空
-     * @param orderBy       可选，无默认值
-     * @return
      * 根据名称关键词搜索主题，暂时没有使用搜索引擎，能力比较弱
      */
     @CustomerPermission

@@ -41,8 +41,6 @@ public class TopicService implements ITopicService {
 
     /**
      *  添加主题，比较简单，没什么好解释的
-     * @param topic
-     * @return
      */
     @Override
     public ServerResponse<String> addTopic(Topic topic) {
@@ -69,9 +67,6 @@ public class TopicService implements ITopicService {
     /**
      *
      * 批量删除，传入id序列，以逗号分隔，所以要解析一下
-     *
-     * @param topicIds
-     * @return
      */
     @Override
     public ServerResponse<String> batchDelete(String topicIds) {
@@ -99,8 +94,6 @@ public class TopicService implements ITopicService {
 
     /**
      * 这里不太适合递归的删除，因为这些数据的类型删除方式是不一样的，删除方法也不一样，不满足递归的条件，
-     * @param topicId
-     * @throws Exception
      */
     private void deepDelete(Integer topicId) throws Exception {
         List<Integer> noticeIdList = noticeMapper.selectNoticesIdsByTopicId(topicId);
@@ -118,11 +111,6 @@ public class TopicService implements ITopicService {
     /**
      * 搜索或者返回整个列表，因为这两个功能是包含关系，重复代码很多，所以就把他们合并了，根据传入的参数是否为null判断
      * 返回的内容
-     * @param topicName
-     * @param pageNum
-     * @param pageSize
-     * @param orderBy
-     * @return
      */
     @Override
     public ServerResponse<PageInfo> searchOrListAllTopic(String topicName, int pageNum, int pageSize, String orderBy) {
@@ -146,9 +134,6 @@ public class TopicService implements ITopicService {
 
     /**
      * 更新，没什么好说的，和其他差不多
-     * @param topicId
-     * @param topic
-     * @return
      */
     @Override
     public ServerResponse updateTopic(Integer topicId, Topic topic) {
@@ -173,8 +158,6 @@ public class TopicService implements ITopicService {
 
     /**
      * 组装视图对象
-     * @param topic
-     * @return
      */
     private TopicListVo assembleTopicListVo(Topic topic) {
         TopicListVo topicListVo = new TopicListVo();

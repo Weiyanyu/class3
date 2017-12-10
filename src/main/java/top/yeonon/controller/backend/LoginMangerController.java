@@ -19,6 +19,9 @@ public class LoginMangerController {
     @Autowired
     private IUserService userService;
 
+    /**
+     *后台管理员登录，要验证管理员身份
+     */
     @RequestMapping(method = RequestMethod.POST)
     public ServerResponse<UserInfoVo> login(String studentId, String password, HttpSession session) {
         ServerResponse<UserInfoVo> response = userService.login(studentId, password);
