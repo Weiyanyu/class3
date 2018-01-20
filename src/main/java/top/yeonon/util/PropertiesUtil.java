@@ -11,12 +11,12 @@ import java.util.Properties;
 
 public class PropertiesUtil {
 
+
     private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
 
     private static Properties props;
 
     static {
-        //TODO 这里线上环境记得改
         String fileName = "class3.properties";
         props = new Properties();
         try {
@@ -26,7 +26,11 @@ public class PropertiesUtil {
         }
     }
 
-    public static String getProperty(String key){
+    /**
+     * 获取String 类型属性
+     *
+     */
+    public static String getStringProperty(String key){
         String value = props.getProperty(key.trim());
         if(StringUtils.isBlank(value)){
             return null;
@@ -34,13 +38,53 @@ public class PropertiesUtil {
         return value.trim();
     }
 
-    public static String getProperty(String key,String defaultValue){
+    public static String getStringProperty(String key,String defaultValue){
 
         String value = props.getProperty(key.trim());
         if(StringUtils.isBlank(value)){
             value = defaultValue;
         }
         return value.trim();
+    }
+
+    /**
+     * 获取int 属性
+     */
+
+    public static Integer getIntegerProperty(String key) {
+        String value = props.getProperty(key.trim());
+        if (StringUtils.isBlank(value)) {
+            return null;
+        }
+        return Integer.parseInt(value.trim());
+    }
+
+    public static Integer getIntegerProperty(String key, Integer defaultValue) {
+        String value = props.getProperty(key.trim());
+        if (StringUtils.isBlank(value)) {
+            return defaultValue;
+        }
+        return Integer.parseInt(value);
+    }
+
+    /**
+     * 获取bool 属性
+     */
+
+    public static Boolean getBooleanProperty(String key) {
+        String value = props.getProperty(key.trim());
+        if (StringUtils.isBlank(value)) {
+            return null;
+        }
+        return Boolean.parseBoolean(value.trim());
+    }
+
+    public static Boolean getBooleanProperty(String key, Boolean defaultValue) {
+        String value = props.getProperty(key.trim());
+        if (StringUtils.isBlank(value)) {
+            return defaultValue;
+        }
+        return Boolean.parseBoolean(value.trim());
     }
 
 
