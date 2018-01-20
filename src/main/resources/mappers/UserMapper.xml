@@ -19,11 +19,11 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    user_id, student_id, user_name, password, email, avatar, question, answer, role, 
+    user_id, student_id, user_name, password, email, avatar, question, answer, role,
     create_time, update_time, banned, profile
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from user
     where user_id = #{userId,jdbcType=INTEGER}
@@ -33,14 +33,14 @@
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="top.yeonon.pojo.User" >
-    insert into user (user_id, student_id, user_name, 
-      password, email, avatar, 
-      question, answer, role, 
+    insert into user (user_id, student_id, user_name,
+      password, email, avatar,
+      question, answer, role,
       create_time, update_time, banned,profile
       )
-    values (#{userId,jdbcType=INTEGER}, #{studentId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
-      #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, 
+    values (#{userId,jdbcType=INTEGER}, #{studentId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR},
+      #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER},
       now(), now(), #{banned,jdbcType=TINYINT}, #{profile,jdbcType=VARCHAR}
       )
   </insert>

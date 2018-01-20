@@ -1,7 +1,16 @@
 package top.yeonon.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Comment {
     private Integer id;
 
@@ -14,67 +23,6 @@ public class Comment {
     private Date createTime;
 
     private Date updateTime;
-
-    public Comment(Integer id, Integer userId, Integer noticeId, String description, Date createTime, Date updateTime) {
-        this.id = id;
-        this.userId = userId;
-        this.noticeId = noticeId;
-        this.description = description;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
-
-    public Comment() {
-        super();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getNoticeId() {
-        return noticeId;
-    }
-
-    public void setNoticeId(Integer noticeId) {
-        this.noticeId = noticeId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 
 
 }

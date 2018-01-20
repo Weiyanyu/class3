@@ -21,7 +21,7 @@
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
         <property name="locations">
             <list>
-                <value>classpath:**/*-dev.properties</value>
+                <value>classpath:datasource.properties</value>
 
 
                 <!--<value>classpath:**/*-prod.properties</value>-->

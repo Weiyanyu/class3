@@ -1,6 +1,12 @@
 package top.yeonon.vo;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
+@Getter
+@NoArgsConstructor
 public class CommentListVo {
     private Integer commentId;
     private String commentDesc;
@@ -10,59 +16,4 @@ public class CommentListVo {
     private String userName;
     private String userAvatar;
 
-    public Integer getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(Integer commentId) {
-        this.commentId = commentId;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getNoticeId() {
-        return noticeId;
-    }
-
-    public void setNoticeId(Integer noticeId) {
-        this.noticeId = noticeId;
-    }
-
-    public String getNoticeTitle() {
-        return noticeTitle;
-    }
-
-    public void setNoticeTitle(String noticeTitle) {
-        this.noticeTitle = noticeTitle;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserAvatar() {
-        return userAvatar;
-    }
-
-    public void setUserAvatar(String userAvatar) {
-        this.userAvatar = userAvatar;
-    }
-
-    public String getCommentDesc() {
-        return commentDesc;
-    }
-
-    public void setCommentDesc(String commentDesc) {
-        this.commentDesc = commentDesc;
-    }
 }

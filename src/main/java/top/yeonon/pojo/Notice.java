@@ -1,7 +1,15 @@
 package top.yeonon.pojo;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.Date;
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Notice {
     private Integer id;
 
@@ -17,74 +25,4 @@ public class Notice {
 
     private Date updateTime;
 
-    public Notice(Integer id, Integer userId, Integer topicId, String title, String description, Date createTime, Date updateTime) {
-        this.id = id;
-        this.userId = userId;
-        this.topicId = topicId;
-        this.title = title;
-        this.description = description;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
-
-    public Notice() {
-        super();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getTopicId() {
-        return topicId;
-    }
-
-    public void setTopicId(Integer topicId) {
-        this.topicId = topicId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

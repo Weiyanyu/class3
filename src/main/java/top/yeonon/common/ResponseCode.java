@@ -7,9 +7,8 @@ public enum ResponseCode {
     ILLEGAL_ARGUMENT(2, "ILLEGAL_ARGUMENT"),
 
     NEED_LOGIN(10, "NEED_LOGIN"),
-    NEED_LOGIN_ADMIN(20, "NEED_LOGIN_ADMIN"),
-    ILLEGAL_REQUEST(30, "ILLEGAL_REQUEST"),
-    GOTO_USER_SHOW(100, "ILLEGAL_REQUEST");
+    NEED_LOGIN_ADMIN(20, "NEED_LOGIN_ADMIN");
+
 
     private final int code;
     private final String desc;

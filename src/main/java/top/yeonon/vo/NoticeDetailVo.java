@@ -1,9 +1,14 @@
 package top.yeonon.vo;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import top.yeonon.pojo.Comment;
 
 import java.util.List;
-
+@Setter
+@Getter
+@NoArgsConstructor
 public class NoticeDetailVo {
     private Integer noticeId;
 
@@ -21,70 +26,4 @@ public class NoticeDetailVo {
 
     private List<CommentDetailVo> commentDetailVoList;
 
-
-
-    public Integer getNoticeId() {
-        return noticeId;
-    }
-
-    public void setNoticeId(Integer noticeId) {
-        this.noticeId = noticeId;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getTopicId() {
-        return topicId;
-    }
-
-    public void setTopicId(Integer topicId) {
-        this.topicId = topicId;
-    }
-
-    public String getNoticeTitle() {
-        return noticeTitle;
-    }
-
-    public void setNoticeTitle(String noticeTitle) {
-        this.noticeTitle = noticeTitle;
-    }
-
-    public String getNoticeDesc() {
-        return noticeDesc;
-    }
-
-    public void setNoticeDesc(String noticeDesc) {
-        this.noticeDesc = noticeDesc;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
-
-    public List<CommentDetailVo> getCommentDetailVoList() {
-        return commentDetailVoList;
-    }
-
-    public void setCommentDetailVoList(List<CommentDetailVo> commentDetailVoList) {
-        this.commentDetailVoList = commentDetailVoList;
-    }
 }
