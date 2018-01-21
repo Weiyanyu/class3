@@ -13,6 +13,10 @@ public class Const {
     public static final Integer LOGIN_TOKEN_EXPIRES_HOUR = 12;
 
 
+    public interface RedisCache {
+        int exTime = 30 * 60;
+    }
+
     public interface Role {
         int ROLE_CUSTOMER = 0;
         int ROLE_ADMIN = 1;
