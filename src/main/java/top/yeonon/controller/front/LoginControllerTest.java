@@ -56,7 +56,7 @@ public class LoginControllerTest {
     /**
      *获取session存储的信息（主要用于检查是否登录）
      */
-//    @CustomerPermission
+    @CustomerPermission
     @RequestMapping(value = "get", method = RequestMethod.GET)
     public ServerResponse<UserInfoVo> getSession(HttpServletRequest request) {
         String loginToken = CookieUtil.readCookie(request);

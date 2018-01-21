@@ -3,6 +3,7 @@ package top.yeonon.interceptor;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import top.yeonon.common.Const;
@@ -10,6 +11,9 @@ import top.yeonon.common.ResponseCode;
 import top.yeonon.common.ServerResponse;
 import top.yeonon.pojo.User;
 import top.yeonon.service.IUserService;
+import top.yeonon.util.CookieUtil;
+import top.yeonon.util.JsonUtil;
+import top.yeonon.util.RedisShardedPoolUtil;
 import top.yeonon.vo.UserInfoVo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +43,6 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (!isPass) {
-            Gson gson = new Gson();
             ServerResponse serverResponse = null;
             if (StringUtils.equals(permissionType, "customer")) {
                 serverResponse = ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
@@ -51,14 +54,21 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             response.setHeader("Access-Control-Allow-Credentials", "true");
-            response.getWriter().write(gson.toJson(serverResponse));
+            response.getWriter().write(JsonUtil.objToPrettyString(serverResponse));
         }
         return isPass;
     }
 
     private boolean isCustomer(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        UserInfoVo user = (UserInfoVo) session.getAttribute(Const.CURRENT_USER);
+//        HttpSession session = request.getSession();
+        String loginToken = CookieUtil.readCookie(request);
+        if (StringUtils.isEmpty(loginToken)) {
+            return false;
+        }
+        String userJson = RedisShardedPoolUtil.get(loginToken);
+
+        UserInfoVo user = JsonUtil.stringToObject(userJson, UserInfoVo.class);
+
         if (user == null) {
             return false;
         }
@@ -66,8 +76,12 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean isManager(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        UserInfoVo user = (UserInfoVo) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readCookie(request);
+        if (StringUtils.isEmpty(loginToken)) {
+            return false;
+        }
+        String userJson = RedisShardedPoolUtil.get(loginToken);
+        UserInfoVo user = JsonUtil.stringToObject(userJson, UserInfoVo.class);
         if (user == null) {
             return false;
         }
