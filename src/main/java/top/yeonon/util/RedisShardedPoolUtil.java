@@ -1,8 +1,13 @@
 package top.yeonon.util;
 
+import edu.princeton.cs.algs4.SET;
 import top.yeonon.common.RedisShardedPool;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.ShardedJedis;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 public class RedisShardedPoolUtil {
@@ -105,6 +110,76 @@ public class RedisShardedPoolUtil {
             result = jedis.del(key);
         } catch (Exception e) {
             log.error("del key {}, error ", key, e);
+            return null;
+        }
+        return result;
+    }
+
+    public static String hmset(String key, Map<String, String> hash) {
+        ShardedJedis jedis;
+        String result;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.hmset(key, hash);
+        } catch (Exception e) {
+            log.error("hmset key {}, error ", key, e);
+            return null;
+        }
+        return result;
+    }
+
+    public static Long append(String key, String value) {
+        ShardedJedis jedis;
+        Long result;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.append(key, value);
+        } catch (Exception e) {
+            log.error("append key {}, error ", key, e);
+            return null;
+        }
+        return result;
+    }
+
+    public static Long sadd(String key, String ...members) {
+        ShardedJedis jedis;
+        Long result;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.sadd(key, members);
+        } catch (Exception e) {
+            log.error("sadd key {}, error ", key, e);
+            return null;
+        }
+        return result;
+    }
+
+    public static Boolean exists(String key) {
+        ShardedJedis jedis;
+        Boolean result;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.exists(key);
+        } catch (Exception e) {
+            log.error("exists key {}, error ", key, e);
+            return null;
+        }
+        return result;
+    }
+
+    public static List<String> hmget(String key, String ...fields) {
+        ShardedJedis jedis;
+        List<String> result;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.hmget(key, fields);
+        } catch (Exception e) {
+            log.error("exists key {}, error ", key, e);
             return null;
         }
         return result;

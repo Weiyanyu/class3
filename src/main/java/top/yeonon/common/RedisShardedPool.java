@@ -1,14 +1,22 @@
 package top.yeonon.common;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 import redis.clients.util.Hashing;
+import top.yeonon.pojo.User;
+import top.yeonon.util.JsonUtil;
 import top.yeonon.util.PropertiesUtil;
+import top.yeonon.util.RedisShardedPoolUtil;
+import top.yeonon.vo.UserInfoVo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RedisShardedPool {
     private static ShardedJedisPool pool;
@@ -64,13 +72,46 @@ public class RedisShardedPool {
     public static void main(String[] args) {
         ShardedJedis jedis = pool.getResource();
 
-        for (int i = 0; i < 10; i++) {
-            jedis.set("key" + i, "value" + i);
+        String seesionId = "124563";
+        String mainKey = "class3:"+seesionId;
+        String expires = "class3:expires";
+        String expirations = "class3:expirations";
+        if (RedisShardedPoolUtil.exists(expires)) {
+            RedisShardedPoolUtil.expire(mainKey, 2100);
+            RedisShardedPoolUtil.expire(expires, 1800);
+            RedisShardedPoolUtil.expire(expirations, 2100);
+            List<String> jsonList = RedisShardedPoolUtil.hmget(mainKey, "sessionAttr");
+            if (CollectionUtils.isNotEmpty(jsonList) && jsonList.size() == 1) {
+                UserInfoVo userInfoVo = JsonUtil.stringToObject(jsonList.get(0), UserInfoVo.class);
+                if (userInfoVo != null) {
+                    System.out.println(userInfoVo.getUserName());
+                }
+            }
+
         }
-
-        returnResource(jedis);
-        System.out.println("ok");
-
-        pool.destroy();
+//        else {
+//            if (RedisShardedPoolUtil.exists(mainKey)) {
+//                RedisShardedPoolUtil.expire(mainKey, 2100);
+//                RedisShardedPoolUtil.append(expires, "");
+//                RedisShardedPoolUtil.expire(expires, 1800);
+//                RedisShardedPoolUtil.sadd(expirations, seesionId);
+//                RedisShardedPoolUtil.expire(expirations, 2100);
+//                System.out.println("已经过期，但是有冗余");
+//            }
+//            else {
+//                Map<String, String> hash = new HashMap<>();
+//                UserInfoVo userInfoVo = new UserInfoVo();
+//                userInfoVo.setUserName("yeonon");
+//                userInfoVo.setStudentId("2015010622");
+//                hash.put("sessionAttr", JsonUtil.objToString(userInfoVo));
+//                RedisShardedPoolUtil.hmset(mainKey, hash);
+//                RedisShardedPoolUtil.expire(mainKey, 2100);
+//                RedisShardedPoolUtil.append(expires, "");
+//                RedisShardedPoolUtil.expire(expires, 1800);
+//                RedisShardedPoolUtil.sadd(expirations, seesionId);
+//                RedisShardedPoolUtil.expire(expirations, 2100);
+//                System.out.println("过期，但是没有冗余，故重新创建");
+//            }
+//        }
     }
 }

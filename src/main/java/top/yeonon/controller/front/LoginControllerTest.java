@@ -11,6 +11,7 @@ import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.service.IUserService;
 import top.yeonon.util.CookieUtil;
 import top.yeonon.util.JsonUtil;
+import top.yeonon.util.RedisSessionUtil;
 import top.yeonon.util.RedisShardedPoolUtil;
 import top.yeonon.vo.UserInfoVo;
 
@@ -29,7 +30,7 @@ public class LoginControllerTest {
      *用户登录
      */
     @RequestMapping(value = "login", method = RequestMethod.GET)
-    public ServerResponse<UserInfoVo> login(String studentId, String password, HttpServletResponse httpServletResponse, HttpSession session) {
+    public ServerResponse<UserInfoVo> login(String studentId, String password, HttpServletRequest request,HttpServletResponse httpServletResponse, HttpSession session) {
         ServerResponse<UserInfoVo> response = userService.login(studentId, password);
         if (response.isSuccess()) {
             CookieUtil.writeCookie(httpServletResponse, session.getId());
