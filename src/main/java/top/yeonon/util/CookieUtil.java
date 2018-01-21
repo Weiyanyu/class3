@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class CookieUtil {
     private static String COOKIE_DOMAIN = ".yeonon.com";
-    private static String COOKIE_NAME = "ymall_login_token";
+    private static String COOKIE_NAME = "class3_login_token";
 
 
     /**

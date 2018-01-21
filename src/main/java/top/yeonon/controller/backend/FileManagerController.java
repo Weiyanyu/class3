@@ -35,7 +35,7 @@ public class FileManagerController {
                                       HttpServletRequest request) {
         String path = request.getSession().getServletContext().getRealPath("upload");
         String targetFileName = fileService.uploadMulitFile(uploadFiles, path, "multiFile");
-        String url = PropertiesUtil.getProperty("ftp.server.http.multifile.prefix") + targetFileName;
+        String url = PropertiesUtil.getStringProperty("ftp.server.http.multifile.prefix") + targetFileName;
 
         Map fileMap = Maps.newHashMap();
         fileMap.put("uri", targetFileName);

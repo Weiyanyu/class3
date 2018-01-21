@@ -53,7 +53,7 @@ public class NoticeManageController {
         String path = request.getSession().getServletContext().getRealPath("upload");
         String remotePath = "img";
         String targetFileName = fileService.upload(noticeFile, path, remotePath, null);
-        String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
+        String url = PropertiesUtil.getStringProperty("ftp.server.http.prefix") + targetFileName;
 
         Map fileMap = Maps.newHashMap();
         fileMap.put("uri", targetFileName);

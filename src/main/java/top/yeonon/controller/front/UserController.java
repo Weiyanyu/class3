@@ -145,7 +145,7 @@ public class UserController {
         String remotePath = "img/avatar";
         String avatarName = currentUser.getUserId() + "-avatar";
         String targetFileName = fileService.upload(avatar, path, remotePath, avatarName);
-        String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + "avatar/" + targetFileName;
+        String url = PropertiesUtil.getStringProperty("ftp.server.http.prefix") + "avatar/" + targetFileName;
 
         Map fileMap = Maps.newHashMap();
         fileMap.put("uri", targetFileName);

@@ -25,7 +25,7 @@ public class MailSenderService implements IMailSenderService {
     @Override
     public ServerResponse sendMail(String toEmail,String content) {
         SimpleMailMessage smm = new SimpleMailMessage();
-        smm.setFrom(PropertiesUtil.getProperty("mail.username"));
+        smm.setFrom(PropertiesUtil.getStringProperty("mail.username"));
         smm.setTo(toEmail);
         smm.setSubject(SUBJECT);
         smm.setText(content);
