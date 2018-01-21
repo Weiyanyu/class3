@@ -1,7 +1,6 @@
 package top.yeonon.controller.front;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +10,6 @@ import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.service.IUserService;
 import top.yeonon.util.CookieUtil;
 import top.yeonon.util.JsonUtil;
-import top.yeonon.util.RedisSessionUtil;
 import top.yeonon.util.RedisShardedPoolUtil;
 import top.yeonon.vo.UserInfoVo;
 
