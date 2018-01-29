@@ -14,9 +14,14 @@ import top.yeonon.interceptor.CustomerPermission;
 import top.yeonon.pojo.Comment;
 import top.yeonon.pojo.User;
 import top.yeonon.service.ICommentService;
+import top.yeonon.util.CookieUtil;
+import top.yeonon.util.JsonUtil;
+import top.yeonon.util.RedisShardedPoolUtil;
 import top.yeonon.vo.CommentDetailVo;
 import top.yeonon.vo.CommentListVo;
+import top.yeonon.vo.UserInfoVo;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -33,9 +38,11 @@ public class CommentController {
      */
     @CustomerPermission
     @RequestMapping(method = RequestMethod.POST)
-    public ServerResponse add(Comment comment, HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        comment.setUserId(user.getUserId());
+    public ServerResponse add(Comment comment, HttpServletRequest request) {
+        String loginToken = CookieUtil.readCookie(request);
+        String userJson = RedisShardedPoolUtil.get(loginToken);
+        UserInfoVo currentUser = JsonUtil.stringToObject(userJson, UserInfoVo.class);
+        comment.setUserId(currentUser.getUserId());
         return commentService.addComment(comment);
     }
 

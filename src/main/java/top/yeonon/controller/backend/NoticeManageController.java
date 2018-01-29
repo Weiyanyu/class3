@@ -14,8 +14,12 @@ import top.yeonon.pojo.Notice;
 import top.yeonon.pojo.User;
 import top.yeonon.service.INoticeService;
 import top.yeonon.service.Impl.FileService;
+import top.yeonon.util.CookieUtil;
+import top.yeonon.util.JsonUtil;
 import top.yeonon.util.PropertiesUtil;
+import top.yeonon.util.RedisShardedPoolUtil;
 import top.yeonon.vo.NoticeDetailVo;
+import top.yeonon.vo.UserInfoVo;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -107,9 +111,11 @@ public class NoticeManageController {
     @ManagerPermission
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public ServerResponse update(@PathVariable("id") Integer noticeId,
-                                 Notice notice, HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        notice.setUserId(user.getUserId());
+                                 Notice notice, HttpServletRequest request) {
+        String loginToken = CookieUtil.readCookie(request);
+        String userJson = RedisShardedPoolUtil.get(loginToken);
+        UserInfoVo currentUser = JsonUtil.stringToObject(userJson, UserInfoVo.class);
+        notice.setUserId(currentUser.getUserId());
         return noticeService.updateNotice(noticeId,notice);
     }
 }

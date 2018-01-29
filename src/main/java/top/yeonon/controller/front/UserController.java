@@ -15,10 +15,14 @@ import top.yeonon.pojo.User;
 import top.yeonon.service.IFileService;
 import top.yeonon.service.IMailSenderService;
 import top.yeonon.service.IUserService;
+import top.yeonon.util.CookieUtil;
+import top.yeonon.util.JsonUtil;
 import top.yeonon.util.PropertiesUtil;
+import top.yeonon.util.RedisShardedPoolUtil;
 import top.yeonon.vo.UserInfoVo;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -109,11 +113,14 @@ public class UserController {
 
     @CustomerPermission
     @RequestMapping(value = "/password/update", method = RequestMethod.POST)
-    public ServerResponse<String> updatePassword(String oldPassword, String newPassword, HttpSession session) {
-        UserInfoVo currentUser = (UserInfoVo) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> updatePassword(String oldPassword, String newPassword, HttpServletRequest request, HttpServletResponse httpServletResponse) {
+        String loginToken = CookieUtil.readCookie(request);
+        String userJson = RedisShardedPoolUtil.get(loginToken);
+        UserInfoVo currentUser = JsonUtil.stringToObject(userJson, UserInfoVo.class);
         ServerResponse<String> response = userService.resetPassword(currentUser.getUserId(), oldPassword, newPassword);
         if (response.isSuccess()) {
-            session.removeAttribute(Const.CURRENT_USER);
+            CookieUtil.delCookie(request, httpServletResponse);
+            RedisShardedPoolUtil.del(loginToken);
         }
         return response;
     }
@@ -123,8 +130,10 @@ public class UserController {
      */
     @CustomerPermission
     @RequestMapping(method = RequestMethod.PUT)
-    public ServerResponse updateInfo(User user, HttpSession session) {
-        UserInfoVo currentUser = (UserInfoVo) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse updateInfo(User user, HttpServletRequest request) {
+        String loginToken = CookieUtil.readCookie(request);
+        String userJson = RedisShardedPoolUtil.get(loginToken);
+        UserInfoVo currentUser = JsonUtil.stringToObject(userJson, UserInfoVo.class);
         user.setUserId(currentUser.getUserId());
         return userService.updateInfo(user);
     }
@@ -138,8 +147,10 @@ public class UserController {
     @CustomerPermission
     @RequestMapping(value = "avatar/upload", method = RequestMethod.POST)
     public ServerResponse uploadAvatar(@RequestParam(value = "avatar", required = false)MultipartFile avatar,
-                                       HttpServletRequest request, HttpSession session) {
-        UserInfoVo currentUser = (UserInfoVo) session.getAttribute(Const.CURRENT_USER);
+                                       HttpServletRequest request) {
+        String loginToken = CookieUtil.readCookie(request);
+        String userJson = RedisShardedPoolUtil.get(loginToken);
+        UserInfoVo currentUser = JsonUtil.stringToObject(userJson, UserInfoVo.class);
 
         String path = request.getSession().getServletContext().getRealPath("upload");
         String remotePath = "img/avatar";
